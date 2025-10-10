@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,29 +17,29 @@ import { sendQuoteEmail } from '@/lib/emailjs';
 import { apiRequest } from '@/lib/queryClient';
 import { NotebookPen, Lock } from 'lucide-react';
 
-const quoteSchema = z.object({
-  fullName: z.string().min(2, 'Full name is required'),
-  email: z.string().email('Valid email is required'),
-  phone: z.string().optional(),
-  country: z.string().optional(),
-  fromAirport: z.string().min(3, 'From airport is required'),
-  toAirport: z.string().min(3, 'To airport is required'),
-  departureDate: z.string().min(1, 'Departure date is required'),
-  returnDate: z.string().optional(),
-  passengers: z.string().min(1, 'Passengers selection is required'),
-  flightClass: z.string().min(1, 'Flight class selection is required'),
-  tripType: z.string().default('roundtrip'),
-  notes: z.string().optional(),
-});
-
-type QuoteFormData = z.infer<typeof quoteSchema>;
-
 export default function QuoteForm() {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const quoteSchema = useMemo(() => z.object({
+    fullName: z.string().min(2, t('validation.nameRequired')),
+    email: z.string().email(t('validation.emailRequired')),
+    phone: z.string().optional(),
+    country: z.string().optional(),
+    fromAirport: z.string().min(3, t('validation.fromAirportRequired')),
+    toAirport: z.string().min(3, t('validation.toAirportRequired')),
+    departureDate: z.string().min(1, t('validation.departureDateRequired')),
+    returnDate: z.string().optional(),
+    passengers: z.string().min(1, t('validation.passengersRequired')),
+    flightClass: z.string().min(1, t('validation.classRequired')),
+    tripType: z.string().default('roundtrip'),
+    notes: z.string().optional(),
+  }), [t]);
+
+  type QuoteFormData = z.infer<typeof quoteSchema>;
 
   const form = useForm<QuoteFormData>({
     resolver: zodResolver(quoteSchema),

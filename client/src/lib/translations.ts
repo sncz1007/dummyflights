@@ -116,6 +116,15 @@ export const translations = {
     'toast.error': 'Error',
     'toast.errorMessage': 'There was an error submitting your quote. Please try again.',
     
+    // Validation Messages
+    'validation.nameRequired': 'Full name is required',
+    'validation.emailRequired': 'Valid email is required',
+    'validation.fromAirportRequired': 'From airport is required',
+    'validation.toAirportRequired': 'To airport is required',
+    'validation.departureDateRequired': 'Departure date is required',
+    'validation.passengersRequired': 'Passengers selection is required',
+    'validation.classRequired': 'Flight class selection is required',
+    
     // Terms Page
     'terms.title': 'Terms of Service',
     'terms.lastUpdated': 'Last updated: October 2025',
@@ -240,6 +249,15 @@ export const translations = {
     'toast.successMessage': 'Tu solicitud de cotización ha sido enviada. Te contactaremos en 24 horas con los mejores precios y hasta 40% de descuento!',
     'toast.error': 'Error',
     'toast.errorMessage': 'Hubo un error enviando tu cotización. Por favor intenta nuevamente.',
+    
+    // Validation Messages
+    'validation.nameRequired': 'El nombre completo es requerido',
+    'validation.emailRequired': 'El correo válido es requerido',
+    'validation.fromAirportRequired': 'El aeropuerto de origen es requerido',
+    'validation.toAirportRequired': 'El aeropuerto de destino es requerido',
+    'validation.departureDateRequired': 'La fecha de salida es requerida',
+    'validation.passengersRequired': 'La selección de pasajeros es requerida',
+    'validation.classRequired': 'La selección de clase es requerida',
     
     // Terms Page
     'terms.title': 'Términos de Servicio',
