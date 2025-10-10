@@ -1,0 +1,10 @@
+# Apache .htaccess for SPA routing
+# Place this file in your website's root directory (where index.html is located)
+
+RewriteEngine On
+
+# Handle client-side routing for SPA
+# If the requested file or directory doesn't exist, serve index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]

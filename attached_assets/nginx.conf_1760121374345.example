@@ -1,0 +1,20 @@
+# Nginx configuration for SPA routing
+# Add this location block to your nginx server configuration
+
+server {
+    listen 80;
+    server_name yourdomain.com;
+    root /path/to/your/website;
+    index index.html;
+
+    # Handle client-side routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Optional: Cache static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
