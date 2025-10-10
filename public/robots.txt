@@ -1,0 +1,14 @@
+# Robots.txt for SkyBudgetFly
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://skybudgetfly.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Block access to admin or sensitive paths (if any)
+Disallow: /api/
+Disallow: /_vite/
+Disallow: /node_modules/

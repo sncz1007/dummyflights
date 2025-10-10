@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    
+    <!-- SEO Meta Tags -->
+    <title>SkyBudgetFly - Cheap Flight Tickets & Budget Travel Deals</title>
+    <meta name="description" content="Find the cheapest flight tickets with SkyBudgetFly. Compare prices from 500+ airlines and save up to 40% on international flights. Book budget travel deals today!" />
+    <meta name="keywords" content="cheap flights, budget travel, flight tickets, airline deals, international flights, flight booking, vuelos baratos, billetes de avión" />
+    <meta name="author" content="SkyBudgetFly" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="SkyBudgetFly - Cheap Flight Tickets & Budget Travel Deals" />
+    <meta property="og:description" content="Save up to 40% on flight tickets. Compare 500+ airlines worldwide." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://skybudgetfly.com" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=630" />
+    <meta property="og:site_name" content="SkyBudgetFly" />
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SkyBudgetFly - Cheap Flight Tickets & Budget Travel" />
+    <meta name="twitter:description" content="Save up to 40% on flight tickets. Compare 500+ airlines worldwide." />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=630" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='%23E53E3E'><path d='M16 2L24 10h-4v6l6 2v8L16 30 6 26v-8l6-2v-6H8L16 2z'/></svg>" />
+    
+    <!-- Font Preconnects -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Font Loading -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TravelAgency",
+      "name": "SkyBudgetFly",
+      "url": "https://skybudgetfly.com",
+      "logo": "https://skybudgetfly.com/logo.png",
+      "description": "Your trusted partner for affordable air travel worldwide. Save up to 40% on international flights.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-555-123-4567",
+        "contactType": "customer service",
+        "email": "skybudgetfly@gmail.com",
+        "availableLanguage": ["English", "Spanish"]
+      },
+      "offers": {
+        "@type": "Offer",
+        "description": "Flight booking services with up to 40% savings"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Brevo Chat Widget -->
+    <script>
+      (function(d, w, c) {
+          w.BrevoConversationsID = 'YOUR_BREVO_WIDGET_ID';
+          w[c] = w[c] || function() {
+              (w[c].q = w[c].q || []).push(arguments);
+          };
+          var s = d.createElement('script');
+          s.async = true;
+          s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
+          s.onload = function() {
+              // Style the chat widget for mobile optimization
+              var style = d.createElement('style');
+              style.textContent = `
+                #brevo-conversations {
+                  z-index: 9999 !important;
+                }
+                @media (max-width: 768px) {
+                  #brevo-conversations iframe {
+                    max-width: 280px !important;
+                    max-height: 400px !important;
+                  }
+                  #brevo-conversations .brevo-launcher {
+                    width: 50px !important;
+                    height: 50px !important;
+                  }
+                }
+              `;
+              d.head.appendChild(style);
+          };
+          if (d.head) d.head.appendChild(s);
+      })(document, window, 'BrevoConversations');
+    </script>
+  </body>
+</html>

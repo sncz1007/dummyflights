@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://skybudgetfly.com/</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://skybudgetfly.com/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://skybudgetfly.com/" />
+  </url>
+  <url>
+    <loc>https://skybudgetfly.com/terms</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://skybudgetfly.com/terms" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://skybudgetfly.com/terms" />
+  </url>
+  <url>
+    <loc>https://skybudgetfly.com/privacy</loc>
+    <lastmod>2025-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://skybudgetfly.com/privacy" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://skybudgetfly.com/privacy" />
+  </url>
+</urlset>
