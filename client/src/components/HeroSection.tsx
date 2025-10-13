@@ -20,15 +20,20 @@ export default function HeroSection() {
   });
 
   const handleSearch = () => {
-    // Scroll to quote section
-    const quoteSection = document.getElementById('quote');
-    if (quoteSection) {
-      quoteSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    console.log('Raw search state:', searchData);
+    console.log('Search data:', {
+      fromAirport: searchData.fromAirport,
+      toAirport: searchData.toAirport,
+      departureDate: searchData.departureDate,
+      returnDate: searchData.returnDate,
+      passengers: searchData.passengers,
+      flightClass: searchData.flightClass,
+      tripType: searchData.tripType,
+    });
   };
 
   return (
-    <section id="home" className="gradient-hero text-white py-20 lg:py-32">
+    <section id="home" className="min-h-screen gradient-hero text-white flex items-center justify-center py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 animate-fade-in">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold mb-6" data-testid="text-hero-title">
