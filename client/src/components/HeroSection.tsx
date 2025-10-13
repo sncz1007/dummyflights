@@ -83,7 +83,7 @@ export default function HeroSection() {
                   <PlaneTakeoff className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <AirportSearch
                     value={searchData.fromAirport}
-                    onChange={(value) => setSearchData({ ...searchData, fromAirport: value })}
+                    onChange={(value) => setSearchData(prev => ({ ...prev, fromAirport: value }))}
                     placeholder={t('search.fromPlaceholder')}
                     className="pl-10"
                     data-testid="input-from-airport"
@@ -100,7 +100,7 @@ export default function HeroSection() {
                   <PlaneLanding className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <AirportSearch
                     value={searchData.toAirport}
-                    onChange={(value) => setSearchData({ ...searchData, toAirport: value })}
+                    onChange={(value) => setSearchData(prev => ({ ...prev, toAirport: value }))}
                     placeholder={t('search.toPlaceholder')}
                     className="pl-10"
                     data-testid="input-to-airport"
@@ -118,7 +118,7 @@ export default function HeroSection() {
                   <Input
                     type="date"
                     value={searchData.departureDate}
-                    onChange={(e) => setSearchData({ ...searchData, departureDate: e.target.value })}
+                    onChange={(e) => setSearchData(prev => ({ ...prev, departureDate: e.target.value }))}
                     className="pl-10"
                     data-testid="input-departure-date"
                   />
@@ -135,7 +135,7 @@ export default function HeroSection() {
                   <Input
                     type="date"
                     value={searchData.returnDate}
-                    onChange={(e) => setSearchData({ ...searchData, returnDate: e.target.value })}
+                    onChange={(e) => setSearchData(prev => ({ ...prev, returnDate: e.target.value }))}
                     className="pl-10"
                     data-testid="input-return-date"
                   />
