@@ -6,11 +6,16 @@ SkyBudgetFly is a modern flight quotation web application that helps users find 
 
 ## Recent Changes (October 2025)
 
-### Fixed: Flight Search Form State Bug
-- **Issue**: Select components (flightClass, tripType, passengers) were not capturing values correctly when form was submitted immediately after selection
-- **Root Cause**: React's async setState behavior caused search handler to read stale state values
-- **Solution**: Implemented React refs (currentPassengers, currentFlightClass, currentTripType) to synchronously capture select values while maintaining controlled component pattern
-- **Result**: All 7 form fields now reliably captured: fromAirport, toAirport, departureDate, returnDate, passengers, flightClass, tripType
+### Fixed: Flight Search Form State and Visibility Issues
+- **Issue 1**: Select components (flightClass, tripType, passengers) were not capturing values correctly when form was submitted immediately after selection
+  - **Root Cause**: React's async setState behavior caused search handler to read stale state values
+  - **Solution**: Implemented React refs (currentPassengers, currentFlightClass, currentTripType) to synchronously capture select values while maintaining controlled component pattern
+  
+- **Issue 2**: Input fields and select dropdowns were not displaying typed or selected values (text was invisible)
+  - **Root Cause**: Missing text color classes (`text-foreground`) in Input and Select components
+  - **Solution**: Added explicit `text-foreground` class to both Input and SelectTrigger components to ensure text visibility
+  
+- **Result**: All 7 form fields now reliably captured and displayed: fromAirport, toAirport, departureDate, returnDate, passengers, flightClass, tripType
 
 ## User Preferences
 
