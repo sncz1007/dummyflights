@@ -1,19 +1,14 @@
-import { airports, quotes, users, type User, type InsertUser, type Airport, type InsertAirport, type Quote, type InsertQuote } from "@shared/schema";
-import { db, pool } from "./db";
+import { airports, quotes, type Airport, type InsertAirport, type Quote, type InsertQuote } from "@shared/schema";
+import { db } from "./db";
 import { eq, ilike, or, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
-import session from "express-session";
-import connectPg from "connect-pg-simple";
-
-const PostgresSessionStore = connectPg(session);
 
 export interface IStorage {
-  sessionStore: session.SessionStore;
-  
-  // User methods
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Airport methods
+  searchAirports(query: string): Promise<Airport[]>;
+  getAirportByIata(code: string): Promise<Airport | undefined>;
+  createAirport(airport: InsertAirport): Promise<Airport>;
+  getAllAirports(): Promise<Airport[]>;
   
   // Airport methods
   searchAirports(query: string): Promise<Airport[]>;
@@ -30,34 +25,6 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
-
-  constructor() {
-    this.sessionStore = new PostgresSessionStore({ 
-      pool, 
-      createTableIfMissing: true 
-    });
-  }
-
-  // User methods
-  async getUser(id: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user || undefined;
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
-    return user || undefined;
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(insertUser)
-      .returning();
-    return user;
-  }
-  
   // Airport methods
   async searchAirports(query: string): Promise<Airport[]> {
     const searchQuery = `%${query.toLowerCase()}%`;

@@ -4,14 +4,6 @@ import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-  role: varchar("role", { length: 20 }).notNull().default("user"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
 export const airports = pgTable("airports", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   iataCode: varchar("iata_code", { length: 3 }).notNull().unique(),
@@ -66,11 +58,6 @@ export const quotesRelations = relations(quotes, ({ one }) => ({
 }));
 
 // Insert schemas
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
-
 export const insertAirportSchema = createInsertSchema(airports).omit({
   id: true,
   createdAt: true,
@@ -87,9 +74,6 @@ export const insertQuoteSchema = createInsertSchema(quotes).omit({
 });
 
 // Types
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
-
 export type InsertAirport = z.infer<typeof insertAirportSchema>;
 export type Airport = typeof airports.$inferSelect;
 
