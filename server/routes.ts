@@ -3,8 +3,11 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertQuoteSchema } from "@shared/schema";
 import { z } from "zod";
+import { setupAuth } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup authentication routes
+  setupAuth(app);
   
   // Airport search endpoint
   app.get("/api/airports/search", async (req, res) => {
@@ -78,6 +81,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Get quote error:", error);
       res.status(500).json({ error: "Failed to get quote" });
+    }
+  });
+  
+  // Update quote status (admin endpoint)
+  app.patch("/api/quotes/:id/status", async (req, res) => {
+    try {
+      if (!req.isAuthenticated() || req.user.role !== 'admin') {
+        return res.status(403).json({ error: "Unauthorized" });
+      }
+      
+      const { status } = req.body;
+      const quote = await storage.updateQuoteStatus(req.params.id, status);
+      
+      if (!quote) {
+        return res.status(404).json({ error: "Quote not found" });
+      }
+      
+      res.json(quote);
+    } catch (error) {
+      console.error("Update quote status error:", error);
+      res.status(500).json({ error: "Failed to update quote status" });
     }
   });
 

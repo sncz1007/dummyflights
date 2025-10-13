@@ -1,9 +1,15 @@
 import { airports, quotes, users, type User, type InsertUser, type Airport, type InsertAirport, type Quote, type InsertQuote } from "@shared/schema";
-import { db } from "./db";
+import { db, pool } from "./db";
 import { eq, ilike, or, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
+
+const PostgresSessionStore = connectPg(session);
 
 export interface IStorage {
+  sessionStore: session.SessionStore;
+  
   // User methods
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -24,6 +30,15 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
+  sessionStore: session.SessionStore;
+
+  constructor() {
+    this.sessionStore = new PostgresSessionStore({ 
+      pool, 
+      createTableIfMissing: true 
+    });
+  }
+
   // User methods
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));

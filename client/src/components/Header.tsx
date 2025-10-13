@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Plane, Menu, ChevronDown } from 'lucide-react';
+import { Plane, Menu, ChevronDown, Shield } from 'lucide-react';
 
 export default function Header() {
   const { t } = useTranslation();
   const { language, setLanguage } = useLanguage();
+  const { user } = useAuth();
+  const [location] = useLocation();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -52,6 +55,14 @@ export default function Header() {
                 {t(item.key)}
               </button>
             ))}
+            {user?.role === 'admin' && location !== '/admin' && (
+              <Link href="/admin">
+                <Button variant="outline" size="sm" data-testid="button-admin-link">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Admin
+                </Button>
+              </Link>
+            )}
           </div>
           
           {/* Language Selector & Mobile Menu */}
