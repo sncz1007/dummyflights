@@ -4,6 +4,14 @@
 
 SkyBudgetFly is a modern flight quotation web application that helps users find and book affordable flights worldwide. The platform provides a bilingual (English/Spanish) interface where users can search for flights, request quotes, and receive personalized flight offers via email. Built as a full-stack application with React frontend and Express backend, it features a comprehensive airport database, email integration for quote requests, and a responsive design optimized for all devices.
 
+## Recent Changes (October 2025)
+
+### Fixed: Flight Search Form State Bug
+- **Issue**: Select components (flightClass, tripType, passengers) were not capturing values correctly when form was submitted immediately after selection
+- **Root Cause**: React's async setState behavior caused search handler to read stale state values
+- **Solution**: Implemented React refs (currentPassengers, currentFlightClass, currentTripType) to synchronously capture select values while maintaining controlled component pattern
+- **Result**: All 7 form fields now reliably captured: fromAirport, toAirport, departureDate, returnDate, passengers, flightClass, tripType
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.

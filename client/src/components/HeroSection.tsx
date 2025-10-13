@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,17 +19,39 @@ export default function HeroSection() {
     tripType: 'roundtrip'
   });
 
+  // Use refs to store current values
+  const currentPassengers = useRef('1');
+  const currentFlightClass = useRef('economy');
+  const currentTripType = useRef('roundtrip');
+
+  const handlePassengersChange = (value: string) => {
+    currentPassengers.current = value;
+    setSearchData(prev => ({ ...prev, passengers: value }));
+  };
+
+  const handleClassChange = (value: string) => {
+    currentFlightClass.current = value;
+    setSearchData(prev => ({ ...prev, flightClass: value }));
+  };
+
+  const handleTripTypeChange = (value: string) => {
+    currentTripType.current = value;
+    setSearchData(prev => ({ ...prev, tripType: value }));
+  };
+
   const handleSearch = () => {
-    console.log('Raw search state:', searchData);
-    console.log('Search data:', {
+    const completeData = {
       fromAirport: searchData.fromAirport,
       toAirport: searchData.toAirport,
       departureDate: searchData.departureDate,
       returnDate: searchData.returnDate,
-      passengers: searchData.passengers,
-      flightClass: searchData.flightClass,
-      tripType: searchData.tripType,
-    });
+      passengers: currentPassengers.current,
+      flightClass: currentFlightClass.current,
+      tripType: currentTripType.current,
+    };
+    
+    // Log search data for debugging
+    console.log('Flight Search Data:', JSON.stringify(completeData, null, 2));
   };
 
   return (
@@ -127,7 +149,7 @@ export default function HeroSection() {
                 <Label className="block text-sm font-medium text-foreground mb-2" data-testid="label-passengers">
                   {t('search.passengers')}
                 </Label>
-                <Select value={searchData.passengers} onValueChange={(value) => setSearchData({ ...searchData, passengers: value })}>
+                <Select value={searchData.passengers} onValueChange={handlePassengersChange}>
                   <SelectTrigger data-testid="select-passengers">
                     <SelectValue />
                   </SelectTrigger>
@@ -145,7 +167,7 @@ export default function HeroSection() {
                 <Label className="block text-sm font-medium text-foreground mb-2" data-testid="label-class">
                   {t('search.class')}
                 </Label>
-                <Select value={searchData.flightClass} onValueChange={(value) => setSearchData({ ...searchData, flightClass: value })}>
+                <Select value={searchData.flightClass} onValueChange={handleClassChange}>
                   <SelectTrigger data-testid="select-class">
                     <SelectValue />
                   </SelectTrigger>
@@ -162,7 +184,7 @@ export default function HeroSection() {
                 <Label className="block text-sm font-medium text-foreground mb-2" data-testid="label-trip-type">
                   {t('search.type')}
                 </Label>
-                <Select value={searchData.tripType} onValueChange={(value) => setSearchData({ ...searchData, tripType: value })}>
+                <Select value={searchData.tripType} onValueChange={handleTripTypeChange}>
                   <SelectTrigger data-testid="select-trip-type">
                     <SelectValue />
                   </SelectTrigger>
