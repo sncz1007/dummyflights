@@ -59,6 +59,18 @@ export const translations = {
     'destinations.newyork': 'New York, USA',
     'destinations.dubai': 'Dubai, UAE',
     
+    // Why Choose Us
+    'whyChoose.title': 'Why Choose SkyBudgetFly',
+    'whyChoose.subtitle': 'Experience the difference with our premium travel services',
+    'whyChoose.discount.title': '40% Guaranteed Discount',
+    'whyChoose.discount.desc': 'Save big on every flight with our exclusive airline partnerships',
+    'whyChoose.worldwide.title': 'Worldwide Coverage',
+    'whyChoose.worldwide.desc': 'Search and book flights to any destination around the globe',
+    'whyChoose.instant.title': 'Instant Booking',
+    'whyChoose.instant.desc': 'Secure your flight in minutes with our fast checkout process',
+    'whyChoose.support.title': 'Expert Support',
+    'whyChoose.support.desc': 'Our travel specialists are available 24/7 to assist you',
+    
     // Deals
     'deals.title': 'Special Deals & Offers',
     'deals.subtitle': 'Limited time offers you don\'t want to miss',
@@ -251,6 +263,18 @@ export const translations = {
     'destinations.bali': 'Bali, Indonesia',
     'destinations.newyork': 'Nueva York, EUA',
     'destinations.dubai': 'Dubái, EAU',
+    
+    // Why Choose Us
+    'whyChoose.title': 'Por Qué Elegir SkyBudgetFly',
+    'whyChoose.subtitle': 'Experimenta la diferencia con nuestros servicios de viaje premium',
+    'whyChoose.discount.title': '40% de Descuento Garantizado',
+    'whyChoose.discount.desc': 'Ahorra en grande en cada vuelo con nuestras alianzas exclusivas',
+    'whyChoose.worldwide.title': 'Cobertura Mundial',
+    'whyChoose.worldwide.desc': 'Busca y reserva vuelos a cualquier destino del mundo',
+    'whyChoose.instant.title': 'Reserva Instantánea',
+    'whyChoose.instant.desc': 'Asegura tu vuelo en minutos con nuestro proceso rápido',
+    'whyChoose.support.title': 'Soporte Experto',
+    'whyChoose.support.desc': 'Nuestros especialistas están disponibles 24/7 para ayudarte',
     
     // Deals
     'deals.title': 'Ofertas Especiales',

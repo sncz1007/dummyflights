@@ -111,3 +111,19 @@ Preferred communication style: Simple, everyday language.
 - **Component**: `client/src/components/PopularDestinations.tsx`
 - **Images**: 8 professional stock photos in `attached_assets/stock_images/`
 - **Bilingual**: Full EN/ES support for destination names and discount badge
+
+### Why Choose SkyBudgetFly Section (14 Oct 2025)
+- **Purpose**: Highlight key benefits and value propositions to convince users
+- **Location**: After Popular Destinations section on homepage
+- **Benefits Featured** (4 total):
+  1. **40% Guaranteed Discount** - Save big with exclusive airline partnerships (Percent icon, red)
+  2. **Worldwide Coverage** - Book flights to any destination globally (Globe icon, blue)
+  3. **Instant Booking** - Fast checkout process, secure flights in minutes (Zap icon, yellow)
+  4. **Expert Support** - 24/7 travel specialists available (Headset icon, green)
+- **Design**: 
+  - 4-column grid on desktop, 2 columns on tablet, single column on mobile
+  - Each benefit card has: colored icon in circle, title, description
+  - Hover effect with background color change
+  - Muted background cards for visual separation
+- **Component**: `client/src/components/WhyChooseUs.tsx`
+- **Bilingual**: Full EN/ES support for all benefit titles and descriptions
