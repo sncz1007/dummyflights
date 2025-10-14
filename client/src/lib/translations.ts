@@ -13,7 +13,7 @@ export const translations = {
     'hero.guarantee': 'Best Price Guarantee • Free Quote • Expert Support',
     
     // Search Form
-    'search.from': 'From (USA only)',
+    'search.from': 'From',
     'search.to': 'To',
     'search.departure': 'Departure',
     'search.return': 'Return',
@@ -28,9 +28,9 @@ export const translations = {
     'search.oneway': 'One Way',
     'search.multicity': 'Multi-City',
     'search.button': 'Search Flights',
-    'search.fromPlaceholder': 'US city or airport',
+    'search.fromPlaceholder': 'City or airport',
     'search.toPlaceholder': 'City or airport',
-    'search.usaOnly': 'Flights departing from USA only',
+    'search.usaOnly': 'International flights and USA domestic flights',
     
     // Trust Indicators
     'trust.airlines': 'Airlines Worldwide',
@@ -63,7 +63,7 @@ export const translations = {
     'quote.email': 'Email *',
     'quote.phone': 'Phone',
     'quote.country': 'Country',
-    'quote.from': 'From Airport (USA only) *',
+    'quote.from': 'From Airport *',
     'quote.to': 'To Airport *',
     'quote.departure': 'Departure Date *',
     'quote.return': 'Return Date',
@@ -76,7 +76,7 @@ export const translations = {
     'quote.emailPlaceholder': 'john@example.com',
     'quote.phonePlaceholder': '+1 (555) 000-0000',
     'quote.countryPlaceholder': 'USA',
-    'quote.fromPlaceholder': 'US city or airport',
+    'quote.fromPlaceholder': 'City or airport',
     'quote.toPlaceholder': 'City or airport',
     'quote.notesPlaceholder': 'Any special requirements or preferences?',
     
@@ -189,7 +189,7 @@ export const translations = {
     'hero.guarantee': 'Garantía de Mejor Precio • Cotización Gratis • Soporte Experto',
     
     // Search Form
-    'search.from': 'Desde (solo USA)',
+    'search.from': 'Desde',
     'search.to': 'Hasta',
     'search.departure': 'Salida',
     'search.return': 'Regreso',
@@ -204,9 +204,9 @@ export const translations = {
     'search.oneway': 'Solo Ida',
     'search.multicity': 'Multi-Ciudad',
     'search.button': 'Buscar Vuelos',
-    'search.fromPlaceholder': 'Ciudad o aeropuerto en USA',
+    'search.fromPlaceholder': 'Ciudad o aeropuerto',
     'search.toPlaceholder': 'Ciudad o aeropuerto',
-    'search.usaOnly': 'Vuelos que salen desde USA únicamente',
+    'search.usaOnly': 'Vuelos internacionales y domésticos en USA',
     
     // Trust Indicators
     'trust.airlines': 'Aerolíneas Globales',
@@ -239,7 +239,7 @@ export const translations = {
     'quote.email': 'Correo *',
     'quote.phone': 'Teléfono',
     'quote.country': 'País',
-    'quote.from': 'Aeropuerto Origen (solo USA) *',
+    'quote.from': 'Aeropuerto Origen *',
     'quote.to': 'Aeropuerto Destino *',
     'quote.departure': 'Fecha Salida *',
     'quote.return': 'Fecha Regreso',
@@ -252,7 +252,7 @@ export const translations = {
     'quote.emailPlaceholder': 'juan@ejemplo.com',
     'quote.phonePlaceholder': '+57 (300) 000-0000',
     'quote.countryPlaceholder': 'Colombia',
-    'quote.fromPlaceholder': 'Ciudad o aeropuerto en USA',
+    'quote.fromPlaceholder': 'Ciudad o aeropuerto',
     'quote.toPlaceholder': 'Ciudad o aeropuerto',
     'quote.notesPlaceholder': '¿Algún requerimiento especial o preferencia?',
     
