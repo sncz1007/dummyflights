@@ -3,6 +3,7 @@ import HeroSection from '@/components/HeroSection';
 import TrustBadges from '@/components/TrustBadges';
 import PopularDestinations from '@/components/PopularDestinations';
 import WhyChooseUs from '@/components/WhyChooseUs';
+import Testimonials from '@/components/Testimonials';
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <TrustBadges />
         <PopularDestinations />
         <WhyChooseUs />
+        <Testimonials />
       </main>
     </div>
   );

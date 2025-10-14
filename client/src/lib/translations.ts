@@ -119,6 +119,18 @@ export const translations = {
     // Testimonials
     'testimonials.title': 'What Our Customers Say',
     'testimonials.subtitle': 'Join thousands of happy travelers who saved with SkyBudgetFly',
+    'testimonials.customer1.name': 'Sarah Johnson',
+    'testimonials.customer1.location': 'Miami, USA',
+    'testimonials.customer1.text': 'I saved over $800 on my family trip to Europe! The booking process was seamless and customer support was excellent. Highly recommend SkyBudgetFly!',
+    'testimonials.customer2.name': 'Carlos Mendez',
+    'testimonials.customer2.location': 'Mexico City, Mexico',
+    'testimonials.customer2.text': 'The 40% discount is real! I was skeptical at first, but they delivered exactly what they promised. Best flight booking experience ever.',
+    'testimonials.customer3.name': 'Yuki Tanaka',
+    'testimonials.customer3.location': 'Tokyo, Japan',
+    'testimonials.customer3.text': 'Exceptional service from start to finish. The team helped me find the perfect flight to New York at an unbeatable price. Will definitely use again!',
+    'testimonials.customer4.name': 'Emma Williams',
+    'testimonials.customer4.location': 'London, UK',
+    'testimonials.customer4.text': 'Fast, reliable, and affordable. SkyBudgetFly made my dream vacation to Bali possible. The savings were incredible and the support team was always available.',
     
     // Contact
     'contact.title': 'Ready to Start Your Journey?',
@@ -324,6 +336,18 @@ export const translations = {
     // Testimonials
     'testimonials.title': 'Lo Que Dicen Nuestros Clientes',
     'testimonials.subtitle': 'Únete a miles de viajeros felices que ahorraron con SkyBudgetFly',
+    'testimonials.customer1.name': 'Sarah Johnson',
+    'testimonials.customer1.location': 'Miami, EUA',
+    'testimonials.customer1.text': '¡Ahorré más de $800 en mi viaje familiar a Europa! El proceso de reserva fue perfecto y el soporte al cliente excelente. ¡Muy recomendado!',
+    'testimonials.customer2.name': 'Carlos Méndez',
+    'testimonials.customer2.location': 'Ciudad de México, México',
+    'testimonials.customer2.text': '¡El descuento del 40% es real! Al principio era escéptico, pero cumplieron exactamente lo que prometieron. La mejor experiencia de reserva de vuelos.',
+    'testimonials.customer3.name': 'Yuki Tanaka',
+    'testimonials.customer3.location': 'Tokio, Japón',
+    'testimonials.customer3.text': 'Servicio excepcional de principio a fin. El equipo me ayudó a encontrar el vuelo perfecto a Nueva York a un precio inmejorable. ¡Definitivamente volveré a usar!',
+    'testimonials.customer4.name': 'Emma Williams',
+    'testimonials.customer4.location': 'Londres, Reino Unido',
+    'testimonials.customer4.text': 'Rápido, confiable y económico. SkyBudgetFly hizo posible mis vacaciones soñadas a Bali. Los ahorros fueron increíbles y el equipo siempre estuvo disponible.',
     
     // Contact
     'contact.title': '¿Listo para Comenzar tu Viaje?',

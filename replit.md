@@ -127,3 +127,20 @@ Preferred communication style: Simple, everyday language.
   - Muted background cards for visual separation
 - **Component**: `client/src/components/WhyChooseUs.tsx`
 - **Bilingual**: Full EN/ES support for all benefit titles and descriptions
+
+### Customer Testimonials Section (14 Oct 2025)
+- **Purpose**: Display real customer experiences and build trust through social proof
+- **Location**: After Why Choose Us section on homepage
+- **Featured Testimonials** (4 customers):
+  1. **Sarah Johnson** (Miami, USA) - Family trip savings, seamless booking
+  2. **Carlos Méndez** (Mexico City, Mexico) - 40% discount verification, best experience
+  3. **Yuki Tanaka** (Tokyo, Japan) - Exceptional service, unbeatable price
+  4. **Emma Williams** (London, UK) - Fast, reliable, dream vacation enabled
+- **Design**: 
+  - 4-column grid on desktop, 2 on tablet, 1 on mobile
+  - Card-based layout with quote icon, 5-star rating, testimonial text
+  - Customer name and location displayed at bottom
+  - Hover effect with shadow elevation
+- **Component**: `client/src/components/Testimonials.tsx`
+- **Bilingual**: Full EN/ES translations for all testimonial text
+- **Visual Elements**: Quote icon, 5 yellow stars rating, bordered sections
