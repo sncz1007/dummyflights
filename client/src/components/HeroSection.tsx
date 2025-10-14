@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useLocation } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,7 @@ import { Plane, PlaneTakeoff, PlaneLanding, Calendar, Users, Check } from 'lucid
 
 export default function HeroSection() {
   const { t } = useTranslation();
+  const [, setLocation] = useLocation();
   const [searchData, setSearchData] = useState({
     fromAirport: '',
     toAirport: '',
@@ -50,8 +52,24 @@ export default function HeroSection() {
       tripType: currentTripType.current,
     };
     
-    // Log search data for debugging
-    console.log('Flight Search Data:', JSON.stringify(completeData, null, 2));
+    // Validate required fields
+    if (!completeData.fromAirport || !completeData.toAirport || !completeData.departureDate) {
+      console.log('Missing required fields for flight search');
+      return;
+    }
+    
+    // Navigate to results page with search params
+    const params = new URLSearchParams({
+      from: completeData.fromAirport,
+      to: completeData.toAirport,
+      departure: completeData.departureDate,
+      ...(completeData.returnDate && { return: completeData.returnDate }),
+      passengers: completeData.passengers,
+      class: completeData.flightClass,
+      type: completeData.tripType,
+    });
+    
+    setLocation(`/flights?${params.toString()}`);
   };
 
   return (

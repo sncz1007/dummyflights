@@ -1,15 +1,9 @@
-import { airports, quotes, type Airport, type InsertAirport, type Quote, type InsertQuote } from "@shared/schema";
+import { airports, quotes, bookings, type Airport, type InsertAirport, type Quote, type InsertQuote, type Booking, type InsertBooking } from "@shared/schema";
 import { db } from "./db";
 import { eq, ilike, or, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
-  // Airport methods
-  searchAirports(query: string): Promise<Airport[]>;
-  getAirportByIata(code: string): Promise<Airport | undefined>;
-  createAirport(airport: InsertAirport): Promise<Airport>;
-  getAllAirports(): Promise<Airport[]>;
-  
   // Airport methods
   searchAirports(query: string): Promise<Airport[]>;
   getAirportByIata(code: string): Promise<Airport | undefined>;
@@ -22,6 +16,15 @@ export interface IStorage {
   getQuoteByNumber(quoteNumber: string): Promise<Quote | undefined>;
   getAllQuotes(): Promise<Quote[]>;
   updateQuoteStatus(id: string, status: string): Promise<Quote | undefined>;
+  
+  // Booking methods
+  createBooking(booking: InsertBooking): Promise<Booking>;
+  getBooking(id: string): Promise<Booking | undefined>;
+  getBookingByNumber(bookingNumber: string): Promise<Booking | undefined>;
+  getAllBookings(): Promise<Booking[]>;
+  updateBookingPaymentIntent(id: string, paymentIntentId: string): Promise<Booking | undefined>;
+  updateBookingPaymentStatus(id: string, status: string): Promise<Booking | undefined>;
+  updateBookingStatus(id: string, status: string): Promise<Booking | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -112,6 +115,83 @@ export class DatabaseStorage implements IStorage {
       .where(eq(quotes.id, id))
       .returning();
     return updatedQuote || undefined;
+  }
+  
+  // Booking methods
+  async createBooking(insertBooking: InsertBooking): Promise<Booking> {
+    const bookingNumber = `BKG${Date.now()}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+    
+    // Convert string dates to Date objects
+    const departureDate = new Date(insertBooking.departureDate);
+    const returnDate = insertBooking.returnDate ? new Date(insertBooking.returnDate) : null;
+    
+    const [booking] = await db
+      .insert(bookings)
+      .values({
+        ...insertBooking,
+        bookingNumber,
+        departureDate,
+        returnDate,
+        updatedAt: new Date(),
+      })
+      .returning();
+    return booking;
+  }
+  
+  async getBooking(id: string): Promise<Booking | undefined> {
+    const [booking] = await db.select().from(bookings).where(eq(bookings.id, id));
+    return booking || undefined;
+  }
+  
+  async getBookingByNumber(bookingNumber: string): Promise<Booking | undefined> {
+    const [booking] = await db
+      .select()
+      .from(bookings)
+      .where(eq(bookings.bookingNumber, bookingNumber));
+    return booking || undefined;
+  }
+  
+  async getAllBookings(): Promise<Booking[]> {
+    return await db
+      .select()
+      .from(bookings)
+      .orderBy(desc(bookings.createdAt));
+  }
+  
+  async updateBookingPaymentIntent(id: string, paymentIntentId: string): Promise<Booking | undefined> {
+    const [updatedBooking] = await db
+      .update(bookings)
+      .set({ 
+        stripePaymentIntentId: paymentIntentId,
+        updatedAt: new Date() 
+      })
+      .where(eq(bookings.id, id))
+      .returning();
+    return updatedBooking || undefined;
+  }
+  
+  async updateBookingPaymentStatus(id: string, status: string): Promise<Booking | undefined> {
+    const [updatedBooking] = await db
+      .update(bookings)
+      .set({ 
+        paymentStatus: status,
+        updatedAt: new Date() 
+      })
+      .where(eq(bookings.id, id))
+      .returning();
+    return updatedBooking || undefined;
+  }
+  
+  async updateBookingStatus(id: string, status: string): Promise<Booking | undefined> {
+    const [updatedBooking] = await db
+      .update(bookings)
+      .set({ 
+        bookingStatus: status,
+        updatedAt: new Date() 
+      })
+      .where(eq(bookings.id, id))
+      .returning();
+    return updatedBooking || undefined;
   }
 }
 
