@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import TrustBadges from '@/components/TrustBadges';
+import PopularDestinations from '@/components/PopularDestinations';
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <main>
         <HeroSection />
         <TrustBadges />
+        <PopularDestinations />
       </main>
     </div>
   );

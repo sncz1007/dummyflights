@@ -91,3 +91,23 @@ Preferred communication style: Simple, everyday language.
 - **Design**: 3-column grid on desktop, single column on mobile, circular icon backgrounds
 - **Component**: `client/src/components/TrustBadges.tsx`
 - **Bilingual**: Full English/Spanish support via translations
+
+### Popular Destinations Section (14 Oct 2025)
+- **Purpose**: Showcase top travel destinations with 40% discount included
+- **Destinations Featured** (8 total):
+  1. **Santorini, Greece** - White buildings and blue domes
+  2. **Rio de Janeiro, Brazil** - Christ the Redeemer statue
+  3. **Tokyo, Japan** - Modern cityscape
+  4. **Cusco, Peru** - Machu Picchu ancient ruins
+  5. **Barcelona, Spain** - Sagrada Familia architecture
+  6. **Bali, Indonesia** - Tropical beach and temples
+  7. **New York, USA** - Manhattan skyline
+  8. **Dubai, UAE** - Burj Khalifa modern city
+- **Design**: 
+  - 4-column grid on desktop (lg:grid-cols-4), 2 columns on tablet, 1 on mobile
+  - Professional stock images with gradient overlay
+  - Hover effect with image zoom
+  - Red badge showing "40% OFF Included" / "40% de Descuento Incluido"
+- **Component**: `client/src/components/PopularDestinations.tsx`
+- **Images**: 8 professional stock photos in `attached_assets/stock_images/`
+- **Bilingual**: Full EN/ES support for destination names and discount badge

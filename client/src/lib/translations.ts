@@ -49,6 +49,15 @@ export const translations = {
     // Destinations
     'destinations.title': 'Popular Destinations',
     'destinations.subtitle': 'Discover amazing deals to top destinations worldwide',
+    'destinations.discount': '40% OFF Included',
+    'destinations.santorini': 'Santorini, Greece',
+    'destinations.rio': 'Rio de Janeiro, Brazil',
+    'destinations.tokyo': 'Tokyo, Japan',
+    'destinations.cusco': 'Cusco, Peru',
+    'destinations.barcelona': 'Barcelona, Spain',
+    'destinations.bali': 'Bali, Indonesia',
+    'destinations.newyork': 'New York, USA',
+    'destinations.dubai': 'Dubai, UAE',
     
     // Deals
     'deals.title': 'Special Deals & Offers',
@@ -233,6 +242,15 @@ export const translations = {
     // Destinations
     'destinations.title': 'Destinos Populares',
     'destinations.subtitle': 'Descubre increíbles ofertas a los mejores destinos del mundo',
+    'destinations.discount': '40% de Descuento Incluido',
+    'destinations.santorini': 'Santorini, Grecia',
+    'destinations.rio': 'Río de Janeiro, Brasil',
+    'destinations.tokyo': 'Tokio, Japón',
+    'destinations.cusco': 'Cusco, Perú',
+    'destinations.barcelona': 'Barcelona, España',
+    'destinations.bali': 'Bali, Indonesia',
+    'destinations.newyork': 'Nueva York, EUA',
+    'destinations.dubai': 'Dubái, EAU',
     
     // Deals
     'deals.title': 'Ofertas Especiales',
