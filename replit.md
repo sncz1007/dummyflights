@@ -6,6 +6,24 @@ SkyBudgetFly is a modern flight quotation web application that helps users find 
 
 ## Recent Changes (October 2025)
 
+### ✅ COMPLETADO: USA-Only Departure Restriction (14 Oct 2025)
+- **Business Rule Implementation**: 
+  - Flights must depart from USA airports only (domestic or international destinations)
+  - 40% discount deals apply only to USA-originating flights per airline partnerships
+  
+- **Frontend Implementation**:
+  - AirportSearch component enhanced with `countryFilter` prop to filter airports by country
+  - HeroSection and QuoteForm both apply `countryFilter="USA"` to departure airport field
+  - Labels updated: "From (USA only)" in English, "Desde (solo USA)" in Spanish
+  - Placeholders updated: "US city or airport" / "Ciudad o aeropuerto en USA"
+  - Informational message: "Flights departing from USA only" / "Vuelos que salen desde USA únicamente"
+  
+- **Backend Implementation**:
+  - `/api/airports/search` supports optional `?country=USA` parameter
+  - `storage.searchAirports()` filters airports by country when parameter provided
+  - `/api/flights/search` validates departure airport is from USA, rejects non-USA origins with clear error message
+  - Stripe key validation enforces format `sk_test_*` or `sk_live_*`
+
 ### ✅ COMPLETADO: Sistema de Reserva y Pago con Stripe (14 Oct 2025)
 - **Integración de Stripe FUNCIONAL**:
   - ✅ Claves de API configuradas correctamente en Replit Secrets (pk_test_... y sk_test_...)

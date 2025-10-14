@@ -10,7 +10,7 @@ const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 if (!stripeSecretKey) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
-if (!stripeSecretKey.startsWith('sk_')) {
+if (!stripeSecretKey.startsWith('sk_test_') && !stripeSecretKey.startsWith('sk_live_')) {
   throw new Error('Invalid STRIPE_SECRET_KEY: must start with sk_test_ or sk_live_');
 }
 const stripe = new Stripe(stripeSecretKey, {
@@ -102,6 +102,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate required fields
       if (!fromAirport || !toAirport || !departureDate || !passengers || !flightClass || !tripType) {
         return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      // Validate that departure airport is from USA
+      // Extract IATA code from format "City (IATA)" or just "IATA"
+      const iataMatch = fromAirport.match(/\(([A-Z]{3})\)/);
+      const iataCode = iataMatch ? iataMatch[1] : fromAirport.split(' ')[0];
+      
+      const departureAirport = await storage.getAirportByIata(iataCode);
+      if (!departureAirport) {
+        return res.status(400).json({ error: "Invalid departure airport" });
+      }
+      if (departureAirport.country !== "USA") {
+        return res.status(400).json({ 
+          error: "Flights must depart from USA airports only",
+          message: "Our special discount deals are only available for flights departing from USA airports."
+        });
       }
 
       // Example flight data with various airlines

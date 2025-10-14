@@ -63,7 +63,7 @@ export const translations = {
     'quote.email': 'Email *',
     'quote.phone': 'Phone',
     'quote.country': 'Country',
-    'quote.from': 'From Airport *',
+    'quote.from': 'From Airport (USA only) *',
     'quote.to': 'To Airport *',
     'quote.departure': 'Departure Date *',
     'quote.return': 'Return Date',
@@ -76,8 +76,8 @@ export const translations = {
     'quote.emailPlaceholder': 'john@example.com',
     'quote.phonePlaceholder': '+1 (555) 000-0000',
     'quote.countryPlaceholder': 'USA',
-    'quote.fromPlaceholder': 'Miami (MIA)',
-    'quote.toPlaceholder': 'Bogotá (BOG)',
+    'quote.fromPlaceholder': 'US city or airport',
+    'quote.toPlaceholder': 'City or airport',
     'quote.notesPlaceholder': 'Any special requirements or preferences?',
     
     // Passengers
@@ -239,7 +239,7 @@ export const translations = {
     'quote.email': 'Correo *',
     'quote.phone': 'Teléfono',
     'quote.country': 'País',
-    'quote.from': 'Aeropuerto Origen *',
+    'quote.from': 'Aeropuerto Origen (solo USA) *',
     'quote.to': 'Aeropuerto Destino *',
     'quote.departure': 'Fecha Salida *',
     'quote.return': 'Fecha Regreso',
@@ -252,8 +252,8 @@ export const translations = {
     'quote.emailPlaceholder': 'juan@ejemplo.com',
     'quote.phonePlaceholder': '+57 (300) 000-0000',
     'quote.countryPlaceholder': 'Colombia',
-    'quote.fromPlaceholder': 'Miami (MIA)',
-    'quote.toPlaceholder': 'Bogotá (BOG)',
+    'quote.fromPlaceholder': 'Ciudad o aeropuerto en USA',
+    'quote.toPlaceholder': 'Ciudad o aeropuerto',
     'quote.notesPlaceholder': '¿Algún requerimiento especial o preferencia?',
     
     // Passengers
