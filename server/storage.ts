@@ -1,11 +1,11 @@
 import { airports, quotes, bookings, type Airport, type InsertAirport, type Quote, type InsertQuote, type Booking, type InsertBooking } from "@shared/schema";
 import { db } from "./db";
-import { eq, ilike, or, desc } from "drizzle-orm";
+import { eq, ilike, or, desc, and } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
   // Airport methods
-  searchAirports(query: string): Promise<Airport[]>;
+  searchAirports(query: string, country?: string): Promise<Airport[]>;
   getAirportByIata(code: string): Promise<Airport | undefined>;
   createAirport(airport: InsertAirport): Promise<Airport>;
   getAllAirports(): Promise<Airport[]>;
@@ -29,20 +29,24 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   // Airport methods
-  async searchAirports(query: string): Promise<Airport[]> {
+  async searchAirports(query: string, country?: string): Promise<Airport[]> {
     const searchQuery = `%${query.toLowerCase()}%`;
+    
+    const searchConditions = or(
+      ilike(airports.city, searchQuery),
+      ilike(airports.name, searchQuery),
+      ilike(airports.iataCode, searchQuery),
+      ilike(airports.country, searchQuery)
+    );
+    
+    const whereClause = country 
+      ? and(searchConditions, eq(airports.country, country))
+      : searchConditions;
     
     return await db
       .select()
       .from(airports)
-      .where(
-        or(
-          ilike(airports.city, searchQuery),
-          ilike(airports.name, searchQuery),
-          ilike(airports.iataCode, searchQuery),
-          ilike(airports.country, searchQuery)
-        )
-      )
+      .where(whereClause)
       .limit(20)
       .orderBy(airports.city);
   }

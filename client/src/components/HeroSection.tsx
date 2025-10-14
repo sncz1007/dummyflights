@@ -117,6 +117,7 @@ export default function HeroSection() {
                     placeholder={t('search.fromPlaceholder')}
                     className="pl-10"
                     data-testid="input-from-airport"
+                    countryFilter="USA"
                   />
                 </div>
               </div>
@@ -237,6 +238,10 @@ export default function HeroSection() {
               <Plane className="h-5 w-5" />
               <span>{t('search.button')}</span>
             </Button>
+            
+            <p className="text-xs text-center mt-3 text-muted-foreground opacity-80">
+              ℹ️ {t('search.usaOnly')}
+            </p>
           </div>
         </div>
       </div>

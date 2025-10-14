@@ -13,7 +13,7 @@ export const translations = {
     'hero.guarantee': 'Best Price Guarantee • Free Quote • Expert Support',
     
     // Search Form
-    'search.from': 'From',
+    'search.from': 'From (USA only)',
     'search.to': 'To',
     'search.departure': 'Departure',
     'search.return': 'Return',
@@ -28,8 +28,9 @@ export const translations = {
     'search.oneway': 'One Way',
     'search.multicity': 'Multi-City',
     'search.button': 'Search Flights',
-    'search.fromPlaceholder': 'City or airport',
+    'search.fromPlaceholder': 'US city or airport',
     'search.toPlaceholder': 'City or airport',
+    'search.usaOnly': 'Flights departing from USA only',
     
     // Trust Indicators
     'trust.airlines': 'Airlines Worldwide',
@@ -188,7 +189,7 @@ export const translations = {
     'hero.guarantee': 'Garantía de Mejor Precio • Cotización Gratis • Soporte Experto',
     
     // Search Form
-    'search.from': 'Desde',
+    'search.from': 'Desde (solo USA)',
     'search.to': 'Hasta',
     'search.departure': 'Salida',
     'search.return': 'Regreso',
@@ -203,8 +204,9 @@ export const translations = {
     'search.oneway': 'Solo Ida',
     'search.multicity': 'Multi-Ciudad',
     'search.button': 'Buscar Vuelos',
-    'search.fromPlaceholder': 'Ciudad o aeropuerto',
+    'search.fromPlaceholder': 'Ciudad o aeropuerto en USA',
     'search.toPlaceholder': 'Ciudad o aeropuerto',
+    'search.usaOnly': 'Vuelos que salen desde USA únicamente',
     
     // Trust Indicators
     'trust.airlines': 'Aerolíneas Globales',

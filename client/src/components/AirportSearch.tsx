@@ -10,6 +10,7 @@ interface AirportSearchProps {
   placeholder?: string;
   className?: string;
   'data-testid'?: string;
+  countryFilter?: string; // Optional country filter (e.g., "USA")
 }
 
 export default function AirportSearch({ 
@@ -17,7 +18,8 @@ export default function AirportSearch({
   onChange, 
   placeholder = "City or airport", 
   className,
-  'data-testid': dataTestId 
+  'data-testid': dataTestId,
+  countryFilter
 }: AirportSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,11 +28,16 @@ export default function AirportSearch({
 
   // Fetch airports based on search query
   const { data: airports = [], isLoading } = useQuery<Airport[]>({
-    queryKey: ['/api/airports/search', searchQuery],
+    queryKey: ['/api/airports/search', searchQuery, countryFilter],
     queryFn: async () => {
       if (searchQuery.length < 2) return [];
       
-      const response = await fetch(`/api/airports/search?q=${encodeURIComponent(searchQuery)}`);
+      const params = new URLSearchParams({ q: searchQuery });
+      if (countryFilter) {
+        params.append('country', countryFilter);
+      }
+      
+      const response = await fetch(`/api/airports/search?${params.toString()}`);
       if (!response.ok) throw new Error('Failed to search airports');
       return response.json();
     },

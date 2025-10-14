@@ -22,12 +22,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/airports/search", async (req, res) => {
     try {
       const query = req.query.q as string;
+      const country = req.query.country as string | undefined;
       
       if (!query || query.length < 2) {
         return res.json([]);
       }
       
-      const airports = await storage.searchAirports(query);
+      const airports = await storage.searchAirports(query, country);
       res.json(airports);
     } catch (error) {
       console.error("Airport search error:", error);
