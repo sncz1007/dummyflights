@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AirportSearch from './AirportSearch';
 import { Plane, PlaneTakeoff, PlaneLanding, Calendar, Users, Check } from 'lucide-react';
+import airplaneBackground from '@assets/stock_images/airplane_flying_in_s_3b371e33.jpg';
 
 export default function HeroSection() {
   const { t } = useTranslation();
@@ -85,8 +86,17 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="home" className="min-h-screen gradient-hero text-white flex items-center justify-center py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="home" className="relative min-h-screen text-white flex items-center justify-center py-20">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${airplaneBackground})` }}
+      />
+      {/* Red Overlay Filter */}
+      <div className="absolute inset-0 bg-red-600/40" />
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 animate-fade-in">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold mb-6" data-testid="text-hero-title">
             {t('hero.title')}

@@ -70,3 +70,13 @@ Preferred communication style: Simple, everyday language.
 - `VITE_EMAILJS_PUBLIC_KEY`
 - `VITE_STRIPE_PUBLIC_KEY`
 - `STRIPE_SECRET_KEY`
+## Recent Design Updates (October 14, 2025)
+
+### Hero Section Background Image
+- **Implementation**: Added professional airplane background image with red brand overlay
+- **Stock Image**: Airplane flying in sky (aerial view)
+- **Brand Filter**: Red overlay at 40% opacity (`bg-red-600/40`) for brand identity
+- **Layout**: Full-section background with proper z-index layering (image → overlay → content)
+- **File Modified**: `client/src/components/HeroSection.tsx`
+- **Asset Location**: `attached_assets/stock_images/airplane_flying_in_s_3b371e33.jpg`
+- **Result**: Professional hero section maintaining text readability with branded visual identity
