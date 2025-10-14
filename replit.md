@@ -152,9 +152,11 @@ DATABASE_URL                   # Neon PostgreSQL connection string
 VITE_EMAILJS_SERVICE_ID       # EmailJS service identifier
 VITE_EMAILJS_TEMPLATE_ID      # EmailJS template for quotes
 VITE_EMAILJS_PUBLIC_KEY       # EmailJS public API key
-VITE_STRIPE_PUBLIC_KEY        # Stripe publishable key (NEW)
-STRIPE_SECRET_KEY             # Stripe secret key (NEW)
+VITE_STRIPE_PUBLIC_KEY        # Stripe publishable key (pk_test_... or pk_live_...)
+STRIPE_SECRET_KEY             # Stripe secret key (sk_test_... or sk_live_...)
 ```
+
+**Note**: All Stripe keys are now configured and functional. The application uses test keys (pk_test_/sk_test_) for development.
 
 ### Hosting Considerations
 - Supports static hosting (Netlify, Vercel) with SPA routing configurations
