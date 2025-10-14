@@ -9,31 +9,32 @@ SkyBudgetFly is a modern flight quotation web application that helps users find 
 ### ✅ COMPLETADO: Airline Partnership Segmentation (14 Oct 2025)
 - **Business Rule**: Airline partnerships are segmented by route type:
   - **Domestic USA Flights (USA → USA)**: Alaska Airlines, American Airlines only
-  - **International Flights (USA → Other Countries)**: British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian, SriLankan Airlines
+  - **International Flights (USA ↔ Other Countries)**: British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian, SriLankan Airlines
   
 - **Implementation**:
-  - Backend determines route type by checking destination airport country
-  - Domestic routes (both airports in USA) → shows only Alaska Airlines and American Airlines
-  - International routes (destination outside USA) → shows only the 13 international airline partners
+  - Backend determines route type by checking BOTH departure and destination airport countries
+  - Domestic routes (BOTH airports in USA) → shows only Alaska Airlines and American Airlines
+  - International routes (ANY airport outside USA) → shows only the 13 international airline partners
+  - Supports: USA→USA (domestic), USA→International, International→USA (all covered)
   - Constants defined: `DOMESTIC_AIRLINES` and `INTERNATIONAL_AIRLINES` in server/routes.ts
-  - Validation: Rejects searches if destination airport cannot be found in database
+  - Validation: Rejects searches if any airport cannot be found in database
 
-### ✅ COMPLETADO: USA-Only Departure Restriction (14 Oct 2025)
-- **Business Rule Implementation**: 
-  - Flights must depart from USA airports only (domestic or international destinations)
-  - 40% discount deals apply only to USA-originating flights per airline partnerships
+### ✅ COMPLETADO: International Flight Support (14 Oct 2025)
+- **Business Rule**: Flights can now depart from anywhere worldwide
+  - Supports: USA domestic (USA→USA), USA to international, and international to USA
+  - 40% discount deals apply to all route types per airline partnerships
   
 - **Frontend Implementation**:
-  - AirportSearch component enhanced with `countryFilter` prop to filter airports by country
-  - HeroSection and QuoteForm both apply `countryFilter="USA"` to departure airport field
-  - Labels updated: "From (USA only)" in English, "Desde (solo USA)" in Spanish
-  - Placeholders updated: "US city or airport" / "Ciudad o aeropuerto en USA"
-  - Informational message: "Flights departing from USA only" / "Vuelos que salen desde USA únicamente"
+  - Removed `countryFilter` restriction from departure airport fields
+  - Labels updated to remove "USA only" references in English and Spanish
+  - Placeholders updated: "City or airport" for all departure/destination fields
+  - Informational message: "International flights and USA domestic flights"
   
 - **Backend Implementation**:
-  - `/api/airports/search` supports optional `?country=USA` parameter
+  - `/api/airports/search` supports optional `?country` parameter for filtering
   - `storage.searchAirports()` filters airports by country when parameter provided
-  - `/api/flights/search` validates departure airport is from USA, rejects non-USA origins with clear error message
+  - `/api/flights/search` validates both airports exist in database
+  - Route type determined by checking BOTH departure and destination countries
   - Stripe key validation enforces format `sk_test_*` or `sk_live_*`
 
 ### ✅ COMPLETADO: Sistema de Reserva y Pago con Stripe (14 Oct 2025)
