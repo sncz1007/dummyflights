@@ -127,25 +127,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Missing required fields" });
       }
 
-      // Validate that departure airport is from USA
-      // Extract IATA code from format "City (IATA)" or just "IATA"
+      // Extract departure and destination airport IATA codes
       const fromIataMatch = fromAirport.match(/\(([A-Z]{3})\)/);
       const fromIataCode = fromIataMatch ? fromIataMatch[1] : fromAirport.split(' ')[0];
       
+      const toIataMatch = toAirport.match(/\(([A-Z]{3})\)/);
+      const toIataCode = toIataMatch ? toIataMatch[1] : toAirport.split(' ')[0];
+      
+      // Get both airports from database
       const departureAirport = await storage.getAirportByIata(fromIataCode);
       if (!departureAirport) {
         return res.status(400).json({ error: "Invalid departure airport" });
       }
-      if (departureAirport.country !== "USA") {
-        return res.status(400).json({ 
-          error: "Flights must depart from USA airports only",
-          message: "Our special discount deals are only available for flights departing from USA airports."
-        });
-      }
-
-      // Extract destination airport IATA and determine route type
-      const toIataMatch = toAirport.match(/\(([A-Z]{3})\)/);
-      const toIataCode = toIataMatch ? toIataMatch[1] : toAirport.split(' ')[0];
       
       const destinationAirport = await storage.getAirportByIata(toIataCode);
       if (!destinationAirport) {
@@ -156,7 +149,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Determine route type and select appropriate airline partners
-      const isDomestic = destinationAirport.country === "USA";
+      // Domestic: BOTH airports in USA
+      // International: ANY airport outside USA
+      const isDomestic = departureAirport.country === "USA" && destinationAirport.country === "USA";
       const airlines = isDomestic ? DOMESTIC_AIRLINES : INTERNATIONAL_AIRLINES;
 
       // Generate example flights (3-6 results)
