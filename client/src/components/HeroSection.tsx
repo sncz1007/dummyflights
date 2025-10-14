@@ -21,10 +21,12 @@ export default function HeroSection() {
     tripType: 'roundtrip'
   });
 
-  // Use refs to store current values
+  // Use refs to store current values (for reliable capture during automated testing)
   const currentPassengers = useRef('1');
   const currentFlightClass = useRef('economy');
   const currentTripType = useRef('roundtrip');
+  const departureDateRef = useRef<HTMLInputElement>(null);
+  const returnDateRef = useRef<HTMLInputElement>(null);
 
   const handlePassengersChange = (value: string) => {
     currentPassengers.current = value;
@@ -45,8 +47,8 @@ export default function HeroSection() {
     const completeData = {
       fromAirport: searchData.fromAirport,
       toAirport: searchData.toAirport,
-      departureDate: searchData.departureDate,
-      returnDate: searchData.returnDate,
+      departureDate: departureDateRef.current?.value || searchData.departureDate,
+      returnDate: returnDateRef.current?.value || searchData.returnDate,
       passengers: currentPassengers.current,
       flightClass: currentFlightClass.current,
       tripType: currentTripType.current,
@@ -144,6 +146,7 @@ export default function HeroSection() {
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <Input
+                    ref={departureDateRef}
                     type="date"
                     value={searchData.departureDate}
                     onChange={(e) => setSearchData(prev => ({ ...prev, departureDate: e.target.value }))}
@@ -161,6 +164,7 @@ export default function HeroSection() {
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <Input
+                    ref={returnDateRef}
                     type="date"
                     value={searchData.returnDate}
                     onChange={(e) => setSearchData(prev => ({ ...prev, returnDate: e.target.value }))}
