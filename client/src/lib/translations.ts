@@ -38,6 +38,14 @@ export const translations = {
     'trust.support': 'Expert Support',
     'trust.customers': 'Happy Travelers',
     
+    // Trust Badges
+    'trust.secureBooking': 'Secure Booking',
+    'trust.secureBookingDesc': 'Your data is protected with SSL encryption',
+    'trust.securePayment': 'Secure Payments',
+    'trust.securePaymentDesc': 'All payments processed securely via Stripe',
+    'trust.support247': '24/7 Support',
+    'trust.support247Desc': 'We\'re here to help you anytime, anywhere',
+    
     // Destinations
     'destinations.title': 'Popular Destinations',
     'destinations.subtitle': 'Discover amazing deals to top destinations worldwide',
@@ -213,6 +221,14 @@ export const translations = {
     'trust.savings': 'Ahorro Promedio',
     'trust.support': 'Soporte Experto',
     'trust.customers': 'Viajeros Felices',
+    
+    // Trust Badges
+    'trust.secureBooking': 'Reserva Segura',
+    'trust.secureBookingDesc': 'Tus datos están protegidos con encriptación SSL',
+    'trust.securePayment': 'Pagos Seguros',
+    'trust.securePaymentDesc': 'Todos los pagos procesados de forma segura via Stripe',
+    'trust.support247': 'Asistencia 24/7',
+    'trust.support247Desc': 'Estamos aquí para ayudarte en cualquier momento',
     
     // Destinations
     'destinations.title': 'Destinos Populares',

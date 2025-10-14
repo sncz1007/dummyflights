@@ -80,3 +80,14 @@ Preferred communication style: Simple, everyday language.
 - **File Modified**: `client/src/components/HeroSection.tsx`
 - **Asset Location**: `attached_assets/stock_images/airplane_flying_in_s_3b371e33.jpg`
 - **Result**: Professional hero section maintaining text readability with branded visual identity
+
+### Trust Badges Section (14 Oct 2025)
+- **Purpose**: Display security and support features to build user trust
+- **Location**: Below Hero Section on homepage
+- **Features**:
+  - **Reserva Segura / Secure Booking**: Shield icon, SSL encryption message
+  - **Pagos Seguros / Secure Payments**: Credit Card icon, Stripe security message
+  - **Asistencia 24/7 / 24/7 Support**: Headphones icon, anytime support message
+- **Design**: 3-column grid on desktop, single column on mobile, circular icon backgrounds
+- **Component**: `client/src/components/TrustBadges.tsx`
+- **Bilingual**: Full English/Spanish support via translations
