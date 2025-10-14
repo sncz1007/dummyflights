@@ -6,6 +6,26 @@ SkyBudgetFly is a modern flight quotation web application that helps users find 
 
 ## Recent Changes (October 2025)
 
+### Implemented: Flight Booking & Payment System (Latest)
+- **Flight Search & Results**:
+  - Added `/api/flights/search` endpoint that generates example flight data with 40% discount
+  - Created FlightResults page (`/flights`) showing available flights with airlines, prices, and amenities
+  - Integrated search form navigation from hero section to results page using URL parameters
+  - Example data includes 6 major airlines (American, Delta, United, British Airways, Lufthansa, Air France)
+  
+- **Stripe Payment Integration**:
+  - Integrated Stripe for secure payment processing (blueprint:javascript_stripe)
+  - Added `bookings` table to database with complete reservation and payment tracking
+  - Created `/api/create-booking` endpoint to handle booking creation and Stripe payment intent
+  - Implemented `/api/stripe-webhook` for payment status updates
+  - Ready for checkout page implementation
+  
+- **Business Model Implementation**:
+  - Owner has 40% discount deals through airline partnerships
+  - Customers see discounted prices and pay via Stripe
+  - Owner manually purchases tickets and sends them to customers via email
+  - All pricing shows: original price (strikethrough) + discounted price (40% off) + savings amount
+
 ### Fixed: Flight Search Form State and Visibility Issues
 - **Issue 1**: Select components (flightClass, tripType, passengers) were not capturing values correctly when form was submitted immediately after selection
   - **Root Cause**: React's async setState behavior caused search handler to read stale state values
@@ -49,6 +69,12 @@ Preferred communication style: Simple, everyday language.
   - `users`: User authentication data
   - `airports`: Comprehensive airport database with IATA/ICAO codes, geolocation
   - `quotes`: Flight quote requests with contact info, trip details, and status tracking
+  - `bookings`: Flight reservations with payment tracking (NEW)
+    - Stores customer info, flight details, selected flight data (JSON)
+    - Tracks original price, discounted price (40% off), currency
+    - Stripe payment integration (payment intent ID, payment status)
+    - Booking status (pending, confirmed, ticketed, cancelled)
+    - Ticket delivery tracking
 
 ### Email Integration
 - **Primary Service**: EmailJS for client-side email sending
@@ -86,6 +112,12 @@ Preferred communication style: Simple, everyday language.
 ## External Dependencies
 
 ### Third-Party Services
+- **Stripe**: Payment processing platform (NEW)
+  - Handles secure credit card payments for flight bookings
+  - Payment intent creation for one-time charges
+  - Webhook integration for payment status updates
+  - Test mode available for development
+  
 - **EmailJS**: Client-side email service for quote delivery
   - Service ID, Template ID, and Public Key configured via environment variables
   - Sends structured quote data to business email
@@ -120,6 +152,8 @@ DATABASE_URL                   # Neon PostgreSQL connection string
 VITE_EMAILJS_SERVICE_ID       # EmailJS service identifier
 VITE_EMAILJS_TEMPLATE_ID      # EmailJS template for quotes
 VITE_EMAILJS_PUBLIC_KEY       # EmailJS public API key
+VITE_STRIPE_PUBLIC_KEY        # Stripe publishable key (NEW)
+STRIPE_SECRET_KEY             # Stripe secret key (NEW)
 ```
 
 ### Hosting Considerations
