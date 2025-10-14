@@ -6,6 +6,18 @@ SkyBudgetFly is a modern flight quotation web application that helps users find 
 
 ## Recent Changes (October 2025)
 
+### ✅ COMPLETADO: Airline Partnership Segmentation (14 Oct 2025)
+- **Business Rule**: Airline partnerships are segmented by route type:
+  - **Domestic USA Flights (USA → USA)**: Alaska Airlines, American Airlines only
+  - **International Flights (USA → Other Countries)**: British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian, SriLankan Airlines
+  
+- **Implementation**:
+  - Backend determines route type by checking destination airport country
+  - Domestic routes (both airports in USA) → shows only Alaska Airlines and American Airlines
+  - International routes (destination outside USA) → shows only the 13 international airline partners
+  - Constants defined: `DOMESTIC_AIRLINES` and `INTERNATIONAL_AIRLINES` in server/routes.ts
+  - Validation: Rejects searches if destination airport cannot be found in database
+
 ### ✅ COMPLETADO: USA-Only Departure Restriction (14 Oct 2025)
 - **Business Rule Implementation**: 
   - Flights must depart from USA airports only (domestic or international destinations)
@@ -43,7 +55,7 @@ SkyBudgetFly is a modern flight quotation web application that helps users find 
   - Added `/api/flights/search` endpoint that generates example flight data with 40% discount
   - Created FlightResults page (`/flights`) showing available flights with airlines, prices, and amenities
   - Integrated search form navigation from hero section to results page using URL parameters
-  - Example data includes 6 major airlines (American, Delta, United, British Airways, Lufthansa, Air France)
+  - Airlines shown depend on route type (domestic: 2 airlines, international: 13 airlines)
   
 - **Business Model Implementation**:
   - Owner has 40% discount deals through airline partnerships
