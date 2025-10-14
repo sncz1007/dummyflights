@@ -129,10 +129,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Validate that departure airport is from USA
       // Extract IATA code from format "City (IATA)" or just "IATA"
-      const iataMatch = fromAirport.match(/\(([A-Z]{3})\)/);
-      const iataCode = iataMatch ? iataMatch[1] : fromAirport.split(' ')[0];
+      const fromIataMatch = fromAirport.match(/\(([A-Z]{3})\)/);
+      const fromIataCode = fromIataMatch ? fromIataMatch[1] : fromAirport.split(' ')[0];
       
-      const departureAirport = await storage.getAirportByIata(iataCode);
+      const departureAirport = await storage.getAirportByIata(fromIataCode);
       if (!departureAirport) {
         return res.status(400).json({ error: "Invalid departure airport" });
       }
@@ -143,15 +143,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Example flight data with various airlines
-      const airlines = [
-        { code: "AA", name: "American Airlines", logo: "https://images.kiwi.com/airlines/64/AA.png" },
-        { code: "DL", name: "Delta Air Lines", logo: "https://images.kiwi.com/airlines/64/DL.png" },
-        { code: "UA", name: "United Airlines", logo: "https://images.kiwi.com/airlines/64/UA.png" },
-        { code: "BA", name: "British Airways", logo: "https://images.kiwi.com/airlines/64/BA.png" },
-        { code: "LH", name: "Lufthansa", logo: "https://images.kiwi.com/airlines/64/LH.png" },
-        { code: "AF", name: "Air France", logo: "https://images.kiwi.com/airlines/64/AF.png" },
-      ];
+      // Extract destination airport IATA and determine route type
+      const toIataMatch = toAirport.match(/\(([A-Z]{3})\)/);
+      const toIataCode = toIataMatch ? toIataMatch[1] : toAirport.split(' ')[0];
+      
+      const destinationAirport = await storage.getAirportByIata(toIataCode);
+      if (!destinationAirport) {
+        return res.status(400).json({ 
+          error: "Invalid destination airport",
+          message: "The destination airport could not be found in our database."
+        });
+      }
+
+      // Determine route type and select appropriate airline partners
+      const isDomestic = destinationAirport.country === "USA";
+      const airlines = isDomestic ? DOMESTIC_AIRLINES : INTERNATIONAL_AIRLINES;
 
       // Generate example flights (3-6 results)
       const numFlights = Math.floor(Math.random() * 4) + 3;
