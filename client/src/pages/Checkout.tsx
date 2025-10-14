@@ -55,27 +55,25 @@ interface SearchParams {
   tripType: string;
 }
 
-const CheckoutForm = ({ 
-  flight, 
-  searchParams, 
-  onCreateBooking 
+interface CustomerInfo {
+  fullName: string;
+  email: string;
+  phone: string;
+}
+
+// Customer Info Form Component (no Stripe hooks)
+const CustomerInfoForm = ({ 
+  onSubmit,
+  customerInfo,
+  setCustomerInfo
 }: { 
-  flight: FlightData; 
-  searchParams: SearchParams; 
-  onCreateBooking: (customerInfo: { fullName: string; email: string; phone: string }) => Promise<string>;
+  onSubmit: () => Promise<void>;
+  customerInfo: CustomerInfo;
+  setCustomerInfo: (info: CustomerInfo) => void;
 }) => {
-  const stripe = useStripe();
-  const elements = useElements();
   const { t } = useTranslation();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [customerInfo, setCustomerInfo] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-  });
-  const [clientSecret, setClientSecret] = useState('');
-  const [bookingCreated, setBookingCreated] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,28 +88,108 @@ const CheckoutForm = ({
     }
 
     setIsProcessing(true);
+    try {
+      await onSubmit();
+    } catch (err: any) {
+      toast({
+        title: t('checkout.error'),
+        description: err.message || t('checkout.errorMessage'),
+        variant: 'destructive',
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold mb-4" data-testid="text-contact-info">
+          {t('checkout.contactInfo')}
+        </h3>
+        
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="fullName">{t('checkout.name')} *</Label>
+            <Input
+              id="fullName"
+              value={customerInfo.fullName}
+              onChange={(e) => setCustomerInfo({ ...customerInfo, fullName: e.target.value })}
+              placeholder="John Doe"
+              required
+              data-testid="input-fullname"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="email">{t('checkout.email')} *</Label>
+            <Input
+              id="email"
+              type="email"
+              value={customerInfo.email}
+              onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
+              placeholder="john@example.com"
+              required
+              data-testid="input-email"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="phone">{t('checkout.phone')}</Label>
+            <Input
+              id="phone"
+              type="tel"
+              value={customerInfo.phone}
+              onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
+              placeholder="+1 (555) 000-0000"
+              data-testid="input-phone"
+            />
+          </div>
+        </div>
+      </Card>
+
+      <Button
+        type="submit"
+        disabled={isProcessing || !customerInfo.fullName || !customerInfo.email}
+        className="w-full"
+        size="lg"
+        data-testid="button-continue-payment"
+      >
+        {isProcessing ? (
+          <>
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            {t('checkout.processing')}
+          </>
+        ) : (
+          'Continue to Payment'
+        )}
+      </Button>
+    </form>
+  );
+};
+
+// Payment Form Component (with Stripe hooks)
+const PaymentForm = ({ 
+  customerInfo 
+}: { 
+  customerInfo: CustomerInfo;
+}) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsProcessing(true);
 
     try {
-      // First, create the booking with real customer info
-      if (!bookingCreated) {
-        const secret = await onCreateBooking(customerInfo);
-        setClientSecret(secret);
-        setBookingCreated(true);
-        
-        toast({
-          title: 'Booking Created',
-          description: 'Please complete your payment',
-        });
-        
-        setIsProcessing(false);
-        return;
-      }
-
-      // Then confirm payment
-      if (!stripe || !elements) {
-        return;
-      }
-
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -140,72 +218,22 @@ const CheckoutForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Customer Information */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4" data-testid="text-contact-info">
-          {t('checkout.contactInfo')}
+        <h3 className="text-lg font-semibold mb-4" data-testid="text-payment-info">
+          {t('checkout.paymentInfo')}
         </h3>
         
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="fullName">{t('checkout.name')} *</Label>
-            <Input
-              id="fullName"
-              value={customerInfo.fullName}
-              onChange={(e) => setCustomerInfo(prev => ({ ...prev, fullName: e.target.value }))}
-              placeholder="John Doe"
-              required
-              data-testid="input-fullname"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="email">{t('checkout.email')} *</Label>
-            <Input
-              id="email"
-              type="email"
-              value={customerInfo.email}
-              onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
-              placeholder="john@example.com"
-              required
-              data-testid="input-email"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="phone">{t('checkout.phone')}</Label>
-            <Input
-              id="phone"
-              type="tel"
-              value={customerInfo.phone}
-              onChange={(e) => setCustomerInfo(prev => ({ ...prev, phone: e.target.value }))}
-              placeholder="+1 (555) 000-0000"
-              data-testid="input-phone"
-            />
-          </div>
+        <PaymentElement />
+        
+        <div className="flex items-center gap-2 mt-4 text-sm text-muted-foreground">
+          <Shield className="h-4 w-4" />
+          <span data-testid="text-secure-payment">{t('checkout.securePayment')}</span>
         </div>
       </Card>
 
-      {/* Payment Element - Only show after booking is created */}
-      {bookingCreated && clientSecret && (
-        <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4" data-testid="text-payment-info">
-            {t('checkout.paymentInfo')}
-          </h3>
-          
-          <PaymentElement />
-          
-          <div className="flex items-center gap-2 mt-4 text-sm text-muted-foreground">
-            <Shield className="h-4 w-4" />
-            <span data-testid="text-secure-payment">{t('checkout.securePayment')}</span>
-          </div>
-        </Card>
-      )}
-
-      {/* Submit Button */}
       <Button
         type="submit"
-        disabled={isProcessing || (!bookingCreated && !customerInfo.fullName)}
+        disabled={!stripe || isProcessing}
         className="w-full"
         size="lg"
         data-testid="button-confirm-booking"
@@ -215,10 +243,8 @@ const CheckoutForm = ({
             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
             {t('checkout.processing')}
           </>
-        ) : bookingCreated ? (
-          t('checkout.confirmBooking')
         ) : (
-          'Continue to Payment'
+          t('checkout.confirmBooking')
         )}
       </Button>
     </form>
@@ -233,6 +259,11 @@ export default function Checkout() {
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
   const [clientSecret, setClientSecret] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
+    fullName: '',
+    email: '',
+    phone: '',
+  });
 
   useEffect(() => {
     // Check for success parameter (payment completed)
@@ -277,7 +308,7 @@ export default function Checkout() {
     setIsLoading(false);
   }, []);
 
-  const handleCreateBooking = async (customerInfo: { fullName: string; email: string; phone: string }): Promise<string> => {
+  const handleCreateBooking = async () => {
     if (!flight || !searchParams) {
       throw new Error('Flight or search params not loaded');
     }
@@ -305,7 +336,11 @@ export default function Checkout() {
       const data = await response.json();
       
       setClientSecret(data.clientSecret);
-      return data.clientSecret;
+      
+      toast({
+        title: 'Booking Created',
+        description: 'Please complete your payment',
+      });
     } catch (error: any) {
       console.error('Booking creation error:', error);
       toast({
@@ -360,88 +395,80 @@ export default function Checkout() {
                 {t('checkout.flightSummary')}
               </h2>
 
-              {/* Flight Info */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={flight.airline.logo}
-                    alt={flight.airline.name}
+              <div className="space-y-4 mb-4">
+                <div className="flex items-center space-x-4">
+                  <img 
+                    src={flight.airline.logo} 
+                    alt={flight.airline.name} 
                     className="h-10 w-10 object-contain"
+                    data-testid="img-airline-logo"
                   />
                   <div>
-                    <p className="font-semibold" data-testid="text-summary-airline">
-                      {flight.airline.name}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="font-semibold" data-testid="text-airline-name">{flight.airline.name}</p>
+                    <p className="text-sm text-muted-foreground" data-testid="text-flight-number">
                       {flight.flightNumber}
                     </p>
                   </div>
                 </div>
 
-                <div className="border-t pt-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <p className="text-sm font-medium">{searchParams.fromAirport}</p>
-                    <Plane className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium">{searchParams.toAirport}</p>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {searchParams.departureDate}
-                    {searchParams.returnDate && ` - ${searchParams.returnDate}`}
-                  </p>
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-sm font-medium">{searchParams.fromAirport}</p>
+                  <Plane className="h-4 w-4 text-muted-foreground" />
+                  <p className="text-sm font-medium">{searchParams.toAirport}</p>
                 </div>
-
-                <div className="border-t pt-4 space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      {t('checkout.originalPrice')}
-                    </span>
-                    <span className="text-sm line-through" data-testid="text-summary-original-price">
-                      ${flight.originalPrice.toFixed(2)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between text-green-600">
-                    <span className="text-sm font-medium">
-                      {t('checkout.discount')}
-                    </span>
-                    <span className="text-sm font-medium" data-testid="text-summary-discount">
-                      -${savings.toFixed(2)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center pt-2 border-t">
-                    <span className="text-lg font-semibold">
-                      {t('checkout.youPay')}
-                    </span>
-                    <span className="text-2xl font-bold text-primary" data-testid="text-summary-total">
-                      ${flight.discountedPrice.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-
-                <Badge variant="default" className="w-full justify-center bg-green-600 hover:bg-green-700">
-                  {flight.discount}% {t('results.discount')}
-                </Badge>
+                <p className="text-xs text-muted-foreground">
+                  {searchParams.departureDate}
+                  {searchParams.returnDate && ` - ${searchParams.returnDate}`}
+                </p>
               </div>
+
+              <div className="border-t pt-4 space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {t('checkout.originalPrice')}
+                  </span>
+                  <span className="text-sm line-through" data-testid="text-summary-original-price">
+                    ${flight.originalPrice.toFixed(2)}
+                  </span>
+                </div>
+                
+                <div className="flex justify-between text-green-600">
+                  <span className="text-sm font-medium">
+                    {t('checkout.discount')}
+                  </span>
+                  <span className="text-sm font-medium" data-testid="text-summary-discount">
+                    -${savings.toFixed(2)}
+                  </span>
+                </div>
+                
+                <div className="flex justify-between items-center pt-2 border-t">
+                  <span className="text-lg font-semibold">
+                    {t('checkout.youPay')}
+                  </span>
+                  <span className="text-2xl font-bold text-primary" data-testid="text-summary-total">
+                    ${flight.discountedPrice.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+
+              <Badge variant="default" className="w-full justify-center bg-green-600 hover:bg-green-700">
+                {flight.discount}% {t('results.discount')}
+              </Badge>
             </Card>
           </div>
 
           {/* Checkout Form - Right Column */}
           <div className="lg:col-span-2">
-            {clientSecret ? (
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
-                <CheckoutForm 
-                  flight={flight} 
-                  searchParams={searchParams} 
-                  onCreateBooking={handleCreateBooking}
-                />
-              </Elements>
-            ) : (
-              <CheckoutForm 
-                flight={flight} 
-                searchParams={searchParams} 
-                onCreateBooking={handleCreateBooking}
+            {!clientSecret ? (
+              <CustomerInfoForm 
+                onSubmit={handleCreateBooking}
+                customerInfo={customerInfo}
+                setCustomerInfo={setCustomerInfo}
               />
+            ) : (
+              <Elements stripe={stripePromise} options={{ clientSecret }}>
+                <PaymentForm customerInfo={customerInfo} />
+              </Elements>
             )}
           </div>
         </div>

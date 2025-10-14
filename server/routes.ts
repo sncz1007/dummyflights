@@ -6,10 +6,12 @@ import { z } from "zod";
 import Stripe from "stripe";
 
 // Initialize Stripe (from blueprint:javascript_stripe)
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+// Use testing key if available (for e2e tests), otherwise use production key
+const stripeSecretKey = process.env.TESTING_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
+if (!stripeSecretKey) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY or TESTING_STRIPE_SECRET_KEY');
 }
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+const stripe = new Stripe(stripeSecretKey, {
   apiVersion: "2025-09-30.clover",
 });
 

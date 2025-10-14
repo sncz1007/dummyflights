@@ -52,9 +52,18 @@ export default function HeroSection() {
       tripType: currentTripType.current,
     };
     
+    console.log('Flight search validation:', completeData);
+    
     // Validate required fields
     if (!completeData.fromAirport || !completeData.toAirport || !completeData.departureDate) {
-      console.log('Missing required fields for flight search');
+      console.log('Missing required fields for flight search', {
+        hasFromAirport: !!completeData.fromAirport,
+        hasToAirport: !!completeData.toAirport,
+        hasDepartureDate: !!completeData.departureDate,
+        fromAirport: completeData.fromAirport,
+        toAirport: completeData.toAirport,
+        departureDate: completeData.departureDate
+      });
       return;
     }
     
@@ -69,6 +78,7 @@ export default function HeroSection() {
       type: completeData.tripType,
     });
     
+    console.log('Navigating to:', `/flights?${params.toString()}`);
     setLocation(`/flights?${params.toString()}`);
   };
 
