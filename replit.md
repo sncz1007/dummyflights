@@ -38,6 +38,12 @@ Preferred communication style: Simple, everyday language.
   - Displays original price (strikethrough) alongside the discounted price and savings.
 - **Internationalization (i18n)**: Supports English and Spanish with language preference stored in localStorage.
 - **Responsive Design**: Mobile-first approach using Tailwind CSS breakpoints.
+- **Homepage Structure** (Complete Landing Page):
+  1. **Hero Section**: Search form with airplane background and red brand overlay
+  2. **Trust Badges**: Security features (Secure Booking, Secure Payments, 24/7 Support)
+  3. **Popular Destinations**: 8 featured destinations with 40% discount badge
+  4. **Why Choose Us**: 4 key benefits (40% discount, worldwide coverage, instant booking, expert support)
+  5. **Customer Testimonials**: 4 real customer reviews with 5-star ratings
 
 ### Design Patterns
 - **Component Composition**: Shadcn/ui pattern with Radix UI.
@@ -144,3 +150,45 @@ Preferred communication style: Simple, everyday language.
 - **Component**: `client/src/components/Testimonials.tsx`
 - **Bilingual**: Full EN/ES translations for all testimonial text
 - **Visual Elements**: Quote icon, 5 yellow stars rating, bordered sections
+
+## Homepage Components Summary (October 14, 2025)
+
+### Complete Page Structure
+The homepage (`client/src/pages/home.tsx`) now includes a comprehensive landing page experience:
+
+1. **Header** - Navigation and language selector
+2. **Hero Section** (`HeroSection.tsx`)
+   - Airplane background image with red brand overlay (40% opacity)
+   - Flight search form (7 fields: from, to, departure, return, passengers, class, type)
+   - Full bilingual support
+3. **Trust Badges** (`TrustBadges.tsx`)
+   - Secure Booking (Shield icon)
+   - Secure Payments (Credit Card icon) 
+   - 24/7 Support (Headphones icon)
+4. **Popular Destinations** (`PopularDestinations.tsx`)
+   - 8 destinations with professional stock images
+   - "40% OFF Included" badge on each
+   - Destinations: Santorini, Rio, Tokyo, Cusco, Barcelona, Bali, New York, Dubai
+5. **Why Choose Us** (`WhyChooseUs.tsx`)
+   - 40% Guaranteed Discount (Percent icon, red)
+   - Worldwide Coverage (Globe icon, blue)
+   - Instant Booking (Zap icon, yellow)
+   - Expert Support (Headset icon, green)
+6. **Customer Testimonials** (`Testimonials.tsx`)
+   - 4 customer reviews with 5-star ratings
+   - Quote icon, card-based design
+   - Customers: Sarah Johnson, Carlos Méndez, Yuki Tanaka, Emma Williams
+
+### Design System
+- **Colors**: Primary red brand color, complemented by blue, yellow, green accents
+- **Layout**: Responsive grid system (1-2-4 columns based on screen size)
+- **Typography**: Bold headings, muted descriptive text
+- **Icons**: Lucide React icons throughout
+- **Images**: Professional stock photography (9 images total)
+- **Effects**: Hover animations, shadow elevations, image zoom on hover
+
+### Bilingual Implementation
+All components fully support English and Spanish:
+- Automatic language switching via language selector
+- Translation keys in `client/src/lib/translations.ts`
+- localStorage persistence for language preference
