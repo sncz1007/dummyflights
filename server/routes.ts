@@ -17,6 +17,29 @@ const stripe = new Stripe(stripeSecretKey, {
   apiVersion: "2025-09-30.clover",
 });
 
+// Airline partnerships - Domestic USA flights only
+const DOMESTIC_AIRLINES = [
+  { code: "AS", name: "Alaska Airlines", logo: "https://images.kiwi.com/airlines/64/AS.png" },
+  { code: "AA", name: "American Airlines", logo: "https://images.kiwi.com/airlines/64/AA.png" },
+];
+
+// Airline partnerships - International flights (USA to/from other countries)
+const INTERNATIONAL_AIRLINES = [
+  { code: "BA", name: "British Airways", logo: "https://images.kiwi.com/airlines/64/BA.png" },
+  { code: "CX", name: "Cathay Pacific", logo: "https://images.kiwi.com/airlines/64/CX.png" },
+  { code: "FJ", name: "Fiji Airways", logo: "https://images.kiwi.com/airlines/64/FJ.png" },
+  { code: "AY", name: "Finnair", logo: "https://images.kiwi.com/airlines/64/AY.png" },
+  { code: "IB", name: "Iberia", logo: "https://images.kiwi.com/airlines/64/IB.png" },
+  { code: "JL", name: "Japan Airlines", logo: "https://images.kiwi.com/airlines/64/JL.png" },
+  { code: "MH", name: "Malaysia Airlines", logo: "https://images.kiwi.com/airlines/64/MH.png" },
+  { code: "WY", name: "Oman Air", logo: "https://images.kiwi.com/airlines/64/WY.png" },
+  { code: "QF", name: "Qantas", logo: "https://images.kiwi.com/airlines/64/QF.png" },
+  { code: "QR", name: "Qatar Airways", logo: "https://images.kiwi.com/airlines/64/QR.png" },
+  { code: "AT", name: "Royal Air Maroc", logo: "https://images.kiwi.com/airlines/64/AT.png" },
+  { code: "RJ", name: "Royal Jordanian", logo: "https://images.kiwi.com/airlines/64/RJ.png" },
+  { code: "UL", name: "SriLankan Airlines", logo: "https://images.kiwi.com/airlines/64/UL.png" },
+];
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Airport search endpoint
   app.get("/api/airports/search", async (req, res) => {
