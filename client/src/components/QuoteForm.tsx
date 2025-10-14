@@ -230,7 +230,6 @@ export default function QuoteForm() {
                             onChange={field.onChange}
                             placeholder={t('quote.fromPlaceholder')}
                             data-testid="input-from-airport-quote"
-                            countryFilter="USA"
                           />
                         </FormControl>
                         <FormMessage />
