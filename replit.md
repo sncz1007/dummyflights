@@ -140,3 +140,12 @@ Added mandatory terms and conditions acceptance to flight search form:
 - **Linked Policies**: Direct links to Terms of Service and Privacy Policy pages
 - **Implementation**: Located in `client/src/components/HeroSection.tsx`
 - **User Experience**: Clear, accessible checkbox with clickable policy links
+
+### Privacy Policy Update (October 15, 2025)
+Updated Privacy Policy page (`client/src/pages/privacy.tsx`) with concise official content:
+- **Information Collection**: Details on collected data (name, email, phone, travel preferences)
+- **Use of Information**: How data is used for quotes, bookings, and communication
+- **Information Sharing**: No selling/sharing except as necessary for services
+- **Data Security**: Security measures against unauthorized access
+- **Cookies**: Usage for browsing experience and traffic analysis
+- **Contact**: info@skybudgetfly.vip for privacy questions
