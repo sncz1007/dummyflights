@@ -23,7 +23,7 @@ export default function Footer() {
               <img 
                 src={logoImage} 
                 alt="SkyBudgetFly Logo" 
-                className="h-10 w-auto brightness-0 invert"
+                className="h-10 w-auto"
               />
             </div>
             <p className="text-gray-400 text-sm mb-4" data-testid="text-footer-tagline">
