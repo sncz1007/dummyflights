@@ -45,6 +45,7 @@ Preferred communication style: Simple, everyday language.
   4. **Why Choose Us**: 4 key benefits (40% discount, worldwide coverage, instant booking, expert support)
   5. **Customer Testimonials**: 4 real customer reviews with 5-star ratings
   6. **Video Strip**: Looping airplane window view video
+  7. **FAQ Section**: 6 frequently asked questions with accordion design
 
 ### Design Patterns
 - **Component Composition**: Shadcn/ui pattern with Radix UI.
@@ -165,6 +166,26 @@ Preferred communication style: Simple, everyday language.
 - **Video Source**: Pexels free stock video (clouds and sky from passenger window perspective)
 - **Video URL**: https://videos.pexels.com/video-files/13879887/13879887-uhd_2560_1440_60fps.mp4
 
+### FAQ Section (15 Oct 2025)
+- **Purpose**: Answer common customer questions about the service
+- **Location**: After Video Strip section on homepage (final section)
+- **Questions Featured** (6 total):
+  1. **How does the 40% discount work?** - Explains exclusive airline partnerships
+  2. **Is the discount really 40% off every flight?** - Confirms guaranteed 40% discount
+  3. **How do I receive my flight tickets?** - Details email delivery within 24 hours
+  4. **Can I cancel or modify my booking?** - Explains cancellation/modification policies
+  5. **Which airlines are included?** - Lists domestic (2) and international (13) partner airlines
+  6. **Are there any hidden fees?** - Confirms no hidden fees, transparent pricing
+- **Design**:
+  - Accordion component from shadcn/ui for expandable Q&A
+  - Help circle icon in header with primary color
+  - Max-width container (4xl) for readability
+  - Muted background for visual separation
+  - Each question in bordered card with rounded corners
+- **Component**: `client/src/components/FAQ.tsx`
+- **Bilingual**: Full EN/ES translations for all questions and answers
+- **Visual Elements**: HelpCircle icon, accordion expand/collapse interaction
+
 ## Homepage Components Summary (October 15, 2025)
 
 ### Complete Page Structure
@@ -198,6 +219,11 @@ The homepage (`client/src/pages/home.tsx`) now includes a comprehensive landing 
    - Responsive height (mobile: 192px, tablet: 256px, desktop: 320px)
    - Auto-plays, muted, loops continuously
    - Source: Pexels free stock video
+8. **FAQ Section** (`FAQ.tsx`)
+   - 6 frequently asked questions with accordion design
+   - Questions cover: 40% discount explanation, ticket delivery, cancellation policy, included airlines, hidden fees
+   - Accordion component from shadcn/ui for expandable Q&A
+   - Help circle icon header in primary color
 
 ### Design System
 - **Colors**: Primary red brand color, complemented by blue, yellow, green accents

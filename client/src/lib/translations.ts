@@ -132,6 +132,22 @@ export const translations = {
     'testimonials.customer4.location': 'London, UK',
     'testimonials.customer4.text': 'Fast, reliable, and affordable. SkyBudgetFly made my dream vacation to Bali possible. The savings were incredible and the support team was always available.',
     
+    // FAQ
+    'faq.title': 'Frequently Asked Questions',
+    'faq.subtitle': 'Find answers to common questions about our services',
+    'faq.q1.question': 'How does the 40% discount work?',
+    'faq.q1.answer': 'We have exclusive partnerships with major airlines worldwide that allow us to offer a guaranteed 40% discount on all flights. Our partnerships include Alaska Airlines and American Airlines for domestic USA routes, and 13 international carriers for worldwide destinations.',
+    'faq.q2.question': 'Is the discount really 40% off every flight?',
+    'faq.q2.answer': 'Yes! The 40% discount is guaranteed on every flight we offer. We show you the original price alongside our discounted price so you can see exactly how much you\'re saving.',
+    'faq.q3.question': 'How do I receive my flight tickets?',
+    'faq.q3.answer': 'After you complete your payment, our team manually purchases your tickets from the airline. You will receive your confirmed e-tickets via email within 24 hours of booking.',
+    'faq.q4.question': 'Can I cancel or modify my booking?',
+    'faq.q4.answer': 'Cancellation and modification policies depend on the airline and fare type. Please contact our support team at least 48 hours before your flight for assistance with changes or cancellations.',
+    'faq.q5.question': 'Which airlines are included?',
+    'faq.q5.answer': 'For domestic USA flights (USA to USA), we partner with Alaska Airlines and American Airlines. For international routes, we work with British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian, and SriLankan Airlines.',
+    'faq.q6.question': 'Are there any hidden fees?',
+    'faq.q6.answer': 'No hidden fees! The price you see is the final price you pay. This includes all airline taxes and our service fee. The only additional costs would be optional extras like baggage or seat selection, which vary by airline.',
+    
     // Contact
     'contact.title': 'Ready to Start Your Journey?',
     'contact.subtitle': 'Get in touch with our travel experts today and let us find you the best flight deals',
@@ -348,6 +364,22 @@ export const translations = {
     'testimonials.customer4.name': 'Emma Williams',
     'testimonials.customer4.location': 'Londres, Reino Unido',
     'testimonials.customer4.text': 'Rápido, confiable y económico. SkyBudgetFly hizo posible mis vacaciones soñadas a Bali. Los ahorros fueron increíbles y el equipo siempre estuvo disponible.',
+    
+    // FAQ
+    'faq.title': 'Preguntas Frecuentes',
+    'faq.subtitle': 'Encuentra respuestas a las preguntas más comunes sobre nuestros servicios',
+    'faq.q1.question': '¿Cómo funciona el descuento del 40%?',
+    'faq.q1.answer': 'Tenemos alianzas exclusivas con aerolíneas importantes a nivel mundial que nos permiten ofrecer un descuento garantizado del 40% en todos los vuelos. Nuestras alianzas incluyen Alaska Airlines y American Airlines para rutas domésticas en EUA, y 13 aerolíneas internacionales para destinos mundiales.',
+    'faq.q2.question': '¿El descuento es realmente del 40% en cada vuelo?',
+    'faq.q2.answer': '¡Sí! El descuento del 40% está garantizado en cada vuelo que ofrecemos. Te mostramos el precio original junto a nuestro precio con descuento para que veas exactamente cuánto estás ahorrando.',
+    'faq.q3.question': '¿Cómo recibo mis boletos de avión?',
+    'faq.q3.answer': 'Después de completar tu pago, nuestro equipo compra manualmente tus boletos con la aerolínea. Recibirás tus e-tickets confirmados por correo electrónico dentro de las 24 horas posteriores a la reserva.',
+    'faq.q4.question': '¿Puedo cancelar o modificar mi reserva?',
+    'faq.q4.answer': 'Las políticas de cancelación y modificación dependen de la aerolínea y el tipo de tarifa. Por favor contacta a nuestro equipo de soporte al menos 48 horas antes de tu vuelo para ayudarte con cambios o cancelaciones.',
+    'faq.q5.question': '¿Qué aerolíneas están incluidas?',
+    'faq.q5.answer': 'Para vuelos domésticos en EUA (EUA a EUA), trabajamos con Alaska Airlines y American Airlines. Para rutas internacionales, trabajamos con British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian y SriLankan Airlines.',
+    'faq.q6.question': '¿Hay cargos ocultos?',
+    'faq.q6.answer': '¡Sin cargos ocultos! El precio que ves es el precio final que pagas. Esto incluye todos los impuestos de la aerolínea y nuestra tarifa de servicio. Los únicos costos adicionales serían extras opcionales como equipaje o selección de asiento, que varían según la aerolínea.',
     
     // Contact
     'contact.title': '¿Listo para Comenzar tu Viaje?',

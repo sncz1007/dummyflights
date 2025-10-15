@@ -5,6 +5,7 @@ import PopularDestinations from '@/components/PopularDestinations';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import Testimonials from '@/components/Testimonials';
 import VideoStrip from '@/components/VideoStrip';
+import FAQ from '@/components/FAQ';
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
         <WhyChooseUs />
         <Testimonials />
         <VideoStrip />
+        <FAQ />
       </main>
     </div>
   );
