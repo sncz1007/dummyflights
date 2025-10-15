@@ -22,6 +22,7 @@ export default function Header() {
                 alt="SkyBudgetFly Logo" 
                 className="h-12 w-auto"
               />
+              <span className="text-xl font-display font-bold text-foreground">SkyBudgetFly</span>
             </div>
           </Link>
           
