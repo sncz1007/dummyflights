@@ -85,3 +85,31 @@ Complete landing page with the following sections (in order):
 - **Layout**: Responsive grid system (1-2-4 columns based on screen size)
 - **Typography**: Bold headings, muted descriptive text
 - **Bilingual**: Full English/Spanish support for all components
+
+## Logo Implementation (October 15, 2025)
+
+### Logo File
+- **File**: `attached_assets/skybudget-logo.png`
+- **Original Logo**: Red airplane icon with clouds and "SkyBudget" text
+- **Format**: PNG image with transparent/white background
+
+### Logo Usage
+The official SkyBudgetFly logo has been implemented in:
+
+1. **Header Component** (`client/src/components/Header.tsx`)
+   - Full-color logo display
+   - Height: 48px (h-12)
+   - Positioned in top-left navigation area
+   - Clickable link to homepage
+
+2. **Footer Component** (`client/src/components/Footer.tsx`)
+   - Inverted logo for dark background (brightness-0 invert)
+   - Height: 40px (h-10)
+   - Located in footer's logo section
+   - White appearance on dark background
+
+### Technical Implementation
+- Import path: `@assets/skybudget-logo.png`
+- Responsive sizing with `w-auto` for aspect ratio preservation
+- Alt text: "SkyBudgetFly Logo" for accessibility
+- Footer version uses CSS filters for color inversion

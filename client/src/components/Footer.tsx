@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
-import { Plane, Mail, Phone } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
+import logoImage from '@assets/skybudget-logo.png';
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -19,10 +20,11 @@ export default function Footer() {
           {/* Logo and Tagline */}
           <div>
             <div className="flex items-center space-x-2 mb-4" data-testid="footer-logo">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Plane className="text-white h-5 w-5" />
-              </div>
-              <span className="text-lg font-display font-bold">SkyBudgetFly</span>
+              <img 
+                src={logoImage} 
+                alt="SkyBudgetFly Logo" 
+                className="h-10 w-auto brightness-0 invert"
+              />
             </div>
             <p className="text-gray-400 text-sm mb-4" data-testid="text-footer-tagline">
               {t('footer.tagline')}
