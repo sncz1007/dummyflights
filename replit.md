@@ -74,7 +74,7 @@ Complete landing page with the following sections (in order):
 9. **Footer** - Complete footer with all standard elements
    - Logo, contact email (info@skybudgetfly.vip), customer support indicator
    - Company links, legal links (Terms, Privacy, Cookies)
-   - Social media links (Facebook, Twitter, Instagram, LinkedIn)
+   - Contact information (email, customer support)
    - Copyright notice
 
 ### Design Implementation
