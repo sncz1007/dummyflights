@@ -113,3 +113,21 @@ The official SkyBudgetFly logo has been implemented in:
 - Responsive sizing with `w-auto` for aspect ratio preservation
 - Alt text: "SkyBudgetFly Logo" for accessibility
 - Footer version uses CSS filters for color inversion
+
+## Latest Updates (October 15, 2025)
+
+### Header Logo Update
+- **New Logo File**: `attached_assets/IMG_9390_1760553283513.jpeg`
+- **Logo Display**: New official logo in header navigation
+- **Company Name**: "SkyBudgetFly" displayed in red (text-red-600) next to logo
+- **Layout**: Logo + red company name, both clickable to homepage
+
+### Terms of Service Update
+Updated Terms of Service page (`client/src/pages/terms.tsx`) with official content including:
+- **Our Services**: Detailed payment process through Stripe, 20-minute payment window after receiving reservation code
+- **Flight Quotes**: Oneworld alliance partnerships for domestic and international flights
+- **Booking Process**: Complete workflow from quote request to payment
+- **Cancellation Policy**: No refunds policy with free flight modification option (48-hour notice required)
+- **Limitation of Liability**: SkyBudget not responsible for airline delays/cancellations
+- **Contact**: info@skybudgetfly.vip
+- **Last Updated**: October 2025
