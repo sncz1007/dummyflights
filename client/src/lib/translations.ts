@@ -31,6 +31,10 @@ export const translations = {
     'search.fromPlaceholder': 'City or airport',
     'search.toPlaceholder': 'City or airport',
     'search.usaOnly': 'International flights and USA domestic flights',
+    'search.termsAccept': 'I accept the',
+    'search.termsLink': 'Terms and Conditions',
+    'search.termsAnd': 'and',
+    'search.privacyLink': 'Privacy Policy',
     
     // Trust Indicators
     'trust.airlines': 'Airlines Worldwide',
@@ -268,6 +272,10 @@ export const translations = {
     'search.fromPlaceholder': 'Ciudad o aeropuerto',
     'search.toPlaceholder': 'Ciudad o aeropuerto',
     'search.usaOnly': 'Vuelos internacionales y domésticos en USA',
+    'search.termsAccept': 'Acepto los',
+    'search.termsLink': 'Términos y Condiciones',
+    'search.termsAnd': 'y la',
+    'search.privacyLink': 'Política de Privacidad',
     
     // Trust Indicators
     'trust.airlines': 'Aerolíneas Globales',

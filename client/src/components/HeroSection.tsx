@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react';
-import { useLocation } from 'wouter';
+import { useLocation, Link } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import AirportSearch from './AirportSearch';
 import { Plane, PlaneTakeoff, PlaneLanding, Calendar, Users, Check } from 'lucide-react';
 import airplaneBackground from '@assets/stock_images/airplane_flying_in_s_3b371e33.jpg';
@@ -21,6 +22,7 @@ export default function HeroSection() {
     flightClass: 'economy',
     tripType: 'roundtrip'
   });
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   // Use refs to store current values (for reliable capture during automated testing)
   const currentPassengers = useRef('1');
@@ -56,6 +58,12 @@ export default function HeroSection() {
     };
     
     console.log('Flight search validation:', completeData);
+    
+    // Validate terms acceptance
+    if (!acceptedTerms) {
+      console.log('Terms and conditions not accepted');
+      return;
+    }
     
     // Validate required fields
     if (!completeData.fromAirport || !completeData.toAirport || !completeData.departureDate) {
@@ -239,9 +247,34 @@ export default function HeroSection() {
               </div>
             </div>
             
+            {/* Terms and Conditions Checkbox */}
+            <div className="mb-4 flex items-start space-x-2">
+              <Checkbox 
+                id="terms" 
+                checked={acceptedTerms}
+                onCheckedChange={(checked) => setAcceptedTerms(checked === true)}
+                data-testid="checkbox-accept-terms"
+              />
+              <label 
+                htmlFor="terms" 
+                className="text-sm text-foreground leading-relaxed cursor-pointer"
+                data-testid="label-terms"
+              >
+                {t('search.termsAccept')}{' '}
+                <Link to="/terms" className="text-primary hover:underline font-medium" data-testid="link-terms">
+                  {t('search.termsLink')}
+                </Link>
+                {' '}{t('search.termsAnd')}{' '}
+                <Link to="/privacy" className="text-primary hover:underline font-medium" data-testid="link-privacy">
+                  {t('search.privacyLink')}
+                </Link>
+              </label>
+            </div>
+            
             <Button 
               onClick={handleSearch}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+              disabled={!acceptedTerms}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 rounded-lg transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               data-testid="button-search-flights"
             >
               <Plane className="h-5 w-5" />

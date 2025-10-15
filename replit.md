@@ -131,3 +131,12 @@ Updated Terms of Service page (`client/src/pages/terms.tsx`) with official conte
 - **Limitation of Liability**: SkyBudget not responsible for airline delays/cancellations
 - **Contact**: info@skybudgetfly.vip
 - **Last Updated**: October 2025
+
+### Flight Search Form - Terms Acceptance (October 15, 2025)
+Added mandatory terms and conditions acceptance to flight search form:
+- **Required Checkbox**: Users must accept Terms & Conditions and Privacy Policy before searching
+- **Form Validation**: Search button disabled until terms are accepted
+- **Bilingual Support**: English and Spanish translations for checkbox text
+- **Linked Policies**: Direct links to Terms of Service and Privacy Policy pages
+- **Implementation**: Located in `client/src/components/HeroSection.tsx`
+- **User Experience**: Clear, accessible checkbox with clickable policy links
