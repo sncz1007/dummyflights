@@ -4,7 +4,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ChevronDown } from 'lucide-react';
-import logoImage from '@assets/skybudget-logo.png';
+import logoImage from '@assets/IMG_9390_1760553283513.jpeg';
 
 export default function Header() {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ export default function Header() {
                 alt="SkyBudgetFly Logo" 
                 className="h-12 w-auto"
               />
-              <span className="text-xl font-display font-bold text-foreground">SkyBudgetFly</span>
+              <span className="text-xl font-display font-bold text-red-600">SkyBudgetFly</span>
             </div>
           </Link>
           
