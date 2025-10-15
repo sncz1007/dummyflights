@@ -44,6 +44,7 @@ Preferred communication style: Simple, everyday language.
   3. **Popular Destinations**: 8 featured destinations with 40% discount badge
   4. **Why Choose Us**: 4 key benefits (40% discount, worldwide coverage, instant booking, expert support)
   5. **Customer Testimonials**: 4 real customer reviews with 5-star ratings
+  6. **Video Strip**: Looping airplane window view video
 
 ### Design Patterns
 - **Component Composition**: Shadcn/ui pattern with Radix UI.
@@ -151,7 +152,20 @@ Preferred communication style: Simple, everyday language.
 - **Bilingual**: Full EN/ES translations for all testimonial text
 - **Visual Elements**: Quote icon, 5 yellow stars rating, bordered sections
 
-## Homepage Components Summary (October 14, 2025)
+### Video Strip Section (15 Oct 2025)
+- **Purpose**: Add dynamic visual element showing real flight experience
+- **Location**: After Testimonials section on homepage (final section)
+- **Content**: Looping video of airplane window view during flight
+- **Design**:
+  - Full-width horizontal video strip (not fullscreen)
+  - Responsive heights: mobile (192px/h-48), tablet (256px/h-64), desktop (320px/h-80)
+  - Auto-plays on load, muted, loops infinitely
+  - Object-fit: cover for optimal display
+- **Component**: `client/src/components/VideoStrip.tsx`
+- **Video Source**: Pexels free stock video (clouds and sky from passenger window perspective)
+- **Video URL**: https://videos.pexels.com/video-files/13879887/13879887-uhd_2560_1440_60fps.mp4
+
+## Homepage Components Summary (October 15, 2025)
 
 ### Complete Page Structure
 The homepage (`client/src/pages/home.tsx`) now includes a comprehensive landing page experience:
@@ -178,6 +192,12 @@ The homepage (`client/src/pages/home.tsx`) now includes a comprehensive landing 
    - 4 customer reviews with 5-star ratings
    - Quote icon, card-based design
    - Customers: Sarah Johnson, Carlos Méndez, Yuki Tanaka, Emma Williams
+7. **Video Strip** (`VideoStrip.tsx`)
+   - Looping video of airplane window view in flight
+   - Shows clouds and sky from passenger perspective
+   - Responsive height (mobile: 192px, tablet: 256px, desktop: 320px)
+   - Auto-plays, muted, loops continuously
+   - Source: Pexels free stock video
 
 ### Design System
 - **Colors**: Primary red brand color, complemented by blue, yellow, green accents

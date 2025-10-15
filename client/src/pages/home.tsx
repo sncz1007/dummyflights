@@ -4,6 +4,7 @@ import TrustBadges from '@/components/TrustBadges';
 import PopularDestinations from '@/components/PopularDestinations';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import Testimonials from '@/components/Testimonials';
+import VideoStrip from '@/components/VideoStrip';
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         <PopularDestinations />
         <WhyChooseUs />
         <Testimonials />
+        <VideoStrip />
       </main>
     </div>
   );
