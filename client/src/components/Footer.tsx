@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
-import { Plane, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Plane, Facebook, Twitter, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -24,9 +24,26 @@ export default function Footer() {
               </div>
               <span className="text-lg font-display font-bold">SkyBudgetFly</span>
             </div>
-            <p className="text-gray-400 text-sm" data-testid="text-footer-tagline">
+            <p className="text-gray-400 text-sm mb-4" data-testid="text-footer-tagline">
               {t('footer.tagline')}
             </p>
+            {/* Contact Info */}
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2 text-sm text-gray-400">
+                <Mail className="h-4 w-4 text-primary" />
+                <a 
+                  href="mailto:info@skybudgetfly.vip" 
+                  className="hover:text-white transition-colors"
+                  data-testid="link-footer-email"
+                >
+                  info@skybudgetfly.vip
+                </a>
+              </div>
+              <div className="flex items-center space-x-2 text-sm text-gray-400">
+                <Phone className="h-4 w-4 text-primary" />
+                <span data-testid="text-footer-support">{t('footer.support')}</span>
+              </div>
+            </div>
           </div>
           
           {/* Company Links */}
