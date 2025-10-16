@@ -26,15 +26,15 @@ export default function TrustBadges() {
   ];
 
   return (
-    <section className="py-6 bg-background border-t border-border">
+    <section className="py-4 md:py-6 bg-background border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
           {badges.map((badge, index) => {
             const Icon = badge.icon;
             return (
               <div 
                 key={index}
-                className="flex flex-col items-center text-center space-y-2"
+                className="flex flex-col items-center text-center space-y-1 md:space-y-2"
                 data-testid={badge.testId}
               >
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
