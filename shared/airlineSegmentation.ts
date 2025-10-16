@@ -2,7 +2,8 @@
 
 export type Region = 
   | 'domestic_usa'
-  | 'americas'
+  | 'north_america'
+  | 'south_america'
   | 'iberia'
   | 'central_europe'
   | 'eastern_europe'
@@ -17,7 +18,8 @@ export type Region =
 // Airlines allowed per region (in priority order)
 export const REGIONAL_AIRLINES: Record<Region, string[]> = {
   domestic_usa: ['Alaska Airlines', 'American Airlines'],
-  americas: ['American Airlines', 'Alaska Airlines'],
+  north_america: ['American Airlines', 'Alaska Airlines'], // Canada, Mexico
+  south_america: ['American Airlines'], // South America - NO Alaska
   iberia: ['American Airlines', 'Royal Air Maroc', 'Iberia', 'Aer Lingus', 'Qatar Airways'],
   central_europe: ['American Airlines', 'Qatar Airways', 'Royal Air Maroc', 'Aer Lingus'],
   eastern_europe: ['Qatar Airways', 'Finnair', 'Aer Lingus', 'Condor'],
@@ -35,27 +37,38 @@ export const COUNTRY_TO_REGION: Record<string, Region> = {
   // USA (domestic)
   'US': 'domestic_usa',
   
-  // Americas
-  'CA': 'americas', // Canada
-  'MX': 'americas', // Mexico
-  'BR': 'americas', // Brazil
-  'AR': 'americas', // Argentina
-  'CL': 'americas', // Chile
-  'CO': 'americas', // Colombia
-  'PE': 'americas', // Peru
-  'VE': 'americas', // Venezuela
-  'EC': 'americas', // Ecuador
-  'CR': 'americas', // Costa Rica
-  'PA': 'americas', // Panama
-  'GT': 'americas', // Guatemala
-  'DO': 'americas', // Dominican Republic
-  'CU': 'americas', // Cuba
-  'JM': 'americas', // Jamaica
-  'BS': 'americas', // Bahamas
-  'TT': 'americas', // Trinidad and Tobago
-  'UY': 'americas', // Uruguay
-  'PY': 'americas', // Paraguay
-  'BO': 'americas', // Bolivia
+  // North America (Canada, Mexico, Central America, Caribbean)
+  'CA': 'north_america', // Canada
+  'MX': 'north_america', // Mexico
+  'CR': 'north_america', // Costa Rica
+  'PA': 'north_america', // Panama
+  'GT': 'north_america', // Guatemala
+  'HN': 'north_america', // Honduras
+  'SV': 'north_america', // El Salvador
+  'NI': 'north_america', // Nicaragua
+  'BZ': 'north_america', // Belize
+  'DO': 'north_america', // Dominican Republic
+  'CU': 'north_america', // Cuba
+  'JM': 'north_america', // Jamaica
+  'BS': 'north_america', // Bahamas
+  'TT': 'north_america', // Trinidad and Tobago
+  'HT': 'north_america', // Haiti
+  'PR': 'north_america', // Puerto Rico
+  
+  // South America
+  'BR': 'south_america', // Brazil
+  'AR': 'south_america', // Argentina
+  'CL': 'south_america', // Chile
+  'CO': 'south_america', // Colombia
+  'PE': 'south_america', // Peru
+  'VE': 'south_america', // Venezuela
+  'EC': 'south_america', // Ecuador
+  'UY': 'south_america', // Uruguay
+  'PY': 'south_america', // Paraguay
+  'BO': 'south_america', // Bolivia
+  'GY': 'south_america', // Guyana
+  'SR': 'south_america', // Suriname
+  'GF': 'south_america', // French Guiana
   
   // Iberian Countries (Spain, Portugal, France)
   'ES': 'iberia', // Spain

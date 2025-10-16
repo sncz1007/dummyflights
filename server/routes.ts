@@ -114,7 +114,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Search flights endpoint - returns example flight data with 40% discount
+  // Search flights endpoint - uses real Amadeus API data with 40% discount
   app.post("/api/flights/search", async (req, res) => {
     try {
       const { fromAirport, toAirport, departureDate, returnDate, passengers, flightClass, tripType } = req.body;
@@ -166,81 +166,131 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Convert airline names to airline objects (in priority order)
-      const airlines = allowedAirlineNames
-        .map(name => ALL_AIRLINES[name])
-        .filter(Boolean); // Remove any undefined entries
+      // Search real flights using Amadeus API
+      const { searchFlights, getAirlineNameFromCode } = await import('./amadeus.js');
+      
+      // Map flightClass to Amadeus travel class format
+      const travelClassMap: Record<string, 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST'> = {
+        'economy': 'ECONOMY',
+        'premium_economy': 'PREMIUM_ECONOMY',
+        'business': 'BUSINESS',
+        'first': 'FIRST',
+      };
+      
+      const amadeusResponse = await searchFlights({
+        originLocationCode: fromIataCode,
+        destinationLocationCode: toIataCode,
+        departureDate: departureDate,
+        adults: parseInt(passengers),
+        travelClass: travelClassMap[flightClass] || 'ECONOMY',
+        currencyCode: 'USD',
+        max: 50, // Get more results to filter
+      });
 
-      // Generate example flights (3-6 results)
-      const numFlights = Math.floor(Math.random() * 4) + 3;
-      const flights = [];
+      // Check if we got valid data from Amadeus
+      // Amadeus returns response.data which itself contains a data array
+      const flightData = amadeusResponse.data || amadeusResponse;
+      
+      if (!flightData || !Array.isArray(flightData)) {
+        return res.json({
+          flights: [],
+          noFlightsAvailable: true,
+          message: "No flights available for this destination at this time",
+          searchParams: {
+            fromAirport,
+            toAirport,
+            departureDate,
+            returnDate,
+            passengers,
+            flightClass,
+            tripType,
+          },
+        });
+      }
 
-      for (let i = 0; i < numFlights; i++) {
-        const airline = airlines[Math.floor(Math.random() * airlines.length)];
-        const basePrice = Math.floor(Math.random() * 800) + 300; // $300-$1100
-        const originalPrice = basePrice * parseInt(passengers);
-        const discountedPrice = originalPrice * 0.6; // 40% discount
-        
-        // Generate departure time (random hour between 6am and 10pm)
-        const depHour = Math.floor(Math.random() * 16) + 6;
-        const depMinute = Math.floor(Math.random() * 60);
-        
-        // Generate duration (2-12 hours for direct, 5-18 for connecting)
-        const isDirect = Math.random() > 0.5;
-        const durationHours = isDirect ? Math.floor(Math.random() * 10) + 2 : Math.floor(Math.random() * 13) + 5;
-        const durationMinutes = Math.floor(Math.random() * 60);
-        
-        // Calculate arrival time
-        const arrivalHour = (depHour + durationHours) % 24;
-        const arrivalMinute = (depMinute + durationMinutes) % 60;
+      // Filter flights to only include allowed airlines
+      // Check ALL segments - use operating carrier if available, otherwise marketing carrier
+      const allowedFlights = flightData.filter((offer: any) => {
+        return offer.itineraries.every((itinerary: any) =>
+          itinerary.segments.every((segment: any) => {
+            // Use operating carrier if available (actual airline operating the flight)
+            const actualCarrier = segment.operating?.carrierCode || segment.carrierCode;
+            const airlineName = getAirlineNameFromCode(actualCarrier);
+            return airlineName && allowedAirlineNames.includes(airlineName);
+          })
+        );
+      });
 
-        const flight = {
-          id: `flight_${Date.now()}_${i}`,
-          airline: airline,
-          flightNumber: `${airline.code}${Math.floor(Math.random() * 9000) + 1000}`,
+      // If no flights with allowed airlines found, return empty results
+      if (allowedFlights.length === 0) {
+        return res.json({
+          flights: [],
+          noFlightsAvailable: true,
+          message: "No flights available for this destination at this time",
+          searchParams: {
+            fromAirport,
+            toAirport,
+            departureDate,
+            returnDate,
+            passengers,
+            flightClass,
+            tripType,
+          },
+        });
+      }
+
+      // Transform Amadeus data to our format with 40% discount
+      const flights = allowedFlights.slice(0, 10).map((offer: any, index: number) => {
+        const outbound = offer.itineraries[0];
+        const firstSegment = outbound.segments[0];
+        const lastSegment = outbound.segments[outbound.segments.length - 1];
+        
+        // Get airline info from first segment - use OPERATING carrier (actual airline)
+        const airlineCode = firstSegment.operating?.carrierCode || firstSegment.carrierCode;
+        const airlineName = getAirlineNameFromCode(airlineCode) || amadeusResponse.dictionaries?.carriers?.[airlineCode] || airlineCode;
+        const airlineObj = ALL_AIRLINES[airlineName] || {
+          code: airlineCode,
+          name: airlineName,
+          logo: `https://images.kiwi.com/airlines/64/${airlineCode}.png`
+        };
+
+        // Calculate prices with 40% discount
+        const originalPrice = parseFloat(offer.price.total);
+        const discountedPrice = originalPrice * 0.6;
+
+        // Format departure and arrival times
+        const depTime = new Date(firstSegment.departure.at);
+        const arrTime = new Date(lastSegment.arrival.at);
+
+        return {
+          id: offer.id,
+          airline: airlineObj,
+          flightNumber: `${firstSegment.carrierCode}${firstSegment.number}`,
           departure: {
             airport: fromAirport,
-            time: `${depHour.toString().padStart(2, '0')}:${depMinute.toString().padStart(2, '0')}`,
+            time: depTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
             date: departureDate,
           },
           arrival: {
             airport: toAirport,
-            time: `${arrivalHour.toString().padStart(2, '0')}:${arrivalMinute.toString().padStart(2, '0')}`,
-            date: departureDate,
+            time: arrTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+            date: arrTime.toISOString().split('T')[0],
           },
-          duration: `${durationHours}h ${durationMinutes}m`,
-          stops: isDirect ? 0 : Math.floor(Math.random() * 2) + 1,
+          duration: outbound.duration.replace('PT', '').replace('H', 'h ').replace('M', 'm').toLowerCase(),
+          stops: outbound.segments.length - 1,
           class: flightClass,
           originalPrice: originalPrice,
           discountedPrice: discountedPrice,
           discount: 40,
           amenities: {
             wifi: Math.random() > 0.5,
-            meals: Math.random() > 0.3,
-            entertainment: Math.random() > 0.4,
-            power: Math.random() > 0.6,
+            meals: outbound.segments.length > 1 || originalPrice > 300,
+            entertainment: originalPrice > 400,
+            power: Math.random() > 0.4,
           },
-          returnFlight: returnDate ? {
-            id: `flight_${Date.now()}_${i}_return`,
-            airline: airline,
-            flightNumber: `${airline.code}${Math.floor(Math.random() * 9000) + 1000}`,
-            departure: {
-              airport: toAirport,
-              time: `${depHour.toString().padStart(2, '0')}:${depMinute.toString().padStart(2, '0')}`,
-              date: returnDate,
-            },
-            arrival: {
-              airport: fromAirport,
-              time: `${arrivalHour.toString().padStart(2, '0')}:${arrivalMinute.toString().padStart(2, '0')}`,
-              date: returnDate,
-            },
-            duration: `${durationHours}h ${durationMinutes}m`,
-            stops: isDirect ? 0 : Math.floor(Math.random() * 2) + 1,
-          } : null,
+          returnFlight: null, // Handle return flights separately if needed
         };
-
-        flights.push(flight);
-      }
+      });
 
       // Sort by price (cheapest first)
       flights.sort((a, b) => a.discountedPrice - b.discountedPrice);
@@ -257,8 +307,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           tripType,
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Flight search error:", error);
+      
+      // If Amadeus API fails, provide helpful error message
+      if (error.message && error.message.includes('Amadeus')) {
+        return res.status(503).json({ 
+          error: "Flight search service temporarily unavailable",
+          message: "Please try again in a moment"
+        });
+      }
+      
       res.status(500).json({ error: "Failed to search flights" });
     }
   });

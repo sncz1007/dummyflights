@@ -14,6 +14,7 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 ### Technical Implementations
 - **Frontend**: React 18 with TypeScript, Wouter for routing, TanStack React Query for server state, React Context for internationalization (i18n), and React Hook Form with Zod for form management. Vite is used as the build tool.
 - **Backend**: Node.js with Express.js and TypeScript (ESM modules) providing RESTful APIs for airports and quotes.
+- **Flight Data**: Real-time flight search powered by **Amadeus API** with intelligent regional airline filtering. Returns actual flight availability, schedules, and prices with automatic 40% discount applied.
 - **Database**: PostgreSQL (Neon serverless) managed by Drizzle ORM, with tables for users, airports, quotes, and bookings.
 
 ### Feature Specifications
@@ -50,6 +51,7 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
+- **Amadeus Flight Offers API**: Real-time flight search and pricing. Returns actual flight availability from global airlines with filters for partner airlines by region.
 - **Airport Data API**: Accessible via `/api/airports/search` for 500+ international airports.
 
 ### External Libraries
