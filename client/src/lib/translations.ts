@@ -9,7 +9,7 @@ export const translations = {
     
     // Hero Section
     'hero.title': 'Find Cheap Flights Worldwide',
-    'hero.subtitle': 'Save up to 40% on international flights',
+    'hero.subtitle': 'Save up to 40% on domestic and international flights',
     'hero.guarantee': 'Best Price Guarantee • Free Quote • Expert Support',
     
     // Search Form
@@ -250,7 +250,7 @@ export const translations = {
     
     // Hero Section
     'hero.title': 'Encuentra Vuelos Baratos en Todo el Mundo',
-    'hero.subtitle': 'Ahorra hasta 40% en vuelos internacionales',
+    'hero.subtitle': 'Ahorra hasta 40% en vuelos nacionales e internacionales',
     'hero.guarantee': 'Garantía de Mejor Precio • Cotización Gratis • Soporte Experto',
     
     // Search Form
