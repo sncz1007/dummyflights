@@ -61,14 +61,14 @@ Complete landing page with the following sections (in order):
 1. **Header** - Navigation and language selector (EN/ES)
 2. **Hero Section** - Flight search form with airplane background image and red overlay
 3. **Trust Badges** - Secure Booking, Secure Payments, 24/7 Support (3 features)
-4. **Popular Destinations** - 8 featured cities with 40% discount badge and professional images
-   - Santorini, Rio de Janeiro, Tokyo, Cusco, Barcelona, Bali, New York, Dubai
-5. **Why Choose Us** - 4 key benefits with color-coded icons
-   - 40% Guaranteed Discount (red), Worldwide Coverage (blue), Instant Booking (yellow), Expert Support (green)
-6. **Customer Testimonials** - 4 customer reviews with 5-star ratings
-   - Sarah Johnson (USA), Carlos Méndez (Mexico), Yuki Tanaka (Japan), Emma Williams (UK)
-7. **Video Strip** - Looping airplane window view video (Pexels stock)
+4. **Video Strip** - Looping airplane window view video (Pexels stock)
    - Full-width, responsive heights, auto-play, muted
+5. **Popular Destinations** - 8 featured cities with 40% discount badge and professional images
+   - Santorini, Rio de Janeiro, Tokyo, Cusco, Barcelona, Bali, New York, Dubai
+6. **Why Choose Us** - 4 key benefits with color-coded icons
+   - 40% Guaranteed Discount (red), Worldwide Coverage (blue), Instant Booking (yellow), Expert Support (green)
+7. **Customer Testimonials** - 4 customer reviews with 5-star ratings
+   - Sarah Johnson (USA), Carlos Méndez (Mexico), Yuki Tanaka (Japan), Emma Williams (UK)
 8. **FAQ Section** - 6 frequently asked questions with accordion UI
    - Covers discount mechanics, ticket delivery, cancellation, airlines, fees
 9. **Footer** - Complete footer with all standard elements
