@@ -36,7 +36,7 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section className="py-8 md:py-16 bg-background">
+    <section id="why-choose-us" className="py-8 md:py-16 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6 md:mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-3 md:mb-4" data-testid="text-whychoose-title">

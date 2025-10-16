@@ -56,7 +56,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <button 
-                  onClick={() => scrollToSection('home')}
+                  onClick={() => scrollToSection('about')}
                   className="hover:text-white transition-colors text-left"
                   data-testid="link-footer-about"
                 >
@@ -74,7 +74,7 @@ export default function Footer() {
               </li>
               <li>
                 <button 
-                  onClick={() => scrollToSection('deals')}
+                  onClick={() => scrollToSection('why-choose-us')}
                   className="hover:text-white transition-colors text-left"
                   data-testid="link-footer-deals"
                 >
@@ -82,13 +82,12 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => scrollToSection('contact')}
-                  className="hover:text-white transition-colors text-left"
+                <span 
+                  className="text-gray-400 cursor-default"
                   data-testid="link-footer-contact"
                 >
                   {t('footer.contact')}
-                </button>
+                </span>
               </li>
             </ul>
           </div>

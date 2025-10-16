@@ -215,6 +215,11 @@ New "About Us" (Sobre Nosotros) section added to homepage (`client/src/component
 - **Tagline**: Already updated to include "desde y hacia USA" / "to and from USA"
 - **Customer Support Icon**: Changed from Phone to MessageCircle (Chat icon)
 - **Customer Support Text**: Changed from "Atención al Cliente" / "Customer Support" to "Chat Personalizado" / "Personalized Chat"
+- **Navigation Links**: Connected footer menu to page sections
+  - "Sobre Nosotros" → scrolls to About Us section (id="about")
+  - "Destinos" → scrolls to Popular Destinations section (id="destinations")
+  - "Ofertas" → scrolls to Why Choose Us section (id="why-choose-us")
+  - "Contacto" → stays in footer (no scroll action)
 - Bilingual support maintained (EN/ES)
 
 ### Homepage Section Order Updated
