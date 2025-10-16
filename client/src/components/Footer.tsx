@@ -84,7 +84,7 @@ export default function Footer() {
               </li>
               <li>
                 <button 
-                  onClick={() => scrollToSection('why-choose-us')}
+                  onClick={() => scrollToSection('home')}
                   className="hover:text-white transition-colors text-left"
                   data-testid="link-footer-deals"
                 >
