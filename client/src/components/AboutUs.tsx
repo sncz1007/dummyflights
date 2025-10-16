@@ -38,7 +38,7 @@ export default function AboutUs() {
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 md:mb-6" data-testid="text-about-title">
             {t('about.title')}
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed" data-testid="text-about-description">
+          <p className="text-base md:text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed text-justify" data-testid="text-about-description">
             {t('about.description')}
           </p>
         </div>
