@@ -407,7 +407,7 @@ export const translations = {
     'faq.q5.question': '¿Qué aerolíneas están incluidas?',
     'faq.q5.answer': 'Para vuelos domésticos en USA (USA a USA), trabajamos con Alaska Airlines y American Airlines. Para rutas internacionales, trabajamos con British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian y SriLankan Airlines.',
     'faq.q6.question': '¿Hay cargos ocultos?',
-    'faq.q6.answer': '¡Sin cargos ocultos! El precio que ves es el precio final que pagas. Esto incluye todos los impuestos de la aerolínea y nuestra tarifa de servicio. Los únicos costos adicionales serían extras opcionales como equipaje o selección de asiento, que varían según la aerolínea.',
+    'faq.q6.answer': '¡No hay cargos ocultos! El precio que ves es el precio final que pagas. Esto incluye todos los impuestos de la aerolínea y nuestra tarifa de servicio. Los únicos costos adicionales serían extras opcionales como equipaje o selección de asiento, lo cual podrás modificar al momento de realizar tu Check-in directamente con la aerolínea.',
     
     // Contact
     'contact.title': '¿Listo para Comenzar tu Viaje?',
