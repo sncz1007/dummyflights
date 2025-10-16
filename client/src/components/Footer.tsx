@@ -117,15 +117,6 @@ export default function Footer() {
                   {t('footer.privacy')}
                 </Link>
               </li>
-              <li>
-                <button 
-                  onClick={() => scrollToSection('home')}
-                  className="hover:text-white transition-colors text-left"
-                  data-testid="link-footer-cookies"
-                >
-                  {t('footer.cookies')}
-                </button>
-              </li>
             </ul>
           </div>
         </div>
