@@ -171,6 +171,34 @@ New "About Us" (Sobre Nosotros) section added to homepage (`client/src/component
   - 40% Discount (Descuento)
   - Oneworld Alliance Partner (Alianza Partner)
 
+### About Us Section Design Update (October 16, 2025)
+- **Background**: Changed to primary red color (bg-primary)
+- **Text**: All text in white for maximum contrast
+- **Icons**: White circular backgrounds (bg-white) with red primary icons inside
+- **Spacing**: Reduced by ~35-40% for more compact layout
+- **Text Alignment**: Description text justified (text-justify)
+
+### FAQ Section Updates (October 16, 2025)
+
+**FAQ Question 1 - Discount Explanation:**
+- Updated to emphasize "Oneworld alliance" partnership
+- Changed from "guaranteed 40%" to "up to 40%" discount
+- Enhanced airline descriptions (13 "important" international carriers)
+- Bilingual support maintained (EN/ES)
+
+**FAQ Question 3 - Ticket Delivery:**
+- Improved process description: "team takes care of making the reservation by manually purchasing"
+- Delivery time reduced from 24 hours to **maximum 6 hours**
+- Bilingual support maintained (EN/ES)
+
+**FAQ Question 4 - Cancellation & Modification Policy:**
+- Completely rewritten with two-paragraph format
+- **Paragraph 1**: Commitment to customers, 48-hour notice requirement for modifications
+- **Paragraph 2**: No refunds policy due to discounted pricing (includes taxes and service fees)
+- Text justified with paragraph spacing (space-y-3)
+- Component updated to handle multi-paragraph answers using "||" separator
+- Bilingual support maintained (EN/ES)
+
 ### Homepage Section Order Updated
 Current homepage structure (October 16, 2025):
 1. Header - Navigation and language selector
@@ -178,8 +206,8 @@ Current homepage structure (October 16, 2025):
 3. Trust Badges - 3 security features
 4. Video Strip - Airplane window video
 5. Popular Destinations - 8 featured cities
-6. **About Us** - Agency credentials and statistics (NEW)
+6. **About Us** - Agency credentials and statistics (RED BACKGROUND)
 7. Why Choose Us - 4 key benefits
 8. Customer Testimonials - 4 reviews
-9. FAQ Section - 6 questions
+9. FAQ Section - 6 questions (updated policies)
 10. Footer - Contact and links

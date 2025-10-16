@@ -58,7 +58,17 @@ export default function FAQ() {
                 className="text-muted-foreground pt-2 pb-4"
                 data-testid={`accordion-content-${faq.id}`}
               >
-                {faq.answer}
+                {faq.answer.includes('||') ? (
+                  <div className="space-y-3">
+                    {faq.answer.split('||').map((paragraph, index) => (
+                      <p key={index} className="text-justify">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                ) : (
+                  faq.answer
+                )}
               </AccordionContent>
             </AccordionItem>
           ))}
