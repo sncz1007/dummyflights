@@ -81,14 +81,6 @@ export default function Footer() {
                   {t('footer.deals')}
                 </button>
               </li>
-              <li>
-                <span 
-                  className="text-gray-400 cursor-default"
-                  data-testid="link-footer-contact"
-                >
-                  {t('footer.contact')}
-                </span>
-              </li>
             </ul>
           </div>
           
