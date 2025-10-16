@@ -30,6 +30,9 @@ export default function Footer() {
               {t('footer.tagline')}
             </p>
             {/* Contact Info */}
+            <h3 className="font-semibold mb-4" data-testid="text-footer-contact">
+              {t('footer.contactUs')}
+            </h3>
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-sm text-gray-400">
                 <Mail className="h-4 w-4 text-primary" />
