@@ -167,7 +167,7 @@ export const translations = {
     'contact.chat': 'Start Live Chat',
     
     // Footer
-    'footer.tagline': 'Your trusted partner for affordable air travel worldwide',
+    'footer.tagline': 'Your trusted partner for affordable air travel worldwide to and from USA',
     'footer.company': 'Company',
     'footer.about': 'About Us',
     'footer.destinations': 'Destinations',
@@ -416,7 +416,7 @@ export const translations = {
     'contact.chat': 'Chat en Vivo',
     
     // Footer
-    'footer.tagline': 'Tu socio de confianza para viajes aéreos asequibles en todo el mundo',
+    'footer.tagline': 'Tu socio de confianza para viajes aéreos asequibles en todo el mundo desde y hacia USA',
     'footer.company': 'Empresa',
     'footer.about': 'Sobre Nosotros',
     'footer.destinations': 'Destinos',
