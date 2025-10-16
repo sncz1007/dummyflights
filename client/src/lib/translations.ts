@@ -158,7 +158,7 @@ export const translations = {
     'faq.q5.question': 'Which airlines are included?',
     'faq.q5.answer': 'For domestic USA flights (USA to USA), we partner with Alaska Airlines and American Airlines. For international routes, we work with British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian, and SriLankan Airlines.',
     'faq.q6.question': 'Are there any hidden fees?',
-    'faq.q6.answer': 'No hidden fees! The price you see is the final price you pay. This includes all airline taxes and our service fee. The only additional costs would be optional extras like baggage or seat selection, which vary by airline.',
+    'faq.q6.answer': 'No hidden fees! The price you see is the final price you pay. This includes all airline taxes and our service fee. The only additional costs would be optional extras like baggage or seat selection, which you can modify when you check-in directly with the airline.',
     
     // Contact
     'contact.title': 'Ready to Start Your Journey?',
