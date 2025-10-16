@@ -150,3 +150,36 @@ Updated Privacy Policy page (`client/src/pages/privacy.tsx`) with concise offici
 - **Data Security**: Security measures against unauthorized access
 - **Cookies**: Usage for browsing experience and traffic analysis
 - **Contact**: info@skybudgetfly.vip for privacy questions
+
+## Latest Updates (October 16, 2025)
+
+### About Us Section Added
+New "About Us" (Sobre Nosotros) section added to homepage (`client/src/components/AboutUs.tsx`):
+- **Location**: Positioned between Popular Destinations and Why Choose Us sections
+- **Content**: Agency description highlighting 5+ years of experience, 3,000+ successful bookings, 40% discount, and Oneworld alliance partnership
+- **Design**: 
+  - Centered title and descriptive text
+  - 4 key statistics with icons displayed in responsive grid (2 columns mobile, 4 columns desktop)
+  - Background color: muted/30 for visual differentiation
+  - Icons: Award, Users, TrendingDown, Plane from Lucide React
+- **Bilingual Support**: Full English and Spanish translations
+  - English: "About Us" with "We are an agency specialized in domestic and international flight reservations..."
+  - Spanish: "Sobre Nosotros" with "Somos una agencia especializada en reservas de vuelos..."
+- **Statistics Displayed**:
+  - 5+ Years of Experience (Años de Experiencia)
+  - 3,000+ Successful Bookings (Reservas Exitosas)
+  - 40% Discount (Descuento)
+  - Oneworld Alliance Partner (Alianza Partner)
+
+### Homepage Section Order Updated
+Current homepage structure (October 16, 2025):
+1. Header - Navigation and language selector
+2. Hero Section - Flight search form
+3. Trust Badges - 3 security features
+4. Video Strip - Airplane window video
+5. Popular Destinations - 8 featured cities
+6. **About Us** - Agency credentials and statistics (NEW)
+7. Why Choose Us - 4 key benefits
+8. Customer Testimonials - 4 reviews
+9. FAQ Section - 6 questions
+10. Footer - Contact and links
