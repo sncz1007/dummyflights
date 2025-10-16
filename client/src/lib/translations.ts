@@ -69,7 +69,7 @@ export const translations = {
     'about.stat.experience': 'Years of Experience',
     'about.stat.bookings': 'Successful Bookings',
     'about.stat.discount': 'Discount',
-    'about.stat.alliance': 'Alliance Partner',
+    'about.stat.alliance': 'Exclusive Oneworld Alliance',
     
     // Why Choose Us
     'whyChoose.title': 'Why Choose SkyBudgetFly',
@@ -318,7 +318,7 @@ export const translations = {
     'about.stat.experience': 'Años de Experiencia',
     'about.stat.bookings': 'Reservas Exitosas',
     'about.stat.discount': 'Descuento',
-    'about.stat.alliance': 'Alianza Partner',
+    'about.stat.alliance': 'Alianza exclusiva en Oneworld',
     
     // Why Choose Us
     'whyChoose.title': 'Por Qué Elegir SkyBudgetFly',
