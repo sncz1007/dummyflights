@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, MessageCircle } from 'lucide-react';
 import logoImage from '@assets/skybudget-logo.png';
 
 export default function Footer() {
@@ -42,7 +42,7 @@ export default function Footer() {
                 </a>
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-400">
-                <Phone className="h-4 w-4 text-primary" />
+                <MessageCircle className="h-4 w-4 text-primary" />
                 <span data-testid="text-footer-support">{t('footer.support')}</span>
               </div>
             </div>

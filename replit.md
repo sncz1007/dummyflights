@@ -211,6 +211,12 @@ New "About Us" (Sobre Nosotros) section added to homepage (`client/src/component
 - Component updated to handle multi-paragraph answers using "||" separator
 - Bilingual support maintained (EN/ES)
 
+### Footer Updates (October 16, 2025)
+- **Tagline**: Already updated to include "desde y hacia USA" / "to and from USA"
+- **Customer Support Icon**: Changed from Phone to MessageCircle (Chat icon)
+- **Customer Support Text**: Changed from "Atención al Cliente" / "Customer Support" to "Chat Personalizado" / "Personalized Chat"
+- Bilingual support maintained (EN/ES)
+
 ### Homepage Section Order Updated
 Current homepage structure (October 16, 2025):
 1. Header - Navigation and language selector
@@ -222,4 +228,4 @@ Current homepage structure (October 16, 2025):
 7. Why Choose Us - 4 key benefits
 8. Customer Testimonials - 4 reviews
 9. FAQ Section - 6 questions (updated policies)
-10. Footer - Contact and links
+10. Footer - Contact and links (updated with Chat icon and text)
