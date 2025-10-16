@@ -67,7 +67,7 @@ export default function FAQ() {
                     ))}
                   </div>
                 ) : (
-                  faq.answer
+                  <p className="text-justify">{faq.answer}</p>
                 )}
               </AccordionContent>
             </AccordionItem>
