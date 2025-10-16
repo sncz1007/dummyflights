@@ -220,6 +220,7 @@ New "About Us" (Sobre Nosotros) section added to homepage (`client/src/component
   - "Sobre Nosotros" → scrolls to About Us section (id="about")
   - "Destinos Populares" / "Popular Destinations" → scrolls to Popular Destinations section (id="destinations")
   - "Ofertas" → scrolls to Hero Section/Flight Search Form (id="home")
+  - "Preguntas Frecuentes" / "Frequently Asked Questions" → scrolls to FAQ section (id="faq")
 - **Scroll Behavior**: 80px offset from top for better section visibility
 - Bilingual support maintained (EN/ES)
 

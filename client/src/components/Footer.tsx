@@ -91,6 +91,15 @@ export default function Footer() {
                   {t('footer.deals')}
                 </button>
               </li>
+              <li>
+                <button 
+                  onClick={() => scrollToSection('faq')}
+                  className="hover:text-white transition-colors text-left"
+                  data-testid="link-footer-faq"
+                >
+                  {t('footer.faq')}
+                </button>
+              </li>
             </ul>
           </div>
           
