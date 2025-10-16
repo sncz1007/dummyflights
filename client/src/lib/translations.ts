@@ -63,6 +63,14 @@ export const translations = {
     'destinations.newyork': 'New York, USA',
     'destinations.dubai': 'Dubai, UAE',
     
+    // About Us
+    'about.title': 'About Us',
+    'about.description': 'We are an agency specialized in domestic and international flight reservations to and from the United States. With over 5 years of experience and more than 3,000 successful bookings, we make your travel easy by handling the entire booking process for you. Thanks to our exclusive partnerships with Oneworld alliance airlines, we can offer you discounts of up to 40% on your flights. Our commitment is to provide you with a safe, efficient, and personalized experience, so that traveling is as easy as choosing your destination.',
+    'about.stat.experience': 'Years of Experience',
+    'about.stat.bookings': 'Successful Bookings',
+    'about.stat.discount': 'Discount',
+    'about.stat.alliance': 'Alliance Partner',
+    
     // Why Choose Us
     'whyChoose.title': 'Why Choose SkyBudgetFly',
     'whyChoose.subtitle': 'Experience the difference with our premium travel services',
@@ -303,6 +311,14 @@ export const translations = {
     'destinations.bali': 'Bali, Indonesia',
     'destinations.newyork': 'Nueva York, USA',
     'destinations.dubai': 'Dubái, EAU',
+    
+    // About Us
+    'about.title': 'Sobre Nosotros',
+    'about.description': 'Somos una agencia especializada en reservas de vuelos nacionales e internacionales desde y hacia Estados Unidos. Con más de 5 años de experiencia y más de 3.000 reservas exitosas, facilitamos tu viaje al encargarnos de todo el proceso de reserva por ti. Gracias a nuestros convenios exclusivos con aerolíneas de la alianza Oneworld, podemos ofrecerte descuentos de hasta el 40% en tus vuelos. Nuestro compromiso es brindarte una experiencia segura, eficiente y personalizada, para que viajar sea tan fácil como decidir tu destino.',
+    'about.stat.experience': 'Años de Experiencia',
+    'about.stat.bookings': 'Reservas Exitosas',
+    'about.stat.discount': 'Descuento',
+    'about.stat.alliance': 'Alianza Partner',
     
     // Why Choose Us
     'whyChoose.title': 'Por Qué Elegir SkyBudgetFly',

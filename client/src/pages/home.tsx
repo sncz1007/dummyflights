@@ -2,6 +2,7 @@ import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import TrustBadges from '@/components/TrustBadges';
 import PopularDestinations from '@/components/PopularDestinations';
+import AboutUs from '@/components/AboutUs';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import Testimonials from '@/components/Testimonials';
 import VideoStrip from '@/components/VideoStrip';
@@ -17,6 +18,7 @@ export default function Home() {
         <TrustBadges />
         <VideoStrip />
         <PopularDestinations />
+        <AboutUs />
         <WhyChooseUs />
         <Testimonials />
         <FAQ />
