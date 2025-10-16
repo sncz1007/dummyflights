@@ -17,7 +17,7 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 - **Database**: PostgreSQL (Neon serverless) managed by Drizzle ORM, with tables for users, airports, quotes, and bookings.
 
 ### Feature Specifications
-- **Airline Partnership Segmentation**: Differentiates between "Domestic USA" (Alaska Airlines, American Airlines) and "International" (13 Oneworld alliance carriers), applying up to a 40% discount globally.
+- **Airline Partnership Segmentation**: Differentiates between "Domestic USA" (Alaska Airlines, American Airlines) and "International" (13 Oneworld alliance carriers: Aer Lingus, British Airways, Cathay Pacific, Condor, Fiji Airways, Finnair, Hawaiian Airlines, Iberia, Icelandair, Qantas, Qatar Airways, Royal Air Maroc, Starlux Airlines), applying up to a 40% discount globally.
 - **Booking and Payment**: Integrates Stripe for secure payments, generates discounted flight data, captures customer information, and tracks booking/payment status. Payment window is 20 minutes after reservation code receipt.
 - **Internationalization (i18n)**: Supports English and Spanish, with language preference stored in localStorage. All content, including legal pages, is fully bilingual.
 - **Homepage Structure**: Includes a Hero Section with flight search, Trust Badges, Video Strip, Popular Destinations, "About Us" section with key statistics, "Why Choose Us" benefits, Customer Testimonials, FAQ section, and a comprehensive Footer with contact info and navigation links.
