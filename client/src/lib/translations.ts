@@ -9,7 +9,7 @@ export const translations = {
     
     // Hero Section
     'hero.title': 'Find Cheap Flights Worldwide',
-    'hero.subtitle': 'Save up to 40% on domestic and international flights',
+    'hero.subtitle': 'Save up to 40% on domestic and international flights to and from USA',
     'hero.guarantee': 'Best Price Guarantee • Free Quote • Expert Support',
     
     // Search Form
@@ -301,7 +301,7 @@ export const translations = {
     'destinations.cusco': 'Cusco, Perú',
     'destinations.barcelona': 'Barcelona, España',
     'destinations.bali': 'Bali, Indonesia',
-    'destinations.newyork': 'Nueva York, EUA',
+    'destinations.newyork': 'Nueva York, USA',
     'destinations.dubai': 'Dubái, EAU',
     
     // Why Choose Us
@@ -365,7 +365,7 @@ export const translations = {
     'testimonials.title': 'Lo Que Dicen Nuestros Clientes',
     'testimonials.subtitle': 'Únete a miles de viajeros felices que ahorraron con SkyBudgetFly',
     'testimonials.customer1.name': 'Sarah Johnson',
-    'testimonials.customer1.location': 'Miami, EUA',
+    'testimonials.customer1.location': 'Miami, USA',
     'testimonials.customer1.text': '¡Ahorré más de $800 en mi viaje familiar a Europa! El proceso de reserva fue perfecto y el soporte al cliente excelente. ¡Muy recomendado!',
     'testimonials.customer2.name': 'Carlos Méndez',
     'testimonials.customer2.location': 'Ciudad de México, México',
@@ -389,7 +389,7 @@ export const translations = {
     'faq.q4.question': '¿Puedo cancelar o modificar mi reserva?',
     'faq.q4.answer': 'Las políticas de cancelación y modificación dependen de la aerolínea y el tipo de tarifa. Por favor contacta a nuestro equipo de soporte al menos 48 horas antes de tu vuelo para ayudarte con cambios o cancelaciones.',
     'faq.q5.question': '¿Qué aerolíneas están incluidas?',
-    'faq.q5.answer': 'Para vuelos domésticos en EUA (EUA a EUA), trabajamos con Alaska Airlines y American Airlines. Para rutas internacionales, trabajamos con British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian y SriLankan Airlines.',
+    'faq.q5.answer': 'Para vuelos domésticos en USA (USA a USA), trabajamos con Alaska Airlines y American Airlines. Para rutas internacionales, trabajamos con British Airways, Cathay Pacific, Fiji Airways, Finnair, Iberia, Japan Airlines, Malaysia Airlines, Oman Air, Qantas, Qatar Airways, Royal Air Maroc, Royal Jordanian y SriLankan Airlines.',
     'faq.q6.question': '¿Hay cargos ocultos?',
     'faq.q6.answer': '¡Sin cargos ocultos! El precio que ves es el precio final que pagas. Esto incluye todos los impuestos de la aerolínea y nuestra tarifa de servicio. Los únicos costos adicionales serían extras opcionales como equipaje o selección de asiento, que varían según la aerolínea.',
     
