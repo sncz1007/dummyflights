@@ -397,7 +397,7 @@ export const translations = {
     'faq.title': 'Preguntas Frecuentes',
     'faq.subtitle': 'Encuentra respuestas a las preguntas más comunes sobre nuestros servicios',
     'faq.q1.question': '¿Cómo funciona el descuento del 40%?',
-    'faq.q1.answer': 'Tenemos alianzas exclusivas con aerolíneas importantes a nivel mundial que nos permiten ofrecer un descuento garantizado del 40% en todos los vuelos. Nuestras alianzas incluyen Alaska Airlines y American Airlines para rutas domésticas en USA, y 13 aerolíneas internacionales para destinos mundiales.',
+    'faq.q1.answer': 'Tenemos alianzas exclusivas con las aerolíneas más importantes de Oneworld, lo que nos permiten ofrecer un descuento garantizado de hasta el 40% en todos los vuelos. Nuestras alianzas incluyen Alaska Airlines y American Airlines para rutas domésticas en USA, y 13 importantes aerolíneas internacionales para destinos mundiales.',
     'faq.q2.question': '¿El descuento es realmente del 40% en cada vuelo?',
     'faq.q2.answer': '¡Sí! El descuento del 40% está garantizado en cada vuelo que ofrecemos. Te mostramos el precio original junto a nuestro precio con descuento para que veas exactamente cuánto estás ahorrando.',
     'faq.q3.question': '¿Cómo recibo mis boletos de avión?',
