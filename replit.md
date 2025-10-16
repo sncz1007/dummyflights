@@ -191,6 +191,18 @@ New "About Us" (Sobre Nosotros) section added to homepage (`client/src/component
 - Delivery time reduced from 24 hours to **maximum 6 hours**
 - Bilingual support maintained (EN/ES)
 
+**FAQ Question 5 - Airlines Included:**
+- Simplified domestic USA description: removed "(USA a USA)" clarification
+- Changed "trabajamos con" to "tenemos alianza con" for domestic flights
+- Text justified
+- Bilingual support maintained (EN/ES)
+
+**FAQ Question 6 - Hidden Fees:**
+- Changed "¡Sin cargos ocultos!" to "¡No hay cargos ocultos!"
+- Updated extras information: "lo cual podrás modificar al momento de realizar tu Check-in directamente con la aerolínea"
+- Text justified
+- Bilingual support maintained (EN/ES)
+
 **FAQ Question 4 - Cancellation & Modification Policy:**
 - Completely rewritten with two-paragraph format
 - **Paragraph 1**: Commitment to customers, 48-hour notice requirement for modifications
