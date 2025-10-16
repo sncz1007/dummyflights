@@ -79,7 +79,7 @@ Complete landing page with the following sections (in order):
 
 ### Design Implementation
 - **Stock Images**: 9 professional images (1 airplane background + 8 destinations)
-- **Hero Background**: White airplane in blue sky with clouds (`descarga_1760624689515.jpg`)
+- **Hero Background**: Airplane flying over city at sunset with purple/pink sky (`vecteezy_airplane-in-the-sky-with-cityscape-background-3d-rendering_28576292_1760624896421.jpg`)
 - **Video**: Airplane window view from Pexels (free stock)
 - **Icons**: Lucide React icons throughout
 - **Colors**: Primary red (#red-600), complementary blue, yellow, green accents

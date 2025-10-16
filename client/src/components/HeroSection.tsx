@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import AirportSearch from './AirportSearch';
 import { Plane, PlaneTakeoff, PlaneLanding, Calendar, Users, Check } from 'lucide-react';
-import airplaneBackground from '@assets/descarga_1760624689515.jpg';
+import airplaneBackground from '@assets/vecteezy_airplane-in-the-sky-with-cityscape-background-3d-rendering_28576292_1760624896421.jpg';
 
 export default function HeroSection() {
   const { t } = useTranslation();
