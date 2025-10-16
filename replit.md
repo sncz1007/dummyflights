@@ -17,7 +17,20 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 - **Database**: PostgreSQL (Neon serverless) managed by Drizzle ORM, with tables for users, airports, quotes, and bookings.
 
 ### Feature Specifications
-- **Airline Partnership Segmentation**: Differentiates between "Domestic USA" (Alaska Airlines, American Airlines) and "International" (13 Oneworld alliance carriers: Aer Lingus, British Airways, Cathay Pacific, Condor, Fiji Airways, Finnair, Hawaiian Airlines, Iberia, Icelandair, Qantas, Qatar Airways, Royal Air Maroc, Starlux Airlines), applying up to a 40% discount globally.
+- **Advanced Regional Airline Segmentation**: Intelligent route-based airline filtering system that displays only partner airlines authorized for specific regions and routes:
+  - **Domestic USA**: Alaska Airlines, American Airlines
+  - **Americas (North/Central/South)**: American Airlines (priority), Alaska Airlines
+  - **Iberian Countries** (Spain, Portugal, France): American Airlines, Royal Air Maroc, Iberia, Aer Lingus, Qatar Airways
+  - **Central Europe** (Germany, Switzerland, Italy): American Airlines, Qatar Airways, Royal Air Maroc, Aer Lingus
+  - **Eastern Europe** (Poland, Czech Republic): Qatar Airways, Finnair, Aer Lingus, Condor
+  - **Nordic Countries** (Sweden, Finland, Norway, Denmark, Iceland): Finnair, Icelandair
+  - **Russia**: Alaska Airlines, American Airlines
+  - **United Kingdom & Ireland**: American Airlines, British Airways
+  - **Middle East** (UAE, Qatar, Saudi Arabia): Qatar Airways, Royal Air Maroc
+  - **Oceania** (Australia, New Zealand, Fiji): American Airlines, Qantas
+  - **Africa** (Morocco, Egypt, South Africa, Nigeria, Kenya): Qatar Airways, Royal Air Maroc
+  - **Asia** (China, Japan, South Korea, Singapore, Thailand): American Airlines, Hawaiian Airlines, Qatar Airways, Qantas, Starlux Airlines
+  - System automatically shows "No flights available" message when no partner airlines serve a specific route
 - **Booking and Payment**: Integrates Stripe for secure payments, generates discounted flight data, captures customer information, and tracks booking/payment status. Payment window is 20 minutes after reservation code receipt.
 - **Internationalization (i18n)**: Supports English and Spanish, with language preference stored in localStorage. All content, including legal pages, is fully bilingual.
 - **Homepage Structure**: Includes a Hero Section with flight search, Trust Badges, Video Strip, Popular Destinations, "About Us" section with key statistics, "Why Choose Us" benefits, Customer Testimonials, FAQ section, and a comprehensive Footer with contact info and navigation links.

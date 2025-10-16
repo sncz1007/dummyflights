@@ -1,0 +1,27 @@
+En cuanto al formulario, ya quedo clara la segmentacion de aerolineas en el resultado de la busqueda de vuelos disponibles segun el API, pero quiero segmentarlo aun mas, ya que no se cuenta con todos esos convenios. Dejemos claro que para vuelos nacionales o domesticos solo arroja los resultados de Alaska Airlines y American Airlines. 
+Pero para vuelos internacionales tambien quiero que segmentes y arrojes los resultados para aerolineas especificas: 
+
+-Para vuelo desde y hacia USA desde y hacia paises de America, ya sea norteamerica, centro america y sur america solo muestra en los resultados los vuelos que opere American Airlines y en su defecto si alguno de ellos lo opera Alaska, de resto no muestres otras aerolineas que no sean estas dos, si no hay vuelos con estas dos aerolineas a alguna ciudad de un pais del continente no arrojes resultados, muestra un mensaje que diga que no hay vuelos disponibles para este destino por el momento.  
+
+Para los demas continentes la segmentacion es a siguiente teniendo en cuenta lo mismo, solo muestra vuelos de las aerolineas que te voy a mencionar para cada continente y region donde te doy algunos ejemplos de paises pertenecientes a esas areas. Importante solo muestra esas aerolineas y manten el orden de importancia segun te lo comparto donde la primer aerolinea es la principal y asi sucesivamente. Igualmente si no hay vuelos en alguna de ellas no arrojes resultados, muestra un mensaje que diga que no hay vuelos disponibles para este destino por el momento.  
+
+-Paises Ibericos ejemplo: (España, Portugal, Francia etc): American Airlines, Royal Air Maroc, Iberia, Aer Lingus, Qatar Airways
+ 
+-Paises de Europa Central ejemplo (Alemania, Suiza, Italia etc): American Airlines, Qatar Airways, Royal Air Maroc, Aer Lingus 
+
+-Paises de Europa oriental ejemplo:(Polonia, Czechia etc) :Qatar Airways, Finnair, Aer Lingus, Condor 
+
+-Paises nórdicos ejemplo ( Suecia, finlandia, Dinamarca, Islandia, etc): Finnair, Iceland air
+
+-Rusia:
+Alaska Air, American Airlines
+
+-Reino Unido: American Airlines, British Airways
+
+-Medio oriente ejemplo: (Emiratos árabes unidos, Qatar, etc): Qatar Airways, Royal Air Maroc
+
+-Oceanía ejemplo: (Asutralia, nueva Zelanda, etc): American Airlines, Qantas Airways, 
+
+-África ejemplo: (Nigeria, kenia, egipto, marrueco, South Africa, etc) Qatar Airways, Royal Air Maroc 
+
+-Asia ejemplo (China, Japon, corea del sur etc): American Airlines, Hawaiian Airlines, Qatar Airways, Qantas, Starlux Airlines.

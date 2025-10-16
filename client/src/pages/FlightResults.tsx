@@ -102,7 +102,12 @@ export default function FlightResults() {
     }
   }, []);
 
-  const { data, isLoading, error } = useQuery<{ flights: Flight[]; searchParams: SearchParams }>({
+  const { data, isLoading, error } = useQuery<{ 
+    flights: Flight[]; 
+    searchParams: SearchParams;
+    noFlightsAvailable?: boolean;
+    message?: string;
+  }>({
     queryKey: ['/api/flights/search', searchParams],
     enabled: !!searchParams,
     queryFn: async () => {
@@ -150,6 +155,31 @@ export default function FlightResults() {
             {t('results.noResults')}
           </p>
           <Button onClick={() => setLocation('/')} data-testid="button-back-home">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            {t('nav.home')}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle no flights available case (no partner airlines for this route)
+  if (data.noFlightsAvailable || data.flights.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center max-w-md px-4">
+          <div className="mb-6">
+            <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+              <Plane className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h2 className="text-2xl font-bold text-foreground mb-3" data-testid="text-no-flights-title">
+              {t('results.noFlightsAvailable')}
+            </h2>
+            <p className="text-muted-foreground mb-6" data-testid="text-no-flights-message">
+              {t('results.noFlightsMessage')}
+            </p>
+          </div>
+          <Button onClick={() => setLocation('/')} size="lg" data-testid="button-back-home">
             <ArrowLeft className="h-4 w-4 mr-2" />
             {t('nav.home')}
           </Button>

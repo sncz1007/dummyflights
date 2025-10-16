@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertQuoteSchema, insertBookingSchema } from "@shared/schema";
+import { getAllowedAirlinesForRoute } from "@shared/airlineSegmentation";
 import { z } from "zod";
 import Stripe from "stripe";
 
@@ -17,28 +18,24 @@ const stripe = new Stripe(stripeSecretKey, {
   apiVersion: "2025-09-30.clover",
 });
 
-// Airline partnerships - Domestic USA flights only
-const DOMESTIC_AIRLINES = [
-  { code: "AS", name: "Alaska Airlines", logo: "https://images.kiwi.com/airlines/64/AS.png" },
-  { code: "AA", name: "American Airlines", logo: "https://images.kiwi.com/airlines/64/AA.png" },
-];
-
-// Airline partnerships - International flights (USA to/from other countries)
-const INTERNATIONAL_AIRLINES = [
-  { code: "BA", name: "British Airways", logo: "https://images.kiwi.com/airlines/64/BA.png" },
-  { code: "CX", name: "Cathay Pacific", logo: "https://images.kiwi.com/airlines/64/CX.png" },
-  { code: "FJ", name: "Fiji Airways", logo: "https://images.kiwi.com/airlines/64/FJ.png" },
-  { code: "AY", name: "Finnair", logo: "https://images.kiwi.com/airlines/64/AY.png" },
-  { code: "IB", name: "Iberia", logo: "https://images.kiwi.com/airlines/64/IB.png" },
-  { code: "JL", name: "Japan Airlines", logo: "https://images.kiwi.com/airlines/64/JL.png" },
-  { code: "MH", name: "Malaysia Airlines", logo: "https://images.kiwi.com/airlines/64/MH.png" },
-  { code: "WY", name: "Oman Air", logo: "https://images.kiwi.com/airlines/64/WY.png" },
-  { code: "QF", name: "Qantas", logo: "https://images.kiwi.com/airlines/64/QF.png" },
-  { code: "QR", name: "Qatar Airways", logo: "https://images.kiwi.com/airlines/64/QR.png" },
-  { code: "AT", name: "Royal Air Maroc", logo: "https://images.kiwi.com/airlines/64/AT.png" },
-  { code: "RJ", name: "Royal Jordanian", logo: "https://images.kiwi.com/airlines/64/RJ.png" },
-  { code: "UL", name: "SriLankan Airlines", logo: "https://images.kiwi.com/airlines/64/UL.png" },
-];
+// All available airline partners (master list)
+const ALL_AIRLINES: Record<string, { code: string; name: string; logo: string }> = {
+  'Alaska Airlines': { code: "AS", name: "Alaska Airlines", logo: "https://images.kiwi.com/airlines/64/AS.png" },
+  'American Airlines': { code: "AA", name: "American Airlines", logo: "https://images.kiwi.com/airlines/64/AA.png" },
+  'Aer Lingus': { code: "EI", name: "Aer Lingus", logo: "https://images.kiwi.com/airlines/64/EI.png" },
+  'British Airways': { code: "BA", name: "British Airways", logo: "https://images.kiwi.com/airlines/64/BA.png" },
+  'Cathay Pacific': { code: "CX", name: "Cathay Pacific", logo: "https://images.kiwi.com/airlines/64/CX.png" },
+  'Condor': { code: "DE", name: "Condor", logo: "https://images.kiwi.com/airlines/64/DE.png" },
+  'Fiji Airways': { code: "FJ", name: "Fiji Airways", logo: "https://images.kiwi.com/airlines/64/FJ.png" },
+  'Finnair': { code: "AY", name: "Finnair", logo: "https://images.kiwi.com/airlines/64/AY.png" },
+  'Hawaiian Airlines': { code: "HA", name: "Hawaiian Airlines", logo: "https://images.kiwi.com/airlines/64/HA.png" },
+  'Iberia': { code: "IB", name: "Iberia", logo: "https://images.kiwi.com/airlines/64/IB.png" },
+  'Icelandair': { code: "FI", name: "Icelandair", logo: "https://images.kiwi.com/airlines/64/FI.png" },
+  'Qantas': { code: "QF", name: "Qantas", logo: "https://images.kiwi.com/airlines/64/QF.png" },
+  'Qatar Airways': { code: "QR", name: "Qatar Airways", logo: "https://images.kiwi.com/airlines/64/QR.png" },
+  'Royal Air Maroc': { code: "AT", name: "Royal Air Maroc", logo: "https://images.kiwi.com/airlines/64/AT.png" },
+  'Starlux Airlines': { code: "JX", name: "Starlux Airlines", logo: "https://images.kiwi.com/airlines/64/JX.png" },
+};
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Airport search endpoint
@@ -148,11 +145,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Determine route type and select appropriate airline partners
-      // Domestic: BOTH airports in USA
-      // International: ANY airport outside USA
-      const isDomestic = departureAirport.country === "USA" && destinationAirport.country === "USA";
-      const airlines = isDomestic ? DOMESTIC_AIRLINES : INTERNATIONAL_AIRLINES;
+      // Get allowed airlines for this route using regional segmentation
+      const allowedAirlineNames = getAllowedAirlinesForRoute(departureAirport.country, destinationAirport.country);
+      
+      // If no airlines available for this route, return empty results
+      if (allowedAirlineNames.length === 0) {
+        return res.json({
+          flights: [],
+          noFlightsAvailable: true,
+          message: "No flights available for this destination at this time",
+          searchParams: {
+            fromAirport,
+            toAirport,
+            departureDate,
+            returnDate,
+            passengers,
+            flightClass,
+            tripType,
+          },
+        });
+      }
+
+      // Convert airline names to airline objects (in priority order)
+      const airlines = allowedAirlineNames
+        .map(name => ALL_AIRLINES[name])
+        .filter(Boolean); // Remove any undefined entries
 
       // Generate example flights (3-6 results)
       const numFlights = Math.floor(Math.random() * 4) + 3;

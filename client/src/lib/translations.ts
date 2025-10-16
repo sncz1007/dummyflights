@@ -239,6 +239,8 @@ export const translations = {
     // Flight Results
     'results.title': 'Available Flights',
     'results.noResults': 'No flights found',
+    'results.noFlightsAvailable': 'No flights available for this destination at this time',
+    'results.noFlightsMessage': 'We currently do not have partner airlines serving this route. Please try a different destination or contact us for assistance.',
     'results.searching': 'Searching for flights...',
     'results.direct': 'Direct',
     'results.stops': 'stops',
@@ -517,6 +519,8 @@ export const translations = {
     // Flight Results
     'results.title': 'Vuelos Disponibles',
     'results.noResults': 'No se encontraron vuelos',
+    'results.noFlightsAvailable': 'No hay vuelos disponibles para este destino por el momento',
+    'results.noFlightsMessage': 'Actualmente no contamos con aerolíneas asociadas que operen esta ruta. Por favor intenta con un destino diferente o contáctanos para asistencia.',
     'results.searching': 'Buscando vuelos...',
     'results.direct': 'Directo',
     'results.stops': 'escalas',
