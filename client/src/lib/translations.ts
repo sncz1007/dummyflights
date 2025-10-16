@@ -185,6 +185,42 @@ export const translations = {
     'footer.follow': 'Follow Us',
     'footer.copyright': 'All rights reserved.',
     
+    // Terms of Service
+    'terms.title': 'Terms of Service',
+    'terms.lastUpdated': 'Last updated: October 2025',
+    'terms.intro': 'By using SkyBudget\'s services, you accept these terms and conditions.',
+    'terms.services.title': 'Our Services',
+    'terms.services.p1': 'SkyBudget offers assistance services for flight search and booking. We act as intermediaries between customers and airlines. Is it safe to buy with us? Booking with us is completely safe, as we process all payments through Stripe, an internationally verified platform that protects your money with the highest security standards. Additionally, we will only send the payment link to pay for the reservation once our agents confirm the availability of the flight, and if the customer accepts and confirms the reservation by sending us their data, which the airline requests to make the reservation. To give more security to our customers, "Payment is made after receiving the reservation code from the airline". Once the customer receives the confirmation code by email, and the flight itinerary directly from the airline, they will have 20 minutes to make the payment through the payment link provided in the email along with their reservation code. "Important, If the customer does not make the payment within that time period, the reservation will be canceled to prevent fraud against SkyBudget".',
+    'terms.services.p2': 'Additionally, we respect your privacy and are available to answer any questions you may have during the process. Your purchase is protected and backed by trusted technology. What payment methods do we accept? We accept credit or debit card payments, bank transfers, and through our secure Stripe platform. All payments are secure.',
+    'terms.quotes.title': 'Flight Quotes',
+    'terms.quotes.text': 'Flight quotes are estimates and may change according to availability and airline policies. Final prices will be confirmed before booking. Currently, we only have agreements with airlines that are members of the oneworld alliance for domestic and international flights.',
+    'terms.booking.title': 'Booking Process',
+    'terms.booking.text': 'Complete the "Get Your Flight Quote" form with all the necessary information for your booking, making sure to correctly provide your contact information. Within minutes, you will receive your flight quote with a 40% discount, along with payment and booking instructions, by email. Once you are sure of your reservation and accept our terms and conditions published in the email and on our website and confirm the provided reservation by responding to the email with your personal data which the airlines require to make the reservation, (no financial data is requested) we will proceed to make the reservation and once you receive the code and flight itinerary, you must make the secure payment through our verified Stripe gateway, within a maximum period of 20 minutes, to avoid flight cancellation.',
+    'terms.cancellation.title': 'Cancellation Policy',
+    'terms.cancellation.text': 'Due to the special discounts we offer through agreements and promotions, we cannot guarantee cancellations or flight refunds, so we recommend being sure of your reservation. However, Sky Budget guarantees that you will get the flight you want. If you need to modify your trip, we offer you a similar flight at no additional cost, as long as there is availability on the chosen date. To manage itinerary changes, it is important that you notify us at least 48 hours in advance of your flight so that we can help you effectively. Our team is here to help you at all times and guarantee a reliable experience. If you have any problems with your reservation, do not hesitate to contact us so we can help you resolve it.',
+    'terms.liability.title': 'Limitation of Liability',
+    'terms.liability.text': 'SkyBudget is not responsible for delays, cancellations, or flight changes made by airlines.',
+    'terms.changes.title': 'Changes to Terms',
+    'terms.changes.text': 'We reserve the right to modify these terms at any time. Changes will be posted on this page.',
+    'terms.contact.title': 'Contact',
+    'terms.contact.text': 'For questions about these terms, contact us at:',
+    
+    // Privacy Policy
+    'privacy.title': 'Privacy Policy',
+    'privacy.intro': 'At SkyBudget, we respect your privacy and are committed to protecting your personal information.',
+    'privacy.collection.title': 'Information Collection',
+    'privacy.collection.text': 'We collect information you provide when requesting flight quotes, including name, email, phone number, and travel preferences.',
+    'privacy.use.title': 'Use of Information',
+    'privacy.use.text': 'We use your information to provide flight quotes, process bookings, and communicate with you about your travel requests.',
+    'privacy.sharing.title': 'Information Sharing',
+    'privacy.sharing.text': 'We do not sell or share your personal information with third parties except as necessary to provide our services.',
+    'privacy.security.title': 'Data Security',
+    'privacy.security.text': 'We implement appropriate security measures to protect your personal information against unauthorized access and disclosure.',
+    'privacy.cookies.title': 'Cookies',
+    'privacy.cookies.text': 'We use cookies to improve your browsing experience and analyze website traffic.',
+    'privacy.contact.title': 'Contact',
+    'privacy.contact.text': 'For questions about this privacy policy, contact us at:',
+    
     // Toast Messages
     'toast.success': 'Success!',
     'toast.successMessage': 'Your quote request has been submitted. We\'ll contact you within 24 hours with the best prices and up to 40% discount!',
@@ -240,14 +276,6 @@ export const translations = {
     'checkout.successMessage': 'Your flight reservation has been confirmed. You will receive your tickets via email within 24 hours.',
     'checkout.error': 'Payment Failed',
     'checkout.errorMessage': 'There was an error processing your payment. Please try again.',
-    
-    // Terms Page
-    'terms.title': 'Terms of Service',
-    'terms.lastUpdated': 'Last updated: October 2025',
-    
-    // Privacy Page
-    'privacy.title': 'Privacy Policy',
-    'privacy.lastUpdated': 'Last updated: October 2025',
   },
   es: {
     // Navigation
@@ -435,6 +463,42 @@ export const translations = {
     'footer.follow': 'Síguenos',
     'footer.copyright': 'Todos los derechos reservados.',
     
+    // Terms of Service
+    'terms.title': 'Términos de Servicio',
+    'terms.lastUpdated': 'Última actualización: Octubre 2025',
+    'terms.intro': 'Al usar los servicios de SkyBudget, aceptas estos términos y condiciones.',
+    'terms.services.title': 'Nuestros Servicios',
+    'terms.services.p1': 'SkyBudget ofrece servicios de asistencia para búsqueda y reserva de vuelos. Actuamos como intermediarios entre clientes y aerolíneas. ¿Es seguro comprar con nosotros? Reservar con nosotros es completamente seguro, ya que procesamos todos los pagos a través de Stripe, una plataforma verificada internacionalmente que protege tu dinero con los más altos estándares de seguridad. Además, solo enviaremos el enlace de pago para pagar la reserva una vez que nuestros agentes confirmen la disponibilidad del vuelo, y si el cliente acepta y confirma la reserva enviándonos sus datos, que la aerolínea solicita para hacer la reserva. Para dar más seguridad a nuestros clientes, "El pago se realiza después de recibir el código de reserva de la aerolínea". Una vez que el cliente reciba el código de confirmación por correo electrónico, y el itinerario de vuelo directamente de la aerolínea, tendrá 20 minutos para realizar el pago a través del enlace de pago proporcionado en el correo junto con su código de reserva. "Importante, Si el cliente no realiza el pago dentro de ese período de tiempo, la reserva será cancelada para prevenir fraudes contra SkyBudget".',
+    'terms.services.p2': 'Además, respetamos tu privacidad y estamos disponibles para responder cualquier pregunta que puedas tener durante el proceso. Tu compra está protegida y respaldada por tecnología confiable. ¿Qué métodos de pago aceptamos? Aceptamos pagos con tarjeta de crédito o débito, transferencias bancarias, y a través de nuestra plataforma segura Stripe. Todos los pagos son seguros.',
+    'terms.quotes.title': 'Cotizaciones de Vuelos',
+    'terms.quotes.text': 'Las cotizaciones de vuelos son estimaciones y pueden cambiar según la disponibilidad y políticas de las aerolíneas. Los precios finales se confirmarán antes de la reserva. Actualmente, solo tenemos acuerdos con aerolíneas que son miembros de la alianza oneworld para vuelos domésticos e internacionales.',
+    'terms.booking.title': 'Proceso de Reserva',
+    'terms.booking.text': 'Completa el formulario "Obtén tu Cotización de Vuelo" con toda la información necesaria para tu reserva, asegurándote de proporcionar correctamente tu información de contacto. En minutos, recibirás tu cotización de vuelo con un 40% de descuento, junto con las instrucciones de pago y reserva, por correo electrónico. Una vez que estés seguro de tu reserva y aceptes nuestros términos y condiciones publicados en el correo y en nuestro sitio web y confirmes la reserva proporcionada respondiendo al correo con tus datos personales que las aerolíneas requieren para hacer la reserva, (no se solicitan datos financieros) procederemos a hacer la reserva y una vez que recibas el código y el itinerario de vuelo, deberás realizar el pago seguro a través de nuestra pasarela verificada Stripe, dentro de un período máximo de 20 minutos, para evitar la cancelación del vuelo.',
+    'terms.cancellation.title': 'Política de Cancelación',
+    'terms.cancellation.text': 'Debido a los descuentos especiales que ofrecemos a través de acuerdos y promociones, no podemos garantizar cancelaciones o reembolsos de vuelos, por lo que recomendamos estar seguro de tu reserva. Sin embargo, Sky Budget garantiza que obtendrás el vuelo que deseas. Si necesitas modificar tu viaje, te ofrecemos un vuelo similar sin costo adicional, siempre que haya disponibilidad en la fecha elegida. Para gestionar cambios de itinerario, es importante que nos notifiques con al menos 48 horas de anticipación a tu vuelo para que podamos ayudarte efectivamente. Nuestro equipo está aquí para ayudarte en todo momento y garantizar una experiencia confiable. Si tienes algún problema con tu reserva, no dudes en contactarnos para que podamos ayudarte a resolverlo.',
+    'terms.liability.title': 'Limitación de Responsabilidad',
+    'terms.liability.text': 'SkyBudget no es responsable por retrasos, cancelaciones o cambios de vuelo realizados por las aerolíneas.',
+    'terms.changes.title': 'Cambios a los Términos',
+    'terms.changes.text': 'Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios se publicarán en esta página.',
+    'terms.contact.title': 'Contacto',
+    'terms.contact.text': 'Para preguntas sobre estos términos, contáctanos en:',
+    
+    // Privacy Policy
+    'privacy.title': 'Política de Privacidad',
+    'privacy.intro': 'En SkyBudget, respetamos tu privacidad y estamos comprometidos a proteger tu información personal.',
+    'privacy.collection.title': 'Recopilación de Información',
+    'privacy.collection.text': 'Recopilamos información que proporcionas al solicitar cotizaciones de vuelos, incluyendo nombre, correo electrónico, número de teléfono y preferencias de viaje.',
+    'privacy.use.title': 'Uso de la Información',
+    'privacy.use.text': 'Utilizamos tu información para proporcionar cotizaciones de vuelos, procesar reservas y comunicarnos contigo sobre tus solicitudes de viaje.',
+    'privacy.sharing.title': 'Compartir Información',
+    'privacy.sharing.text': 'No vendemos ni compartimos tu información personal con terceros excepto cuando sea necesario para proporcionar nuestros servicios.',
+    'privacy.security.title': 'Seguridad de Datos',
+    'privacy.security.text': 'Implementamos medidas de seguridad apropiadas para proteger tu información personal contra acceso y divulgación no autorizados.',
+    'privacy.cookies.title': 'Cookies',
+    'privacy.cookies.text': 'Utilizamos cookies para mejorar tu experiencia de navegación y analizar el tráfico del sitio web.',
+    'privacy.contact.title': 'Contacto',
+    'privacy.contact.text': 'Para preguntas sobre esta política de privacidad, contáctanos en:',
+    
     // Toast Messages
     'toast.success': '¡Éxito!',
     'toast.successMessage': 'Tu solicitud de cotización ha sido enviada. Te contactaremos en 24 horas con los mejores precios y hasta 40% de descuento!',
@@ -490,14 +554,6 @@ export const translations = {
     'checkout.successMessage': 'Tu reserva de vuelo ha sido confirmada. Recibirás tus boletos por correo en 24 horas.',
     'checkout.error': 'Pago Fallido',
     'checkout.errorMessage': 'Hubo un error procesando tu pago. Por favor intenta nuevamente.',
-    
-    // Terms Page
-    'terms.title': 'Términos de Servicio',
-    'terms.lastUpdated': 'Última actualización: Octubre 2025',
-    
-    // Privacy Page
-    'privacy.title': 'Política de Privacidad',
-    'privacy.lastUpdated': 'Última actualización: Octubre 2025',
   }
 } as const;
 

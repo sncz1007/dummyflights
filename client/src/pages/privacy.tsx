@@ -23,53 +23,53 @@ export default function Privacy() {
             </Link>
             
             <h1 className="text-4xl font-display font-bold text-foreground mb-4" data-testid="text-privacy-title">
-              Privacy Policy
+              {t('privacy.title')}
             </h1>
-            <p className="text-muted-foreground mb-8" data-testid="text-last-updated">
-              At SkyBudget, we respect your privacy and are committed to protecting your personal information.
+            <p className="text-muted-foreground mb-8" data-testid="text-privacy-intro">
+              {t('privacy.intro')}
             </p>
           </div>
 
           <div className="prose prose-lg max-w-none text-foreground">
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Information Collection</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t('privacy.collection.title')}</h2>
               <p className="mb-4">
-                We collect information you provide when requesting flight quotes, including name, email, phone number, and travel preferences.
+                {t('privacy.collection.text')}
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Use of Information</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t('privacy.use.title')}</h2>
               <p className="mb-4">
-                We use your information to provide flight quotes, process bookings, and communicate with you about your travel requests.
+                {t('privacy.use.text')}
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Information Sharing</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t('privacy.sharing.title')}</h2>
               <p className="mb-4">
-                We do not sell or share your personal information with third parties except as necessary to provide our services.
+                {t('privacy.sharing.text')}
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Data Security</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t('privacy.security.title')}</h2>
               <p className="mb-4">
-                We implement appropriate security measures to protect your personal information against unauthorized access and disclosure.
+                {t('privacy.security.text')}
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Cookies</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t('privacy.cookies.title')}</h2>
               <p className="mb-4">
-                We use cookies to improve your browsing experience and analyze website traffic.
+                {t('privacy.cookies.text')}
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Contact</h2>
+              <h2 className="text-2xl font-semibold mb-4">{t('privacy.contact.title')}</h2>
               <p className="mb-4">
-                For questions about this privacy policy, contact us at: <a href="mailto:info@skybudgetfly.vip" className="text-primary hover:underline">info@skybudgetfly.vip</a>
+                {t('privacy.contact.text')} <a href="mailto:info@skybudgetfly.vip" className="text-primary hover:underline">info@skybudgetfly.vip</a>
               </p>
             </section>
           </div>
