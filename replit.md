@@ -20,7 +20,8 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 ### Feature Specifications
 - **Advanced Regional Airline Segmentation**: Intelligent route-based airline filtering system that displays only partner airlines authorized for specific regions and routes:
   - **Domestic USA**: Alaska Airlines, American Airlines
-  - **Americas (North/Central/South)**: American Airlines (priority), Alaska Airlines
+  - **North America** (USA, Canada, Mexico, Central America): Alaska Airlines, American Airlines
+  - **South America**: American Airlines only (Alaska excluded)
   - **Iberian Countries** (Spain, Portugal, France): American Airlines, Royal Air Maroc, Iberia, Aer Lingus, Qatar Airways
   - **Central Europe** (Germany, Switzerland, Italy): American Airlines, Qatar Airways, Royal Air Maroc, Aer Lingus
   - **Eastern Europe** (Poland, Czech Republic): Qatar Airways, Finnair, Aer Lingus, Condor
@@ -51,7 +52,7 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
-- **Amadeus Flight Offers API**: Real-time flight search and pricing. Returns actual flight availability from global airlines with filters for partner airlines by region.
+- **Amadeus Flight Offers API (Production)**: Real-time flight search and pricing using production credentials. Returns actual flight availability from global airlines with operating carrier-based filtering to ensure only approved partner airlines appear. Uses 40% discount multiplier on live Amadeus prices.
 - **Airport Data API**: Accessible via `/api/airports/search` for 500+ international airports.
 
 ### External Libraries
@@ -64,5 +65,6 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 
 ### Environment Variables
 - `DATABASE_URL`
+- `AMADEUS_API_KEY`, `AMADEUS_API_SECRET` (Production credentials)
 - `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
 - `VITE_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY`
