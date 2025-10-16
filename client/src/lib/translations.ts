@@ -141,7 +141,7 @@ export const translations = {
     'testimonials.customer3.location': 'Tokyo, Japan',
     'testimonials.customer3.text': 'Exceptional service from start to finish. The team helped me find the perfect flight to New York at an unbeatable price. Will definitely use again!',
     'testimonials.customer4.name': 'Emma Williams',
-    'testimonials.customer4.location': 'London, UK',
+    'testimonials.customer4.location': 'New York, USA',
     'testimonials.customer4.text': 'Fast, reliable, and affordable. SkyBudgetFly made my dream vacation to Bali possible. The savings were incredible and the support team was always available.',
     
     // FAQ
@@ -390,7 +390,7 @@ export const translations = {
     'testimonials.customer3.location': 'Tokio, Japón',
     'testimonials.customer3.text': 'Servicio excepcional de principio a fin. El equipo me ayudó a encontrar el vuelo perfecto a Nueva York a un precio inmejorable. ¡Definitivamente volveré a usar!',
     'testimonials.customer4.name': 'Emma Williams',
-    'testimonials.customer4.location': 'Londres, Reino Unido',
+    'testimonials.customer4.location': 'New York, USA',
     'testimonials.customer4.text': 'Rápido, confiable y económico. SkyBudgetFly hizo posible mis vacaciones soñadas a Bali. Los ahorros fueron increíbles y el equipo siempre estuvo disponible.',
     
     // FAQ
