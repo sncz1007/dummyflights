@@ -32,33 +32,33 @@ export default function AboutUs() {
   ];
 
   return (
-    <section className="py-8 md:py-16 bg-muted/30">
+    <section className="py-6 md:py-10 bg-primary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 md:mb-6" data-testid="text-about-title">
+        <div className="text-center mb-6 md:mb-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3 md:mb-4" data-testid="text-about-title">
             {t('about.title')}
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed text-justify" data-testid="text-about-description">
+          <p className="text-base md:text-lg text-white/90 max-w-4xl mx-auto leading-relaxed text-justify" data-testid="text-about-description">
             {t('about.description')}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-8 md:mt-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-6 md:mt-8">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
               <div
                 key={index}
-                className="flex flex-col items-center text-center p-4 md:p-6"
+                className="flex flex-col items-center text-center p-3 md:p-4"
                 data-testid={stat.testId}
               >
-                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center mb-2 md:mb-3">
                   <Icon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-foreground mb-1" data-testid={`${stat.testId}-value`}>
+                <div className="text-2xl md:text-3xl font-bold text-white mb-1" data-testid={`${stat.testId}-value`}>
                   {stat.value}
                 </div>
-                <div className="text-xs md:text-sm text-muted-foreground" data-testid={`${stat.testId}-label`}>
+                <div className="text-xs md:text-sm text-white/80" data-testid={`${stat.testId}-label`}>
                   {stat.label}
                 </div>
               </div>
