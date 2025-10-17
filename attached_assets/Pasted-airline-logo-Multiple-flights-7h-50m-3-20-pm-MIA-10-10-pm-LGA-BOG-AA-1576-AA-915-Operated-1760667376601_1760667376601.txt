@@ -1,0 +1,266 @@
+airline logo
+Multiple flights
+7h 50m
+3:20 pm
+MIA
+10:10 pm
+LGA
+BOG
+AA 1576, AA 915 — Operated by American Airlines: LGA to MIA, MIA to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+90k
+points
+pts
++
+$106
+Round trip
+Mixed itinerary
+
+Low fare alert
+airline logo
+Multiple flights
+8h 26m
+2:44 pm
+MIA
+10:10 pm
+JFK
+BOG
+AA 320, AA 915 — Operated by American Airlines: JFK to MIA, MIA to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+Unavailable
+
+Low fare alert
+airline logo
+Multiple flights
+9h 55m
+1:15 pm
+MIA
+10:10 pm
+LGA
+BOG
+AA 605, AA 915 — Operated by American Airlines: LGA to MIA, MIA to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+90k
+points
+pts
++
+$106
+Round trip
+Mixed itinerary
+
+Low fare alert
+airline logo
+Multiple flights
+11h 20m
+1:00 pm
+DFW
+11:20 pm
+JFK
+BOG
+AA 1956, AA 1137 — Operated by American Airlines: JFK to DFW, DFW to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+Unavailable
+
+Low fare alert
+airline logo
+Multiple flights
+11h 25m
+12:55 pm
+DFW
+11:20 pm
+LGA
+BOG
+AA 1263, AA 1137 — Operated by American Airlines: LGA to DFW, DFW to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+Unavailable
+
+Low fare alert
+airline logo
+Multiple flights
+11h 39m
+12:41 pm
+DFW
+11:20 pm
+EWR
+BOG
+AA 1700, AA 1137 — Operated by American Airlines: EWR to DFW, DFW to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+Unavailable
+
+Low fare alert
+airline logo
+Multiple flights
+12h 10m
+11:00 am
+MIA
+10:10 pm
+JFK
+BOG
+AA 2514, AA 915 — Operated by American Airlines: JFK to MIA, MIA to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+Unavailable
+
+Low fare alert
+airline logo
+Multiple flights
+13h 0m
+10:10 am
+MIA
+10:10 pm
+JFK
+BOG
+AA 2334, AA 915 — Operated by American Airlines: JFK to MIA, MIA to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+90k
+points
+pts
++
+$106
+Round trip
+Mixed itinerary
+
+Low fare alert
+airline logo
+Multiple flights
+13h 17m
+11:03 am
+DFW
+11:20 pm
+LGA
+BOG
+AA 2857, AA 1137 — Operated by American Airlines: LGA to DFW, DFW to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+Unavailable
+
+Low fare alert
+airline logo
+Multiple flights
+14h 10m
+9:00 am
+MIA
+10:10 pm
+LGA
+BOG
+AA 2040, AA 915 — Operated by American Airlines: LGA to MIA, MIA to BOG
+
+
+Main
+
+45k
+points
+pts
++
+$106
+Round trip
+
+Partner Business
+
+Unavailable
