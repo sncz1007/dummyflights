@@ -56,13 +56,15 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 ### API Integrations
 - **Flight Simulator (server/simulatedFlights.ts)**: Comprehensive flight simulation with **150+ realistic routes** based on actual 2025 airline operations and market pricing:
   - **Domestic USA** (70+ routes): American Airlines, Alaska Airlines - covering all state capitals and major cities (BNA, BHM, ANC, LIT, SAN, SMF, HNL, BOI, IND, DSM, MCI, SDF, MSY, JAN, BIL, OMA, ABQ, FAR, OKC, PDX, PVD, CHS, FSD, AUS, SAT, BTV, CRW, MKE, JAC, SLC, etc.)
-  - **Canada** (6 routes): Porter Airlines, Alaska Airlines, American Airlines (YYZ, YUL, YVR, YYC)
-  - **South America** (12 routes): American Airlines (BOG, GRU, EZE, LIM, SCL, GIG, UIO, SDQ, PUJ)
-  - **Europe** (40+ routes): American Airlines, British Airways, Aer Lingus, Qatar Airways, Royal Air Maroc, Finnair, Icelandair, Condor (includes EDI, ATH, CPH, ARN, OSL, HEL, WAW, PRG, OTP)
-  - **Asia** (20+ routes): American Airlines, Hawaiian Airlines, Japan Airlines, Korean Air, Cathay Pacific, Qatar Airways, Philippine Airlines, Malaysia Airlines, Starlux Airlines (includes DEL, BOM, KIX, more China & Indonesia cities)
-  - **Middle East** (10 routes): Qatar Airways, Oman Air (AUH, RUH, JED, IST, AMM, KWI)
-  - **Oceania** (5 routes): American Airlines, Qantas, Fiji Airways
-  - **Africa** (8 routes): Qatar Airways, Royal Air Maroc (TUN, ZNZ, ACC, ABV, CPT, NBO)
+  - **Norteamérica - Canadá** (4 ciudades): Toronto (YYZ), Montreal (YUL), Vancouver (YVR), Calgary (YYC)
+  - **Norteamérica - México** (2 destinos): Ciudad de México (MEX), Cancún (CUN)
+  - **Centroamérica** (3 países): Costa Rica (SJO), Panamá (PTY), República Dominicana (SDQ, PUJ)
+  - **Sudamérica** (6 países): Colombia (BOG, MDE), Brasil (GRU, GIG), Argentina (EZE), Chile (SCL), Perú (LIM), Ecuador (UIO)
+  - **Europa** (21 ciudades): Londres, Dublín, Edimburgo, París, Múnich, Madrid, Barcelona, Roma, Milán, Ámsterdam, Zúrich, Ginebra, Lisboa, Atenas, Copenhague, Estocolmo, Oslo, Helsinki, Varsovia, Praga, Bucarest
+  - **Asia** (15 ciudades): Tokio (NRT, HND), Osaka (KIX), Seúl (ICN), Beijing (PKX), Shanghái (PVG), Guangzhou (CAN), Delhi (DEL), Mumbai (BOM), Singapur (SIN), Bangkok (BKK), Hanói (HAN), Bali (DPS), Yakarta (CGK), Manila (MNL), Kuala Lumpur (KUL)
+  - **Medio Oriente** (8 países): Dubái (DXB), Abu Dhabi (AUH), Doha (DOH), Riad (RUH), Yeda (JED), Estambul (IST), Amán (AMM), Kuwait (KWI)
+  - **Oceanía** (4 destinos): Sídney (SYD), Melbourne (MEL), Auckland (AKL), Nadi/Fiji (NAN)
+  - **África** (9 ciudades): Casablanca (CMN), Nairobi (NBO), Túnez (TUN), Zanzíbar (ZNZ), Accra (ACC), Abuja (ABV), Ciudad del Cabo (CPT), El Cairo (CAI), Johannesburgo (JNB)
   - **Manual Coast-Based Segmentation**: East coast origins route through Aer Lingus/Porter/Qatar, west coast origins route through Alaska/Hawaiian Airlines for same international destinations
   - Accurate hub operations (DFW, CLT, MIA, ORD, PHX, PHL, JFK, LAX, SFO, SEA)
   - Distance-based pricing with ±15% variations and 40% discount multiplier
@@ -89,3 +91,4 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 - **Porter Airlines Integration** (October 17, 2025): Added Porter Airlines as new partner for Canada routes from east coast origins (JFK→Toronto=Porter Airlines, LAX→Toronto=Alaska Airlines).
 - **International Destinations Expansion** (October 17, 2025): Added 50+ new international cities across Europe (Edinburgh, Athens, Copenhagen, Stockholm, Oslo, Helsinki, Warsaw, Prague, Bucharest), Asia (Delhi, Mumbai, Osaka, more China/Indonesia), Africa (Tunis, Zanzibar, Accra, Abuja, Cape Town, Nairobi), Middle East (Abu Dhabi, Riyadh, Jeddah, Istanbul, Amman, Kuwait City), and Central/South America (Medellín, Rio de Janeiro, Quito, Santo Domingo, Punta Cana).
 - **Multiple Daily Flight Options** (October 17, 2025): Updated 323 international routes to display multiple daily departures (3-8 flights per route based on destination traffic). High-traffic destinations (London, Paris, Tokyo) show 6-8 flights/day, moderate destinations (secondary Europe/Asia) show 4-5 flights/day, less-busy destinations (Africa, islands) show 3 flights/day. Corrected coast-based segmentation: LAX→Paris/Rome now use American Airlines (not Aer Lingus/British Airways).
+- **Calgary Integration** (October 17, 2025): Added Calgary (YYC) as fourth Canadian destination with proper coast-based segmentation: east coast (JFK) uses Porter Airlines, west coast (LAX, SEA) uses Alaska Airlines.

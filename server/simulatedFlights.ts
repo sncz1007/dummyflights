@@ -454,6 +454,7 @@ const NORTH_AMERICA_ROUTES: SimulatedRoute[] = [
   { from: "SEA", to: "YVR", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 150, duration: "1h 0m", typical_flights_per_day: 12, countries: { from: "USA", to: "Canada" } },
   { from: "JFK", to: "YUL", airline: "Porter Airlines", airlineCode: "PD", basePrice: 210, duration: "1h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Canada" } },
   { from: "LAX", to: "YUL", airline: "American Airlines", airlineCode: "AA", basePrice: 420, duration: "5h 45m", typical_flights_per_day: 2, countries: { from: "USA", to: "Canada" } },
+  { from: "JFK", to: "YYC", airline: "Porter Airlines", airlineCode: "PD", basePrice: 280, duration: "2h 50m", typical_flights_per_day: 4, countries: { from: "USA", to: "Canada" } },
   { from: "LAX", to: "YYC", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 280, duration: "2h 45m", typical_flights_per_day: 6, countries: { from: "USA", to: "Canada" } },
   { from: "SEA", to: "YYC", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 180, duration: "1h 30m", typical_flights_per_day: 8, countries: { from: "USA", to: "Canada" } },
   
