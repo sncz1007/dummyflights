@@ -7,12 +7,16 @@ import { z } from "zod";
 import Stripe from "stripe";
 
 // Initialize Stripe (from blueprint:javascript_stripe)
+// Support both regular and testing Stripe keys
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 if (!stripeSecretKey) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
-if (!stripeSecretKey.startsWith('sk_test_') && !stripeSecretKey.startsWith('sk_live_')) {
-  throw new Error('Invalid STRIPE_SECRET_KEY: must start with sk_test_ or sk_live_');
+// Allow sk_test_, sk_live_, and rk_ (Replit testing keys)
+if (!stripeSecretKey.startsWith('sk_test_') && 
+    !stripeSecretKey.startsWith('sk_live_') && 
+    !stripeSecretKey.startsWith('rk_')) {
+  throw new Error('Invalid STRIPE_SECRET_KEY: must start with sk_test_, sk_live_, or rk_');
 }
 const stripe = new Stripe(stripeSecretKey, {
   apiVersion: "2025-09-30.clover",
@@ -259,8 +263,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // Sort by price (cheapest first)
-      limitedFlights.sort((a, b) => a.discountedPrice - b.discountedPrice);
+      // Limit to top 10 flights and sort by price (cheapest first)
+      const limitedFlights = flights.slice(0, 10);
+      limitedFlights.sort((a: any, b: any) => a.discountedPrice - b.discountedPrice);
 
       res.json({
         flights: limitedFlights,
