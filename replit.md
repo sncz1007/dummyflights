@@ -52,7 +52,17 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
-- **Flight Simulator (server/simulatedFlights.ts)**: Realistic flight simulation based on actual American Airlines 2025 routes and market pricing. Includes 50+ routes covering domestic USA, South America, Europe, and Asia with accurate hub operations (DFW, CLT, MIA, ORD, PHX, PHL, JFK, LAX). Applies distance-based pricing with ±15% variations and 40% discount multiplier. Partner airlines include British Airways, Japan Airlines, Korean Air, and other Alaska Mileage Plan partners.
+- **Flight Simulator (server/simulatedFlights.ts)**: Comprehensive flight simulation with **101 realistic routes** based on actual 2025 airline operations and market pricing:
+  - **Domestic USA** (27 routes): American Airlines, Alaska Airlines
+  - **South America** (10 routes): American Airlines (BOG, GRU, EZE, LIM, SCL)
+  - **Europe** (32 routes): American Airlines, British Airways, Aer Lingus, Qatar Airways, Royal Air Maroc, Finnair, Icelandair, Condor
+  - **Asia** (17 routes): American Airlines, Japan Airlines, Korean Air, Cathay Pacific, Qatar Airways, Philippine Airlines, Malaysia Airlines, Starlux Airlines
+  - **Middle East** (4 routes): Qatar Airways, Oman Air
+  - **Oceania** (5 routes): American Airlines, Qantas, Fiji Airways
+  - **Africa** (4 routes): Qatar Airways, Royal Air Maroc
+  - Accurate hub operations (DFW, CLT, MIA, ORD, PHX, PHL, JFK, LAX)
+  - Distance-based pricing with ±15% variations and 40% discount multiplier
+  - Regional airline filtering ensures only authorized partners appear per route
 - **Airport Data API**: Accessible via `/api/airports/search` for 500+ international airports.
 
 ### External Libraries
