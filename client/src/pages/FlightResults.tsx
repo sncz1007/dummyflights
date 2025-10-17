@@ -61,7 +61,7 @@ interface Flight {
   discountedPrice: number;
   discount: number;
   amenities: FlightAmenities;
-  returnFlight: FlightLeg | null;
+  returnFlightOptions: FlightLeg[] | null;
 }
 
 interface SearchParams {
@@ -274,35 +274,35 @@ export default function FlightResults() {
                   </div>
 
                   {/* Return Flight */}
-                  {flight.returnFlight && (
+                  {flight.returnFlightOptions && flight.returnFlightOptions.length > 0 && (
                     <div className="flex items-center gap-4 mt-4 pt-4 border-t">
                       <div className="text-center">
                         <p className="text-2xl font-bold" data-testid={`text-return-departure-time-${flight.id}`}>
-                          {flight.returnFlight.departure.time}
+                          {flight.returnFlightOptions[0].departure.time}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {flight.returnFlight.departure.airport}
+                          {flight.returnFlightOptions[0].departure.airport}
                         </p>
                       </div>
 
                       <div className="flex-1 flex flex-col items-center">
                         <p className="text-sm text-muted-foreground mb-1">
-                          {flight.returnFlight.duration}
+                          {flight.returnFlightOptions[0].duration}
                         </p>
                         <div className="w-full h-px bg-border relative">
                           <Plane className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground rotate-180" />
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {flight.returnFlight.stops === 0 ? t('results.direct') : `${flight.returnFlight.stops} ${flight.returnFlight.stops === 1 ? t('results.stop') : t('results.stops')}`}
+                          {flight.returnFlightOptions[0].stops === 0 ? t('results.direct') : `${flight.returnFlightOptions[0].stops} ${flight.returnFlightOptions[0].stops === 1 ? t('results.stop') : t('results.stops')}`}
                         </p>
                       </div>
 
                       <div className="text-center">
                         <p className="text-2xl font-bold" data-testid={`text-return-arrival-time-${flight.id}`}>
-                          {flight.returnFlight.arrival.time}
+                          {flight.returnFlightOptions[0].arrival.time}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {flight.returnFlight.arrival.airport}
+                          {flight.returnFlightOptions[0].arrival.airport}
                         </p>
                       </div>
                     </div>

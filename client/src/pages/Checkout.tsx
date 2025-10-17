@@ -42,7 +42,7 @@ interface FlightData {
   originalPrice: number;
   discountedPrice: number;
   discount: number;
-  returnFlight?: any;
+  returnFlightOptions?: any;
 }
 
 interface SearchParams {
