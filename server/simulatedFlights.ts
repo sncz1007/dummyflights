@@ -417,32 +417,32 @@ const DOMESTIC_USA_ROUTES: SimulatedRoute[] = [
 // === SUDAMÉRICA (Solo American Airlines) ===
 const SOUTH_AMERICA_ROUTES: SimulatedRoute[] = [
   // Colombia
-  { from: "JFK", to: "BOG", airline: "American Airlines", airlineCode: "AA", basePrice: 450, duration: "5h 30m", typical_flights_per_day: 2, countries: { from: "USA", to: "Colombia" } },
-  { from: "MIA", to: "BOG", airline: "American Airlines", airlineCode: "AA", basePrice: 380, duration: "3h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "Colombia" } },
-  { from: "DFW", to: "BOG", airline: "American Airlines", airlineCode: "AA", basePrice: 430, duration: "5h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Colombia" } },
-  { from: "MIA", to: "MDE", airline: "American Airlines", airlineCode: "AA", basePrice: 400, duration: "4h 0m", typical_flights_per_day: 2, countries: { from: "USA", to: "Colombia" } },
+  { from: "JFK", to: "BOG", airline: "American Airlines", airlineCode: "AA", basePrice: 450, duration: "5h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "Colombia" } },
+  { from: "MIA", to: "BOG", airline: "American Airlines", airlineCode: "AA", basePrice: 450, duration: "5h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "Colombia" } },
+  { from: "DFW", to: "BOG", airline: "American Airlines", airlineCode: "AA", basePrice: 450, duration: "5h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "Colombia" } },
+  { from: "MIA", to: "MDE", airline: "American Airlines", airlineCode: "AA", basePrice: 400, duration: "4h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "Colombia" } },
   
   // Brasil
-  { from: "JFK", to: "GRU", airline: "American Airlines", airlineCode: "AA", basePrice: 650, duration: "10h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Brazil" } },
-  { from: "MIA", to: "GRU", airline: "American Airlines", airlineCode: "AA", basePrice: 550, duration: "8h 40m", typical_flights_per_day: 2, countries: { from: "USA", to: "Brazil" } },
-  { from: "DFW", to: "GRU", airline: "American Airlines", airlineCode: "AA", basePrice: 600, duration: "10h 5m", typical_flights_per_day: 1, countries: { from: "USA", to: "Brazil" } },
-  { from: "MIA", to: "GIG", airline: "American Airlines", airlineCode: "AA", basePrice: 580, duration: "8h 55m", typical_flights_per_day: 2, countries: { from: "USA", to: "Brazil" } },
+  { from: "JFK", to: "GRU", airline: "American Airlines", airlineCode: "AA", basePrice: 650, duration: "10h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Brazil" } },
+  { from: "MIA", to: "GRU", airline: "American Airlines", airlineCode: "AA", basePrice: 650, duration: "10h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Brazil" } },
+  { from: "DFW", to: "GRU", airline: "American Airlines", airlineCode: "AA", basePrice: 650, duration: "10h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Brazil" } },
+  { from: "MIA", to: "GIG", airline: "American Airlines", airlineCode: "AA", basePrice: 580, duration: "8h 55m", typical_flights_per_day: 4, countries: { from: "USA", to: "Brazil" } },
   
   // Argentina
-  { from: "JFK", to: "EZE", airline: "American Airlines", airlineCode: "AA", basePrice: 700, duration: "10h 50m", typical_flights_per_day: 1, countries: { from: "USA", to: "Argentina" } },
-  { from: "MIA", to: "EZE", airline: "American Airlines", airlineCode: "AA", basePrice: 620, duration: "9h 10m", typical_flights_per_day: 1, countries: { from: "USA", to: "Argentina" } },
+  { from: "JFK", to: "EZE", airline: "American Airlines", airlineCode: "AA", basePrice: 700, duration: "10h 50m", typical_flights_per_day: 4, countries: { from: "USA", to: "Argentina" } },
+  { from: "MIA", to: "EZE", airline: "American Airlines", airlineCode: "AA", basePrice: 700, duration: "10h 50m", typical_flights_per_day: 4, countries: { from: "USA", to: "Argentina" } },
   
   // Chile
-  { from: "MIA", to: "SCL", airline: "American Airlines", airlineCode: "AA", basePrice: 680, duration: "9h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Chile" } },
-  { from: "DFW", to: "SCL", airline: "American Airlines", airlineCode: "AA", basePrice: 720, duration: "10h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Chile" } },
+  { from: "MIA", to: "SCL", airline: "American Airlines", airlineCode: "AA", basePrice: 680, duration: "9h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "Chile" } },
+  { from: "DFW", to: "SCL", airline: "American Airlines", airlineCode: "AA", basePrice: 720, duration: "10h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Chile" } },
   
   // Perú
-  { from: "JFK", to: "LIM", airline: "American Airlines", airlineCode: "AA", basePrice: 500, duration: "8h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Peru" } },
-  { from: "MIA", to: "LIM", airline: "American Airlines", airlineCode: "AA", basePrice: 450, duration: "6h 35m", typical_flights_per_day: 2, countries: { from: "USA", to: "Peru" } },
+  { from: "JFK", to: "LIM", airline: "American Airlines", airlineCode: "AA", basePrice: 500, duration: "8h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Peru" } },
+  { from: "MIA", to: "LIM", airline: "American Airlines", airlineCode: "AA", basePrice: 450, duration: "6h 35m", typical_flights_per_day: 4, countries: { from: "USA", to: "Peru" } },
   
   // Ecuador
-  { from: "MIA", to: "UIO", airline: "American Airlines", airlineCode: "AA", basePrice: 480, duration: "5h 25m", typical_flights_per_day: 1, countries: { from: "USA", to: "Ecuador" } },
-  { from: "DFW", to: "UIO", airline: "American Airlines", airlineCode: "AA", basePrice: 520, duration: "7h 10m", typical_flights_per_day: 1, countries: { from: "USA", to: "Ecuador" } },
+  { from: "MIA", to: "UIO", airline: "American Airlines", airlineCode: "AA", basePrice: 480, duration: "5h 25m", typical_flights_per_day: 3, countries: { from: "USA", to: "Ecuador" } },
+  { from: "DFW", to: "UIO", airline: "American Airlines", airlineCode: "AA", basePrice: 520, duration: "7h 10m", typical_flights_per_day: 3, countries: { from: "USA", to: "Ecuador" } },
 ];
 
 // === NORTEAMÉRICA (Canadá, México) ===
@@ -454,6 +454,8 @@ const NORTH_AMERICA_ROUTES: SimulatedRoute[] = [
   { from: "SEA", to: "YVR", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 150, duration: "1h 0m", typical_flights_per_day: 12, countries: { from: "USA", to: "Canada" } },
   { from: "JFK", to: "YUL", airline: "Porter Airlines", airlineCode: "PD", basePrice: 210, duration: "1h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Canada" } },
   { from: "LAX", to: "YUL", airline: "American Airlines", airlineCode: "AA", basePrice: 420, duration: "5h 45m", typical_flights_per_day: 2, countries: { from: "USA", to: "Canada" } },
+  { from: "LAX", to: "YYC", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 280, duration: "2h 45m", typical_flights_per_day: 6, countries: { from: "USA", to: "Canada" } },
+  { from: "SEA", to: "YYC", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 180, duration: "1h 30m", typical_flights_per_day: 8, countries: { from: "USA", to: "Canada" } },
   
   // México
   { from: "JFK", to: "MEX", airline: "American Airlines", airlineCode: "AA", basePrice: 380, duration: "5h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "Mexico" } },
@@ -484,218 +486,218 @@ const CENTRAL_AMERICA_ROUTES: SimulatedRoute[] = [
 // === EUROPA ===
 const EUROPE_ROUTES: SimulatedRoute[] = [
   // Reino Unido
-  { from: "JFK", to: "LHR", airline: "American Airlines", airlineCode: "AA", basePrice: 550, duration: "7h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "United Kingdom" } },
-  { from: "BOS", to: "LHR", airline: "American Airlines", airlineCode: "AA", basePrice: 540, duration: "6h 50m", typical_flights_per_day: 3, countries: { from: "USA", to: "United Kingdom" } },
-  { from: "PHL", to: "LHR", airline: "American Airlines", airlineCode: "AA", basePrice: 560, duration: "7h 30m", typical_flights_per_day: 2, countries: { from: "USA", to: "United Kingdom" } },
-  { from: "LAX", to: "LHR", airline: "American Airlines", airlineCode: "AA", basePrice: 620, duration: "10h 30m", typical_flights_per_day: 2, countries: { from: "USA", to: "United Kingdom" } },
+  { from: "JFK", to: "LHR", airline: "American Airlines", airlineCode: "AA", basePrice: 550, duration: "7h 15m", typical_flights_per_day: 7, countries: { from: "USA", to: "United Kingdom" } },
+  { from: "BOS", to: "LHR", airline: "American Airlines", airlineCode: "AA", basePrice: 550, duration: "7h 15m", typical_flights_per_day: 7, countries: { from: "USA", to: "United Kingdom" } },
+  { from: "PHL", to: "LHR", airline: "American Airlines", airlineCode: "AA", basePrice: 550, duration: "7h 15m", typical_flights_per_day: 7, countries: { from: "USA", to: "United Kingdom" } },
+  { from: "LAX", to: "LHR", airline: "American Airlines", airlineCode: "AA", basePrice: 550, duration: "7h 15m", typical_flights_per_day: 7, countries: { from: "USA", to: "United Kingdom" } },
   
   // Irlanda
-  { from: "JFK", to: "DUB", airline: "Aer Lingus", airlineCode: "EI", basePrice: 520, duration: "6h 50m", typical_flights_per_day: 2, countries: { from: "USA", to: "Ireland" } },
-  { from: "BOS", to: "DUB", airline: "Aer Lingus", airlineCode: "EI", basePrice: 500, duration: "6h 30m", typical_flights_per_day: 2, countries: { from: "USA", to: "Ireland" } },
-  { from: "LAX", to: "DUB", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 680, duration: "11h 10m", typical_flights_per_day: 1, countries: { from: "USA", to: "Ireland" } },
+  { from: "JFK", to: "DUB", airline: "Aer Lingus", airlineCode: "EI", basePrice: 520, duration: "6h 50m", typical_flights_per_day: 5, countries: { from: "USA", to: "Ireland" } },
+  { from: "BOS", to: "DUB", airline: "Aer Lingus", airlineCode: "EI", basePrice: 520, duration: "6h 50m", typical_flights_per_day: 5, countries: { from: "USA", to: "Ireland" } },
+  { from: "LAX", to: "DUB", airline: "Aer Lingus", airlineCode: "EI", basePrice: 520, duration: "6h 50m", typical_flights_per_day: 5, countries: { from: "USA", to: "Ireland" } },
   
   // Escocia
-  { from: "JFK", to: "EDI", airline: "Aer Lingus", airlineCode: "EI", basePrice: 540, duration: "7h 5m", typical_flights_per_day: 1, countries: { from: "USA", to: "United Kingdom" } },
-  { from: "LAX", to: "EDI", airline: "British Airways", airlineCode: "BA", basePrice: 650, duration: "10h 50m", typical_flights_per_day: 1, countries: { from: "USA", to: "United Kingdom" } },
+  { from: "JFK", to: "EDI", airline: "Aer Lingus", airlineCode: "EI", basePrice: 540, duration: "7h 5m", typical_flights_per_day: 4, countries: { from: "USA", to: "United Kingdom" } },
+  { from: "LAX", to: "EDI", airline: "British Airways", airlineCode: "BA", basePrice: 650, duration: "10h 50m", typical_flights_per_day: 4, countries: { from: "USA", to: "United Kingdom" } },
   
   // Francia
-  { from: "JFK", to: "CDG", airline: "Aer Lingus", airlineCode: "EI", basePrice: 570, duration: "7h 55m", typical_flights_per_day: 2, countries: { from: "USA", to: "France" } },
-  { from: "BOS", to: "CDG", airline: "Aer Lingus", airlineCode: "EI", basePrice: 560, duration: "7h 35m", typical_flights_per_day: 1, countries: { from: "USA", to: "France" } },
-  { from: "LAX", to: "CDG", airline: "American Airlines", airlineCode: "AA", basePrice: 640, duration: "11h 15m", typical_flights_per_day: 2, countries: { from: "USA", to: "France" } },
+  { from: "JFK", to: "CDG", airline: "Aer Lingus", airlineCode: "EI", basePrice: 570, duration: "7h 55m", typical_flights_per_day: 6, countries: { from: "USA", to: "France" } },
+  { from: "BOS", to: "CDG", airline: "Aer Lingus", airlineCode: "EI", basePrice: 570, duration: "7h 55m", typical_flights_per_day: 6, countries: { from: "USA", to: "France" } },
+  { from: "LAX", to: "CDG", airline: "American Airlines", airlineCode: "AA", basePrice: 640, duration: "11h 15m", typical_flights_per_day: 6, countries: { from: "USA", to: "France" } },
   
   // Alemania
-  { from: "JFK", to: "MUC", airline: "British Airways", airlineCode: "BA", basePrice: 600, duration: "8h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Germany" } },
-  { from: "LAX", to: "MUC", airline: "American Airlines", airlineCode: "AA", basePrice: 680, duration: "11h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Germany" } },
+  { from: "JFK", to: "MUC", airline: "British Airways", airlineCode: "BA", basePrice: 600, duration: "8h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Germany" } },
+  { from: "LAX", to: "MUC", airline: "American Airlines", airlineCode: "AA", basePrice: 680, duration: "11h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "Germany" } },
   
   // España
-  { from: "JFK", to: "MAD", airline: "American Airlines", airlineCode: "AA", basePrice: 560, duration: "7h 45m", typical_flights_per_day: 2, countries: { from: "USA", to: "Spain" } },
-  { from: "MIA", to: "MAD", airline: "American Airlines", airlineCode: "AA", basePrice: 600, duration: "9h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Spain" } },
-  { from: "JFK", to: "BCN", airline: "American Airlines", airlineCode: "AA", basePrice: 580, duration: "8h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Spain" } },
+  { from: "JFK", to: "MAD", airline: "American Airlines", airlineCode: "AA", basePrice: 560, duration: "7h 45m", typical_flights_per_day: 6, countries: { from: "USA", to: "Spain" } },
+  { from: "MIA", to: "MAD", airline: "American Airlines", airlineCode: "AA", basePrice: 560, duration: "7h 45m", typical_flights_per_day: 6, countries: { from: "USA", to: "Spain" } },
+  { from: "JFK", to: "BCN", airline: "American Airlines", airlineCode: "AA", basePrice: 580, duration: "8h 0m", typical_flights_per_day: 5, countries: { from: "USA", to: "Spain" } },
   
   // Italia
-  { from: "JFK", to: "FCO", airline: "British Airways", airlineCode: "BA", basePrice: 590, duration: "8h 50m", typical_flights_per_day: 2, countries: { from: "USA", to: "Italy" } },
-  { from: "LAX", to: "FCO", airline: "American Airlines", airlineCode: "AA", basePrice: 670, duration: "12h 20m", typical_flights_per_day: 1, countries: { from: "USA", to: "Italy" } },
-  { from: "JFK", to: "MXP", airline: "British Airways", airlineCode: "BA", basePrice: 580, duration: "8h 40m", typical_flights_per_day: 1, countries: { from: "USA", to: "Italy" } },
-  { from: "LAX", to: "MXP", airline: "American Airlines", airlineCode: "AA", basePrice: 660, duration: "12h 10m", typical_flights_per_day: 1, countries: { from: "USA", to: "Italy" } },
+  { from: "JFK", to: "FCO", airline: "British Airways", airlineCode: "BA", basePrice: 590, duration: "8h 50m", typical_flights_per_day: 5, countries: { from: "USA", to: "Italy" } },
+  { from: "LAX", to: "FCO", airline: "American Airlines", airlineCode: "AA", basePrice: 670, duration: "12h 20m", typical_flights_per_day: 5, countries: { from: "USA", to: "Italy" } },
+  { from: "JFK", to: "MXP", airline: "British Airways", airlineCode: "BA", basePrice: 580, duration: "8h 40m", typical_flights_per_day: 4, countries: { from: "USA", to: "Italy" } },
+  { from: "LAX", to: "MXP", airline: "American Airlines", airlineCode: "AA", basePrice: 660, duration: "12h 10m", typical_flights_per_day: 4, countries: { from: "USA", to: "Italy" } },
   
   // Países Bajos
-  { from: "JFK", to: "AMS", airline: "British Airways", airlineCode: "BA", basePrice: 580, duration: "7h 50m", typical_flights_per_day: 1, countries: { from: "USA", to: "Netherlands" } },
-  { from: "LAX", to: "AMS", airline: "American Airlines", airlineCode: "AA", basePrice: 650, duration: "11h 20m", typical_flights_per_day: 1, countries: { from: "USA", to: "Netherlands" } },
+  { from: "JFK", to: "AMS", airline: "British Airways", airlineCode: "BA", basePrice: 580, duration: "7h 50m", typical_flights_per_day: 5, countries: { from: "USA", to: "Netherlands" } },
+  { from: "LAX", to: "AMS", airline: "American Airlines", airlineCode: "AA", basePrice: 650, duration: "11h 20m", typical_flights_per_day: 5, countries: { from: "USA", to: "Netherlands" } },
   
   // Suiza
-  { from: "JFK", to: "ZRH", airline: "British Airways", airlineCode: "BA", basePrice: 600, duration: "8h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Switzerland" } },
-  { from: "LAX", to: "ZRH", airline: "American Airlines", airlineCode: "AA", basePrice: 680, duration: "11h 50m", typical_flights_per_day: 1, countries: { from: "USA", to: "Switzerland" } },
-  { from: "JFK", to: "GVA", airline: "British Airways", airlineCode: "BA", basePrice: 590, duration: "8h 5m", typical_flights_per_day: 1, countries: { from: "USA", to: "Switzerland" } },
-  { from: "LAX", to: "GVA", airline: "American Airlines", airlineCode: "AA", basePrice: 670, duration: "11h 40m", typical_flights_per_day: 1, countries: { from: "USA", to: "Switzerland" } },
+  { from: "JFK", to: "ZRH", airline: "British Airways", airlineCode: "BA", basePrice: 600, duration: "8h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Switzerland" } },
+  { from: "LAX", to: "ZRH", airline: "American Airlines", airlineCode: "AA", basePrice: 680, duration: "11h 50m", typical_flights_per_day: 4, countries: { from: "USA", to: "Switzerland" } },
+  { from: "JFK", to: "GVA", airline: "British Airways", airlineCode: "BA", basePrice: 590, duration: "8h 5m", typical_flights_per_day: 4, countries: { from: "USA", to: "Switzerland" } },
+  { from: "LAX", to: "GVA", airline: "American Airlines", airlineCode: "AA", basePrice: 670, duration: "11h 40m", typical_flights_per_day: 4, countries: { from: "USA", to: "Switzerland" } },
   
   // Portugal
-  { from: "JFK", to: "LIS", airline: "British Airways", airlineCode: "BA", basePrice: 570, duration: "7h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Portugal" } },
-  { from: "LAX", to: "LIS", airline: "American Airlines", airlineCode: "AA", basePrice: 660, duration: "12h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Portugal" } },
+  { from: "JFK", to: "LIS", airline: "British Airways", airlineCode: "BA", basePrice: 570, duration: "7h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Portugal" } },
+  { from: "LAX", to: "LIS", airline: "American Airlines", airlineCode: "AA", basePrice: 660, duration: "12h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "Portugal" } },
   
   // Grecia
-  { from: "JFK", to: "ATH", airline: "British Airways", airlineCode: "BA", basePrice: 620, duration: "10h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Greece" } },
-  { from: "LAX", to: "ATH", airline: "American Airlines", airlineCode: "AA", basePrice: 720, duration: "14h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Greece" } },
+  { from: "JFK", to: "ATH", airline: "British Airways", airlineCode: "BA", basePrice: 620, duration: "10h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Greece" } },
+  { from: "LAX", to: "ATH", airline: "American Airlines", airlineCode: "AA", basePrice: 720, duration: "14h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Greece" } },
   
   // Dinamarca
-  { from: "JFK", to: "CPH", airline: "Finnair", airlineCode: "AY", basePrice: 610, duration: "8h 20m", typical_flights_per_day: 1, countries: { from: "USA", to: "Denmark" } },
-  { from: "LAX", to: "CPH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 880, duration: "17h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Denmark" } },
+  { from: "JFK", to: "CPH", airline: "Finnair", airlineCode: "AY", basePrice: 610, duration: "8h 20m", typical_flights_per_day: 4, countries: { from: "USA", to: "Denmark" } },
+  { from: "LAX", to: "CPH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 880, duration: "17h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "Denmark" } },
   
   // Suecia
-  { from: "JFK", to: "ARN", airline: "British Airways", airlineCode: "BA", basePrice: 630, duration: "8h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Sweden" } },
-  { from: "LAX", to: "ARN", airline: "Icelandair", airlineCode: "FI", basePrice: 700, duration: "12h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Sweden" } },
+  { from: "JFK", to: "ARN", airline: "British Airways", airlineCode: "BA", basePrice: 630, duration: "8h 45m", typical_flights_per_day: 3, countries: { from: "USA", to: "Sweden" } },
+  { from: "LAX", to: "ARN", airline: "Icelandair", airlineCode: "FI", basePrice: 700, duration: "12h 30m", typical_flights_per_day: 3, countries: { from: "USA", to: "Sweden" } },
   
   // Noruega
-  { from: "JFK", to: "OSL", airline: "Icelandair", airlineCode: "FI", basePrice: 620, duration: "8h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Norway" } },
-  { from: "LAX", to: "OSL", airline: "Icelandair", airlineCode: "FI", basePrice: 690, duration: "12h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Norway" } },
+  { from: "JFK", to: "OSL", airline: "Icelandair", airlineCode: "FI", basePrice: 620, duration: "8h 30m", typical_flights_per_day: 3, countries: { from: "USA", to: "Norway" } },
+  { from: "LAX", to: "OSL", airline: "Icelandair", airlineCode: "FI", basePrice: 690, duration: "12h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "Norway" } },
   
   // Finlandia
-  { from: "JFK", to: "HEL", airline: "Icelandair", airlineCode: "FI", basePrice: 650, duration: "8h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Finland" } },
-  { from: "LAX", to: "HEL", airline: "Icelandair", airlineCode: "FI", basePrice: 720, duration: "13h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Finland" } },
+  { from: "JFK", to: "HEL", airline: "Icelandair", airlineCode: "FI", basePrice: 650, duration: "8h 45m", typical_flights_per_day: 3, countries: { from: "USA", to: "Finland" } },
+  { from: "LAX", to: "HEL", airline: "Icelandair", airlineCode: "FI", basePrice: 720, duration: "13h 0m", typical_flights_per_day: 3, countries: { from: "USA", to: "Finland" } },
   
   // Polonia
-  { from: "JFK", to: "WAW", airline: "Qatar Airways", airlineCode: "QR", basePrice: 750, duration: "16h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Poland" } },
-  { from: "LAX", to: "WAW", airline: "Qatar Airways", airlineCode: "QR", basePrice: 850, duration: "20h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Poland" } },
+  { from: "JFK", to: "WAW", airline: "Qatar Airways", airlineCode: "QR", basePrice: 750, duration: "16h 45m", typical_flights_per_day: 3, countries: { from: "USA", to: "Poland" } },
+  { from: "LAX", to: "WAW", airline: "Qatar Airways", airlineCode: "QR", basePrice: 850, duration: "20h 30m", typical_flights_per_day: 3, countries: { from: "USA", to: "Poland" } },
   
   // República Checa
-  { from: "JFK", to: "PRG", airline: "Condor", airlineCode: "DE", basePrice: 620, duration: "9h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Czech Republic" } },
-  { from: "LAX", to: "PRG", airline: "Condor", airlineCode: "DE", basePrice: 710, duration: "13h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Czech Republic" } },
+  { from: "JFK", to: "PRG", airline: "Condor", airlineCode: "DE", basePrice: 620, duration: "9h 0m", typical_flights_per_day: 3, countries: { from: "USA", to: "Czech Republic" } },
+  { from: "LAX", to: "PRG", airline: "Condor", airlineCode: "DE", basePrice: 710, duration: "13h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "Czech Republic" } },
   
   // Rumanía
-  { from: "JFK", to: "OTP", airline: "Qatar Airways", airlineCode: "QR", basePrice: 780, duration: "17h 20m", typical_flights_per_day: 1, countries: { from: "USA", to: "Romania" } },
-  { from: "LAX", to: "OTP", airline: "Qatar Airways", airlineCode: "QR", basePrice: 880, duration: "21h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Romania" } },
+  { from: "JFK", to: "OTP", airline: "Qatar Airways", airlineCode: "QR", basePrice: 780, duration: "17h 20m", typical_flights_per_day: 3, countries: { from: "USA", to: "Romania" } },
+  { from: "LAX", to: "OTP", airline: "Qatar Airways", airlineCode: "QR", basePrice: 880, duration: "21h 0m", typical_flights_per_day: 3, countries: { from: "USA", to: "Romania" } },
 ];
 
 // === ÁFRICA ===
 const AFRICA_ROUTES: SimulatedRoute[] = [
   // Sudáfrica
-  { from: "JFK", to: "JNB", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "20h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "South Africa" } },
-  { from: "LAX", to: "JNB", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1200, duration: "24h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "South Africa" } },
-  { from: "JFK", to: "CPT", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1180, duration: "21h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "South Africa" } },
+  { from: "JFK", to: "JNB", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "20h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "South Africa" } },
+  { from: "LAX", to: "JNB", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1200, duration: "24h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "South Africa" } },
+  { from: "JFK", to: "CPT", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1180, duration: "21h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "South Africa" } },
   
   // Egipto
-  { from: "JFK", to: "CAI", airline: "Qatar Airways", airlineCode: "QR", basePrice: 980, duration: "17h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Egypt" } },
-  { from: "LAX", to: "CAI", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1080, duration: "21h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Egypt" } },
+  { from: "JFK", to: "CAI", airline: "Qatar Airways", airlineCode: "QR", basePrice: 980, duration: "17h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Egypt" } },
+  { from: "LAX", to: "CAI", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1080, duration: "21h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Egypt" } },
   
   // Marruecos
-  { from: "JFK", to: "CMN", airline: "Royal Air Maroc", airlineCode: "AT", basePrice: 720, duration: "7h 50m", typical_flights_per_day: 2, countries: { from: "USA", to: "Morocco" } },
-  { from: "LAX", to: "CMN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 920, duration: "18h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Morocco" } },
+  { from: "JFK", to: "CMN", airline: "Royal Air Maroc", airlineCode: "AT", basePrice: 720, duration: "7h 50m", typical_flights_per_day: 4, countries: { from: "USA", to: "Morocco" } },
+  { from: "LAX", to: "CMN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 920, duration: "18h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Morocco" } },
   
   // Kenia
-  { from: "JFK", to: "NBO", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1100, duration: "19h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Kenya" } },
-  { from: "LAX", to: "NBO", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1180, duration: "23h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Kenya" } },
+  { from: "JFK", to: "NBO", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1100, duration: "19h 45m", typical_flights_per_day: 3, countries: { from: "USA", to: "Kenya" } },
+  { from: "LAX", to: "NBO", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1180, duration: "23h 30m", typical_flights_per_day: 3, countries: { from: "USA", to: "Kenya" } },
   
   // Túnez
-  { from: "JFK", to: "TUN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 950, duration: "18h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Tunisia" } },
-  { from: "LAX", to: "TUN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1050, duration: "21h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Tunisia" } },
+  { from: "JFK", to: "TUN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 950, duration: "18h 0m", typical_flights_per_day: 3, countries: { from: "USA", to: "Tunisia" } },
+  { from: "LAX", to: "TUN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1050, duration: "21h 45m", typical_flights_per_day: 3, countries: { from: "USA", to: "Tunisia" } },
   
   // Tanzania
-  { from: "JFK", to: "ZNZ", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "20h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Tanzania" } },
-  { from: "LAX", to: "ZNZ", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1230, duration: "24h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Tanzania" } },
+  { from: "JFK", to: "ZNZ", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "20h 30m", typical_flights_per_day: 3, countries: { from: "USA", to: "Tanzania" } },
+  { from: "LAX", to: "ZNZ", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1230, duration: "24h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "Tanzania" } },
   
   // Ghana
-  { from: "JFK", to: "ACC", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1020, duration: "18h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Ghana" } },
-  { from: "LAX", to: "ACC", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1120, duration: "22h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Ghana" } },
+  { from: "JFK", to: "ACC", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1020, duration: "18h 45m", typical_flights_per_day: 3, countries: { from: "USA", to: "Ghana" } },
+  { from: "LAX", to: "ACC", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1120, duration: "22h 30m", typical_flights_per_day: 3, countries: { from: "USA", to: "Ghana" } },
   
   // Nigeria
-  { from: "JFK", to: "ABV", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1050, duration: "19h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Nigeria" } },
-  { from: "LAX", to: "ABV", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "23h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Nigeria" } },
+  { from: "JFK", to: "ABV", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1050, duration: "19h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "Nigeria" } },
+  { from: "LAX", to: "ABV", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "23h 0m", typical_flights_per_day: 3, countries: { from: "USA", to: "Nigeria" } },
 ];
 
 // === ASIA ===
 const ASIA_ROUTES: SimulatedRoute[] = [
   // Japón
-  { from: "LAX", to: "NRT", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 850, duration: "11h 30m", typical_flights_per_day: 2, countries: { from: "USA", to: "Japan" } },
-  { from: "LAX", to: "HND", airline: "American Airlines", airlineCode: "AA", basePrice: 870, duration: "11h 25m", typical_flights_per_day: 2, countries: { from: "USA", to: "Japan" } },
-  { from: "LAX", to: "KIX", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 890, duration: "12h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Japan" } },
+  { from: "LAX", to: "NRT", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 820, duration: "11h 30m", typical_flights_per_day: 6, countries: { from: "USA", to: "Japan" } },
+  { from: "LAX", to: "HND", airline: "American Airlines", airlineCode: "AA", basePrice: 870, duration: "11h 25m", typical_flights_per_day: 6, countries: { from: "USA", to: "Japan" } },
+  { from: "LAX", to: "KIX", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 890, duration: "12h 0m", typical_flights_per_day: 5, countries: { from: "USA", to: "Japan" } },
   
   // Corea del Sur
-  { from: "LAX", to: "ICN", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 880, duration: "12h 15m", typical_flights_per_day: 2, countries: { from: "USA", to: "South Korea" } },
+  { from: "LAX", to: "ICN", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 850, duration: "12h 15m", typical_flights_per_day: 6, countries: { from: "USA", to: "South Korea" } },
   
   // China
   { from: "JFK", to: "PKX", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1100, duration: "19h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "China" } },
-  { from: "JFK", to: "PVG", airline: "American Airlines", airlineCode: "AA", basePrice: 1000, duration: "15h 10m", typical_flights_per_day: 1, countries: { from: "USA", to: "China" } },
-  { from: "LAX", to: "PVG", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 920, duration: "12h 50m", typical_flights_per_day: 2, countries: { from: "USA", to: "China" } },
-  { from: "JFK", to: "CAN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1080, duration: "19h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "China" } },
-  { from: "LAX", to: "CAN", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 950, duration: "13h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "China" } },
+  { from: "JFK", to: "PVG", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 880, duration: "13h 0m", typical_flights_per_day: 5, countries: { from: "USA", to: "China" } },
+  { from: "LAX", to: "PVG", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 880, duration: "13h 0m", typical_flights_per_day: 5, countries: { from: "USA", to: "China" } },
+  { from: "JFK", to: "CAN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1080, duration: "19h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "China" } },
+  { from: "LAX", to: "CAN", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 950, duration: "13h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "China" } },
   
   // India
-  { from: "JFK", to: "DEL", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1050, duration: "18h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "India" } },
-  { from: "LAX", to: "DEL", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "22h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "India" } },
-  { from: "JFK", to: "BOM", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1070, duration: "19h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "India" } },
-  { from: "LAX", to: "BOM", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1170, duration: "23h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "India" } },
+  { from: "JFK", to: "DEL", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1050, duration: "18h 45m", typical_flights_per_day: 5, countries: { from: "USA", to: "India" } },
+  { from: "LAX", to: "DEL", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "22h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "India" } },
+  { from: "JFK", to: "BOM", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1070, duration: "19h 15m", typical_flights_per_day: 5, countries: { from: "USA", to: "India" } },
+  { from: "LAX", to: "BOM", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1170, duration: "23h 0m", typical_flights_per_day: 5, countries: { from: "USA", to: "India" } },
   
   // Singapur
-  { from: "JFK", to: "SIN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1100, duration: "21h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Singapore" } },
-  { from: "LAX", to: "SIN", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 980, duration: "17h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Singapore" } },
+  { from: "JFK", to: "SIN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1100, duration: "21h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "Singapore" } },
+  { from: "LAX", to: "SIN", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 980, duration: "17h 45m", typical_flights_per_day: 5, countries: { from: "USA", to: "Singapore" } },
   
   // Tailandia
-  { from: "JFK", to: "BKK", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1080, duration: "22h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Thailand" } },
-  { from: "LAX", to: "BKK", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 960, duration: "18h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Thailand" } },
+  { from: "JFK", to: "BKK", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1080, duration: "22h 15m", typical_flights_per_day: 5, countries: { from: "USA", to: "Thailand" } },
+  { from: "LAX", to: "BKK", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 960, duration: "18h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "Thailand" } },
   
   // Vietnam
-  { from: "JFK", to: "HAN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1120, duration: "22h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Vietnam" } },
-  { from: "LAX", to: "HAN", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 990, duration: "19h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Vietnam" } },
+  { from: "JFK", to: "HAN", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1120, duration: "22h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "Vietnam" } },
+  { from: "LAX", to: "HAN", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 990, duration: "19h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "Vietnam" } },
   
   // Indonesia
-  { from: "JFK", to: "DPS", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1200, duration: "24h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Indonesia" } },
-  { from: "LAX", to: "DPS", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 1050, duration: "20h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Indonesia" } },
-  { from: "JFK", to: "CGK", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1180, duration: "24h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Indonesia" } },
-  { from: "LAX", to: "CGK", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 1030, duration: "20h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Indonesia" } },
+  { from: "JFK", to: "DPS", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1200, duration: "24h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "Indonesia" } },
+  { from: "LAX", to: "DPS", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 1050, duration: "20h 45m", typical_flights_per_day: 5, countries: { from: "USA", to: "Indonesia" } },
+  { from: "JFK", to: "CGK", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1180, duration: "24h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "Indonesia" } },
+  { from: "LAX", to: "CGK", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 1030, duration: "20h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Indonesia" } },
   
   // Filipinas
-  { from: "JFK", to: "MNL", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "23h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Philippines" } },
-  { from: "LAX", to: "MNL", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 990, duration: "14h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Philippines" } },
+  { from: "JFK", to: "MNL", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "23h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Philippines" } },
+  { from: "LAX", to: "MNL", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 990, duration: "14h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "Philippines" } },
   
   // Malasia
-  { from: "JFK", to: "KUL", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1130, duration: "23h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Malaysia" } },
-  { from: "LAX", to: "KUL", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 1000, duration: "18h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Malaysia" } },
+  { from: "JFK", to: "KUL", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1130, duration: "23h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "Malaysia" } },
+  { from: "LAX", to: "KUL", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 1000, duration: "18h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Malaysia" } },
 ];
 
 // === MEDIO ORIENTE ===
 const MIDDLE_EAST_ROUTES: SimulatedRoute[] = [
   // Emiratos Árabes Unidos
-  { from: "JFK", to: "DXB", airline: "Qatar Airways", airlineCode: "QR", basePrice: 920, duration: "14h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "United Arab Emirates" } },
-  { from: "LAX", to: "DXB", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1000, duration: "18h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "United Arab Emirates" } },
-  { from: "JFK", to: "AUH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 930, duration: "14h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "United Arab Emirates" } },
-  { from: "LAX", to: "AUH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1010, duration: "18h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "United Arab Emirates" } },
+  { from: "JFK", to: "DXB", airline: "Qatar Airways", airlineCode: "QR", basePrice: 920, duration: "14h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "United Arab Emirates" } },
+  { from: "LAX", to: "DXB", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1000, duration: "18h 15m", typical_flights_per_day: 5, countries: { from: "USA", to: "United Arab Emirates" } },
+  { from: "JFK", to: "AUH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 930, duration: "14h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "United Arab Emirates" } },
+  { from: "LAX", to: "AUH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1010, duration: "18h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "United Arab Emirates" } },
   
   // Qatar
-  { from: "JFK", to: "DOH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 900, duration: "13h 10m", typical_flights_per_day: 2, countries: { from: "USA", to: "Qatar" } },
-  { from: "LAX", to: "DOH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 950, duration: "16h 20m", typical_flights_per_day: 1, countries: { from: "USA", to: "Qatar" } },
+  { from: "JFK", to: "DOH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 900, duration: "13h 10m", typical_flights_per_day: 5, countries: { from: "USA", to: "Qatar" } },
+  { from: "LAX", to: "DOH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 950, duration: "16h 20m", typical_flights_per_day: 5, countries: { from: "USA", to: "Qatar" } },
   
   // Arabia Saudita
-  { from: "JFK", to: "RUH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 940, duration: "15h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Saudi Arabia" } },
-  { from: "LAX", to: "RUH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1020, duration: "18h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Saudi Arabia" } },
-  { from: "JFK", to: "JED", airline: "Qatar Airways", airlineCode: "QR", basePrice: 950, duration: "15h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Saudi Arabia" } },
-  { from: "LAX", to: "JED", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1030, duration: "19h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Saudi Arabia" } },
+  { from: "JFK", to: "RUH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 940, duration: "15h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "Saudi Arabia" } },
+  { from: "LAX", to: "RUH", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1020, duration: "18h 45m", typical_flights_per_day: 4, countries: { from: "USA", to: "Saudi Arabia" } },
+  { from: "JFK", to: "JED", airline: "Qatar Airways", airlineCode: "QR", basePrice: 950, duration: "15h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Saudi Arabia" } },
+  { from: "LAX", to: "JED", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1030, duration: "19h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "Saudi Arabia" } },
   
   // Turquía
-  { from: "JFK", to: "IST", airline: "Qatar Airways", airlineCode: "QR", basePrice: 850, duration: "16h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Turkey" } },
-  { from: "LAX", to: "IST", airline: "Qatar Airways", airlineCode: "QR", basePrice: 950, duration: "20h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Turkey" } },
+  { from: "JFK", to: "IST", airline: "Qatar Airways", airlineCode: "QR", basePrice: 850, duration: "16h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "Turkey" } },
+  { from: "LAX", to: "IST", airline: "Qatar Airways", airlineCode: "QR", basePrice: 950, duration: "20h 15m", typical_flights_per_day: 5, countries: { from: "USA", to: "Turkey" } },
   
   // Jordania
-  { from: "JFK", to: "AMM", airline: "Qatar Airways", airlineCode: "QR", basePrice: 920, duration: "16h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Jordan" } },
-  { from: "LAX", to: "AMM", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1010, duration: "19h 45m", typical_flights_per_day: 1, countries: { from: "USA", to: "Jordan" } },
+  { from: "JFK", to: "AMM", airline: "Qatar Airways", airlineCode: "QR", basePrice: 920, duration: "16h 0m", typical_flights_per_day: 3, countries: { from: "USA", to: "Jordan" } },
+  { from: "LAX", to: "AMM", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1010, duration: "19h 45m", typical_flights_per_day: 3, countries: { from: "USA", to: "Jordan" } },
   
   // Kuwait
-  { from: "JFK", to: "KWI", airline: "Qatar Airways", airlineCode: "QR", basePrice: 930, duration: "15h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Kuwait" } },
-  { from: "LAX", to: "KWI", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1020, duration: "19h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Kuwait" } },
+  { from: "JFK", to: "KWI", airline: "Qatar Airways", airlineCode: "QR", basePrice: 930, duration: "15h 30m", typical_flights_per_day: 3, countries: { from: "USA", to: "Kuwait" } },
+  { from: "LAX", to: "KWI", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1020, duration: "19h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "Kuwait" } },
 ];
 
 // === OCEANÍA ===
 const OCEANIA_ROUTES: SimulatedRoute[] = [
   // Australia
-  { from: "JFK", to: "SYD", airline: "American Airlines", airlineCode: "AA", basePrice: 1300, duration: "21h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "Australia" } },
-  { from: "LAX", to: "SYD", airline: "Qantas", airlineCode: "QF", basePrice: 1250, duration: "15h 5m", typical_flights_per_day: 2, countries: { from: "USA", to: "Australia" } },
-  { from: "JFK", to: "MEL", airline: "American Airlines", airlineCode: "AA", basePrice: 1320, duration: "22h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "Australia" } },
-  { from: "LAX", to: "MEL", airline: "Qantas", airlineCode: "QF", basePrice: 1270, duration: "15h 35m", typical_flights_per_day: 1, countries: { from: "USA", to: "Australia" } },
+  { from: "JFK", to: "SYD", airline: "American Airlines", airlineCode: "AA", basePrice: 1300, duration: "21h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "Australia" } },
+  { from: "LAX", to: "SYD", airline: "Qantas", airlineCode: "QF", basePrice: 1250, duration: "15h 5m", typical_flights_per_day: 5, countries: { from: "USA", to: "Australia" } },
+  { from: "JFK", to: "MEL", airline: "American Airlines", airlineCode: "AA", basePrice: 1320, duration: "22h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "Australia" } },
+  { from: "LAX", to: "MEL", airline: "Qantas", airlineCode: "QF", basePrice: 1270, duration: "15h 35m", typical_flights_per_day: 4, countries: { from: "USA", to: "Australia" } },
   
   // Nueva Zelanda
-  { from: "JFK", to: "AKL", airline: "American Airlines", airlineCode: "AA", basePrice: 1350, duration: "19h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "New Zealand" } },
-  { from: "LAX", to: "AKL", airline: "American Airlines", airlineCode: "AA", basePrice: 1280, duration: "13h 0m", typical_flights_per_day: 1, countries: { from: "USA", to: "New Zealand" } },
+  { from: "JFK", to: "AKL", airline: "American Airlines", airlineCode: "AA", basePrice: 1350, duration: "19h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "New Zealand" } },
+  { from: "LAX", to: "AKL", airline: "American Airlines", airlineCode: "AA", basePrice: 1280, duration: "13h 0m", typical_flights_per_day: 4, countries: { from: "USA", to: "New Zealand" } },
   
   // Fiji
-  { from: "LAX", to: "NAN", airline: "Fiji Airways", airlineCode: "FJ", basePrice: 980, duration: "11h 15m", typical_flights_per_day: 1, countries: { from: "USA", to: "Fiji" } },
+  { from: "LAX", to: "NAN", airline: "Fiji Airways", airlineCode: "FJ", basePrice: 980, duration: "11h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "Fiji" } },
 ];
 
 // Consolidar todas las rutas
