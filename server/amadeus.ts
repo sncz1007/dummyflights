@@ -107,23 +107,34 @@ export interface AmadeusSearchResponse {
   };
 }
 
-// Airline code to name mapping (Oneworld and partner airlines)
+// Airline code to name mapping (Oneworld and Alaska Mileage Plan partner airlines)
 export const AIRLINE_CODE_TO_NAME: Record<string, string> = {
+  // Primary carriers
   'AS': 'Alaska Airlines',
   'AA': 'American Airlines',
+  
+  // Oneworld alliance partners
   'BA': 'British Airways',
   'CX': 'Cathay Pacific',
   'AY': 'Finnair',
-  'IB': 'Iberia',
+  'IB': 'Iberia', // Note: Currently earn-only, not available for redemption
+  'JL': 'Japan Airlines',
+  'MH': 'Malaysia Airlines',
+  'WY': 'Oman Air',
   'QF': 'Qantas',
   'QR': 'Qatar Airways',
   'AT': 'Royal Air Maroc',
-  'EI': 'Aer Lingus',
+  'RJ': 'Royal Jordanian',
   'FJ': 'Fiji Airways',
+  
+  // Non-Oneworld partners
+  'EI': 'Aer Lingus',
   'HA': 'Hawaiian Airlines',
   'FI': 'Icelandair',
   'DE': 'Condor',
   'JX': 'Starlux Airlines',
+  'KE': 'Korean Air',
+  'PR': 'Philippine Airlines',
 };
 
 // Function to get airline name from code

@@ -16,20 +16,24 @@ export type Region =
   | 'asia';
 
 // Airlines allowed per region (in priority order)
+// Primary airlines are based on actual Alaska Mileage Plan award availability research
 export const REGIONAL_AIRLINES: Record<Region, string[]> = {
   domestic_usa: ['Alaska Airlines', 'American Airlines'],
-  north_america: ['American Airlines', 'Alaska Airlines'], // Canada, Mexico
-  south_america: ['American Airlines'], // South America - NO Alaska
-  iberia: ['American Airlines', 'Royal Air Maroc', 'Iberia', 'Aer Lingus', 'Qatar Airways'],
-  central_europe: ['American Airlines', 'Qatar Airways', 'Royal Air Maroc', 'Aer Lingus'],
-  eastern_europe: ['Qatar Airways', 'Finnair', 'Aer Lingus', 'Condor'],
-  nordic: ['Finnair', 'Icelandair'],
+  north_america: ['American Airlines', 'Alaska Airlines'], // Canada, Mexico, Central America
+  south_america: ['American Airlines'], // South America - NO Alaska, NO LATAM (agreement ended 2025)
+  iberia: ['American Airlines', 'Royal Air Maroc', 'Aer Lingus', 'Qatar Airways'], // Spain, Portugal, France - Iberia removed (earn only)
+  central_europe: ['American Airlines', 'Qatar Airways', 'Royal Air Maroc', 'Aer Lingus'], // Germany, Switzerland, Italy, Austria
+  eastern_europe: ['Qatar Airways', 'Finnair', 'Aer Lingus', 'Condor'], // Poland, Czech Republic, etc.
+  nordic: ['Finnair', 'Icelandair'], // Sweden, Finland, Norway, Denmark, Iceland
   russia: ['Alaska Airlines', 'American Airlines'],
-  uk: ['American Airlines', 'British Airways'],
-  middle_east: ['Qatar Airways', 'Royal Air Maroc'],
-  oceania: ['American Airlines', 'Qantas'],
-  africa: ['Qatar Airways', 'Royal Air Maroc'],
-  asia: ['American Airlines', 'Hawaiian Airlines', 'Qatar Airways', 'Qantas', 'Starlux Airlines']
+  uk: ['American Airlines', 'British Airways'], // United Kingdom & Ireland
+  middle_east: ['Qatar Airways', 'Royal Air Maroc', 'Oman Air'], // UAE, Qatar, Saudi Arabia, Oman
+  oceania: ['American Airlines', 'Qantas', 'Fiji Airways'], // Australia, New Zealand, Fiji
+  africa: ['Qatar Airways', 'Royal Air Maroc'], // Morocco, Egypt, South Africa, etc.
+  asia: [
+    'American Airlines', 'Hawaiian Airlines', 'Qatar Airways', 'Qantas', 'Starlux Airlines', // Primary carriers
+    'Japan Airlines', 'Cathay Pacific', 'Malaysia Airlines', 'Korean Air', 'Philippine Airlines' // Additional Asian carriers
+  ]
 };
 
 // Country to region mapping (ISO 3166-1 alpha-2 codes)

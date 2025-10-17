@@ -18,20 +18,20 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 - **Database**: PostgreSQL (Neon serverless) managed by Drizzle ORM, with tables for users, airports, quotes, and bookings.
 
 ### Feature Specifications
-- **Advanced Regional Airline Segmentation**: Intelligent route-based airline filtering system that displays only partner airlines authorized for specific regions and routes:
+- **Advanced Regional Airline Segmentation**: Intelligent route-based airline filtering system that displays only partner airlines authorized for specific regions and routes (based on Alaska Mileage Plan award availability research):
   - **Domestic USA**: Alaska Airlines, American Airlines
   - **North America** (USA, Canada, Mexico, Central America): Alaska Airlines, American Airlines
-  - **South America**: American Airlines only (Alaska excluded)
-  - **Iberian Countries** (Spain, Portugal, France): American Airlines, Royal Air Maroc, Iberia, Aer Lingus, Qatar Airways
-  - **Central Europe** (Germany, Switzerland, Italy): American Airlines, Qatar Airways, Royal Air Maroc, Aer Lingus
-  - **Eastern Europe** (Poland, Czech Republic): Qatar Airways, Finnair, Aer Lingus, Condor
+  - **South America**: American Airlines only (Alaska excluded; LATAM partnership ended 2025)
+  - **Iberian Countries** (Spain, Portugal, France): American Airlines, Royal Air Maroc, Aer Lingus, Qatar Airways (Iberia excluded - earn-only partner)
+  - **Central Europe** (Germany, Switzerland, Italy, Austria): American Airlines, Qatar Airways, Royal Air Maroc, Aer Lingus
+  - **Eastern Europe** (Poland, Czech Republic, etc.): Qatar Airways, Finnair, Aer Lingus, Condor
   - **Nordic Countries** (Sweden, Finland, Norway, Denmark, Iceland): Finnair, Icelandair
   - **Russia**: Alaska Airlines, American Airlines
   - **United Kingdom & Ireland**: American Airlines, British Airways
-  - **Middle East** (UAE, Qatar, Saudi Arabia): Qatar Airways, Royal Air Maroc
-  - **Oceania** (Australia, New Zealand, Fiji): American Airlines, Qantas
+  - **Middle East** (UAE, Qatar, Saudi Arabia, Oman): Qatar Airways, Royal Air Maroc, Oman Air
+  - **Oceania** (Australia, New Zealand, Fiji): American Airlines, Qantas, Fiji Airways
   - **Africa** (Morocco, Egypt, South Africa, Nigeria, Kenya): Qatar Airways, Royal Air Maroc
-  - **Asia** (China, Japan, South Korea, Singapore, Thailand): American Airlines, Hawaiian Airlines, Qatar Airways, Qantas, Starlux Airlines
+  - **Asia** (China, Japan, South Korea, Singapore, Thailand, etc.): American Airlines, Hawaiian Airlines, Qatar Airways, Qantas, Starlux Airlines (primary); Japan Airlines, Cathay Pacific, Malaysia Airlines, Korean Air, Philippine Airlines (additional coverage)
   - System automatically shows "No flights available" message when no partner airlines serve a specific route
 - **Booking and Payment**: Integrates Stripe for secure payments, generates discounted flight data, captures customer information, and tracks booking/payment status. Payment window is 20 minutes after reservation code receipt.
 - **Internationalization (i18n)**: Supports English and Spanish, with language preference stored in localStorage. All content, including legal pages, is fully bilingual.
