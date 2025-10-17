@@ -135,11 +135,68 @@ export const AIRLINE_CODE_TO_NAME: Record<string, string> = {
   'JX': 'Starlux Airlines',
   'KE': 'Korean Air',
   'PR': 'Philippine Airlines',
+  
+  // Common regional and feeder airlines (for connections)
+  'DL': 'Delta Air Lines',
+  'UA': 'United Airlines',
+  'WN': 'Southwest Airlines',
+  '9E': 'Endeavor Air',
+  'YV': 'Mesa Airlines',
+  'G4': 'Allegiant Air',
+  'NK': 'Spirit Airlines',
+  'F9': 'Frontier Airlines',
+  'B6': 'JetBlue Airways',
+  'SY': 'Sun Country Airlines',
+  'QX': 'Horizon Air',
+  'OO': 'SkyWest Airlines',
+  'MQ': 'Envoy Air',
+  'YX': 'Republic Airways',
+  'OH': 'PSA Airlines',
+  'PT': 'West Air Sweden',
+  'LH': 'Lufthansa',
+  'AF': 'Air France',
+  'KL': 'KLM',
+  'AZ': 'ITA Airways',
+  'SK': 'SAS Scandinavian Airlines',
+  'LX': 'Swiss International Air Lines',
+  'OS': 'Austrian Airlines',
+  'SN': 'Brussels Airlines',
+  'TP': 'TAP Air Portugal',
+  'UX': 'Air Europa',
+  'VY': 'Vueling',
+  'I2': 'Iberia Express',
+  'LA': 'LATAM Airlines',
+  'CM': 'Copa Airlines',
+  'AM': 'Aeromexico',
+  'AV': 'Avianca',
+  'AR': 'Aerolineas Argentinas',
+  'G3': 'GOL Airlines',
 };
 
-// Function to get airline name from code
-export function getAirlineNameFromCode(code: string): string | null {
-  return AIRLINE_CODE_TO_NAME[code] || null;
+// Reverse mapping: name to code (for filtering)
+export const AIRLINE_NAME_TO_CODE: Record<string, string> = Object.entries(AIRLINE_CODE_TO_NAME).reduce((acc, [code, name]) => {
+  acc[name] = code;
+  return acc;
+}, {} as Record<string, string>);
+
+// Function to get airline name from code (with fallback to dictionaries)
+export function getAirlineNameFromCode(code: string, dictionaries?: Record<string, string>): string | null {
+  // First try our mapping
+  if (AIRLINE_CODE_TO_NAME[code]) {
+    return AIRLINE_CODE_TO_NAME[code];
+  }
+  
+  // Then try Amadeus dictionaries
+  if (dictionaries && dictionaries[code]) {
+    return dictionaries[code];
+  }
+  
+  return null;
+}
+
+// Function to get airline code from name
+export function getAirlineCodeFromName(name: string): string | null {
+  return AIRLINE_NAME_TO_CODE[name] || null;
 }
 
 // Search for flights using Amadeus API

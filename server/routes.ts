@@ -167,7 +167,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Search real flights using Amadeus API
-      const { searchFlights, getAirlineNameFromCode } = await import('./amadeus.js');
+      const { searchFlights, getAirlineNameFromCode, getAirlineCodeFromName } = await import('./amadeus.js');
       
       // Map flightClass to Amadeus travel class format
       const travelClassMap: Record<string, 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST'> = {
@@ -208,17 +208,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Filter flights to only include allowed airlines
-      // Check ALL segments - use operating carrier if available, otherwise marketing carrier
+      // Convert allowed airline names to codes for efficient filtering
+      const allowedAirlineCodes = new Set(
+        allowedAirlineNames
+          .map(name => getAirlineCodeFromName(name))
+          .filter(code => code !== null) as string[]
+      );
+
+      console.log(`[Flight Search] Route: ${fromIataCode} -> ${toIataCode}`);
+      console.log(`[Flight Search] Allowed airline codes:`, Array.from(allowedAirlineCodes));
+      console.log(`[Flight Search] Total offers from Amadeus:`, flightData.length);
+
+      // Filter flights based on operating carriers
+      // NEW LOGIC: Accept flights where at least one major segment is operated by an allowed airline
+      // This allows connections through other partners while ensuring main legs are bookable with Alaska miles
       const allowedFlights = flightData.filter((offer: any) => {
-        return offer.itineraries.every((itinerary: any) =>
-          itinerary.segments.every((segment: any) => {
-            // Use operating carrier if available (actual airline operating the flight)
-            const actualCarrier = segment.operating?.carrierCode || segment.carrierCode;
-            const airlineName = getAirlineNameFromCode(actualCarrier);
-            return airlineName && allowedAirlineNames.includes(airlineName);
-          })
-        );
+        const offerInfo = { id: offer.id, segments: [] as any[] };
+        
+        // Check all segments across all itineraries
+        let hasAllowedSegment = false;
+        let hasUnknownCarrier = false;
+        
+        for (const itinerary of offer.itineraries) {
+          for (const segment of itinerary.segments) {
+            // Use operating carrier (actual airline flying the plane)
+            const operatingCarrier = segment.operating?.carrierCode || segment.carrierCode;
+            const airlineName = getAirlineNameFromCode(operatingCarrier, amadeusResponse.dictionaries?.carriers);
+            
+            offerInfo.segments.push({
+              from: segment.departure.iataCode,
+              to: segment.arrival.iataCode,
+              carrier: operatingCarrier,
+              name: airlineName || 'Unknown',
+              duration: segment.duration
+            });
+            
+            // Check if this segment is operated by an allowed airline
+            if (allowedAirlineCodes.has(operatingCarrier)) {
+              hasAllowedSegment = true;
+            }
+            
+            // Track if we have unknown carriers
+            if (!airlineName && !amadeusResponse.dictionaries?.carriers?.[operatingCarrier]) {
+              hasUnknownCarrier = true;
+            }
+          }
+        }
+        
+        // Accept offer if it has at least one segment operated by an allowed airline
+        // This allows for connections with partner airlines
+        const accepted = hasAllowedSegment;
+        
+        if (!accepted) {
+          console.log(`[Flight Search] REJECTED offer ${offer.id}:`, JSON.stringify(offerInfo, null, 2));
+        }
+        
+        return accepted;
       });
 
       // If no flights with allowed airlines found, return empty results
@@ -247,7 +292,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Get airline info from first segment - use OPERATING carrier (actual airline)
         const airlineCode = firstSegment.operating?.carrierCode || firstSegment.carrierCode;
-        const airlineName = getAirlineNameFromCode(airlineCode) || amadeusResponse.dictionaries?.carriers?.[airlineCode] || airlineCode;
+        const airlineName = getAirlineNameFromCode(airlineCode, amadeusResponse.dictionaries?.carriers) || airlineCode;
         const airlineObj = ALL_AIRLINES[airlineName] || {
           code: airlineCode,
           name: airlineName,
