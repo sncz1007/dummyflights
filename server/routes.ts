@@ -114,7 +114,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Search flights endpoint - uses real Amadeus API data with 40% discount
+  // Search flights endpoint - uses simulated flights based on real American Airlines routes
   app.post("/api/flights/search", async (req, res) => {
     try {
       const { fromAirport, toAirport, departureDate, returnDate, passengers, flightClass, tripType } = req.body;
@@ -166,108 +166,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Search real flights using Amadeus API
-      const { searchFlights, getAirlineNameFromCode, getAirlineCodeFromName } = await import('./amadeus.js');
+      // Use simulated flights instead of Amadeus
+      const { findSimulatedFlights, generateFlightTimes, applyPriceVariation } = await import('./simulatedFlights.js');
       
-      // Map flightClass to Amadeus travel class format
-      const travelClassMap: Record<string, 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST'> = {
-        'economy': 'ECONOMY',
-        'premium_economy': 'PREMIUM_ECONOMY',
-        'business': 'BUSINESS',
-        'first': 'FIRST',
-      };
-      
-      const amadeusResponse = await searchFlights({
-        originLocationCode: fromIataCode,
-        destinationLocationCode: toIataCode,
-        departureDate: departureDate,
-        adults: parseInt(passengers),
-        travelClass: travelClassMap[flightClass] || 'ECONOMY',
-        currencyCode: 'USD',
-        max: 50, // Get more results to filter
-      });
-
-      // Check if we got valid data from Amadeus
-      // Amadeus returns response.data which itself contains a data array
-      const flightData = amadeusResponse.data || amadeusResponse;
-      
-      if (!flightData || !Array.isArray(flightData)) {
-        return res.json({
-          flights: [],
-          noFlightsAvailable: true,
-          message: "No flights available for this destination at this time",
-          searchParams: {
-            fromAirport,
-            toAirport,
-            departureDate,
-            returnDate,
-            passengers,
-            flightClass,
-            tripType,
-          },
-        });
-      }
-
-      // Convert allowed airline names to codes for efficient filtering
-      const allowedAirlineCodes = new Set(
-        allowedAirlineNames
-          .map(name => getAirlineCodeFromName(name))
-          .filter(code => code !== null) as string[]
-      );
+      // Search for simulated routes matching this origin-destination pair
+      const simulatedRoutes = findSimulatedFlights(fromIataCode, toIataCode);
 
       console.log(`[Flight Search] Route: ${fromIataCode} -> ${toIataCode}`);
-      console.log(`[Flight Search] Allowed airline codes:`, Array.from(allowedAirlineCodes));
-      console.log(`[Flight Search] Total offers from Amadeus:`, flightData.length);
+      console.log(`[Flight Search] Allowed airlines:`, allowedAirlineNames);
+      console.log(`[Flight Search] Found ${simulatedRoutes.length} simulated routes`);
 
-      // Filter flights based on operating carriers
-      // NEW LOGIC: Accept flights where at least one major segment is operated by an allowed airline
-      // This allows connections through other partners while ensuring main legs are bookable with Alaska miles
-      const allowedFlights = flightData.filter((offer: any) => {
-        const offerInfo = { id: offer.id, segments: [] as any[] };
-        
-        // Check all segments across all itineraries
-        let hasAllowedSegment = false;
-        let hasUnknownCarrier = false;
-        
-        for (const itinerary of offer.itineraries) {
-          for (const segment of itinerary.segments) {
-            // Use operating carrier (actual airline flying the plane)
-            const operatingCarrier = segment.operating?.carrierCode || segment.carrierCode;
-            const airlineName = getAirlineNameFromCode(operatingCarrier, amadeusResponse.dictionaries?.carriers);
-            
-            offerInfo.segments.push({
-              from: segment.departure.iataCode,
-              to: segment.arrival.iataCode,
-              carrier: operatingCarrier,
-              name: airlineName || 'Unknown',
-              duration: segment.duration
-            });
-            
-            // Check if this segment is operated by an allowed airline
-            if (allowedAirlineCodes.has(operatingCarrier)) {
-              hasAllowedSegment = true;
-            }
-            
-            // Track if we have unknown carriers
-            if (!airlineName && !amadeusResponse.dictionaries?.carriers?.[operatingCarrier]) {
-              hasUnknownCarrier = true;
-            }
-          }
-        }
-        
-        // Accept offer if it has at least one segment operated by an allowed airline
-        // This allows for connections with partner airlines
-        const accepted = hasAllowedSegment;
-        
-        if (!accepted) {
-          console.log(`[Flight Search] REJECTED offer ${offer.id}:`, JSON.stringify(offerInfo, null, 2));
-        }
-        
-        return accepted;
-      });
+      // Filter routes to only show airlines allowed for this region
+      const allowedRoutes = simulatedRoutes.filter(route => 
+        allowedAirlineNames.includes(route.airline)
+      );
 
-      // If no flights with allowed airlines found, return empty results
-      if (allowedFlights.length === 0) {
+      if (allowedRoutes.length === 0) {
         return res.json({
           flights: [],
           noFlightsAvailable: true,
@@ -284,64 +198,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Transform Amadeus data to our format with 40% discount
-      const flights = allowedFlights.slice(0, 10).map((offer: any, index: number) => {
-        const outbound = offer.itineraries[0];
-        const firstSegment = outbound.segments[0];
-        const lastSegment = outbound.segments[outbound.segments.length - 1];
+      // Generate flights from allowed routes with price variations
+      const flights: any[] = [];
+      
+      for (const route of allowedRoutes) {
+        const flightTimes = generateFlightTimes(route, departureDate);
         
-        // Get airline info from first segment - use OPERATING carrier (actual airline)
-        const airlineCode = firstSegment.operating?.carrierCode || firstSegment.carrierCode;
-        const airlineName = getAirlineNameFromCode(airlineCode, amadeusResponse.dictionaries?.carriers) || airlineCode;
-        const airlineObj = ALL_AIRLINES[airlineName] || {
-          code: airlineCode,
-          name: airlineName,
-          logo: `https://images.kiwi.com/airlines/64/${airlineCode}.png`
-        };
-
-        // Calculate prices with 40% discount
-        const originalPrice = parseFloat(offer.price.total);
-        const discountedPrice = originalPrice * 0.6;
-
-        // Format departure and arrival times
-        const depTime = new Date(firstSegment.departure.at);
-        const arrTime = new Date(lastSegment.arrival.at);
-
-        return {
-          id: offer.id,
-          airline: airlineObj,
-          flightNumber: `${firstSegment.carrierCode}${firstSegment.number}`,
-          departure: {
-            airport: fromAirport,
-            time: depTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
-            date: departureDate,
-          },
-          arrival: {
-            airport: toAirport,
-            time: arrTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
-            date: arrTime.toISOString().split('T')[0],
-          },
-          duration: outbound.duration.replace('PT', '').replace('H', 'h ').replace('M', 'm').toLowerCase(),
-          stops: outbound.segments.length - 1,
-          class: flightClass,
-          originalPrice: originalPrice,
-          discountedPrice: discountedPrice,
-          discount: 40,
-          amenities: {
-            wifi: Math.random() > 0.5,
-            meals: outbound.segments.length > 1 || originalPrice > 300,
-            entertainment: originalPrice > 400,
-            power: Math.random() > 0.4,
-          },
-          returnFlight: null, // Handle return flights separately if needed
-        };
-      });
-
+        for (const flightTime of flightTimes) {
+          // Apply price variation and class multipliers
+          let basePrice = applyPriceVariation(route.basePrice);
+          
+          // Apply class multipliers
+          const classMultipliers: Record<string, number> = {
+            'economy': 1,
+            'premium_economy': 1.5,
+            'business': 2.5,
+            'first': 4.0,
+          };
+          basePrice = basePrice * (classMultipliers[flightClass] || 1);
+          
+          // Calculate discounted price (40% off)
+          const originalPrice = basePrice;
+          const discountedPrice = originalPrice * 0.6;
+          
+          // Get airline info
+          const airlineObj = ALL_AIRLINES[route.airline] || {
+            code: route.airlineCode,
+            name: route.airline,
+            logo: `https://images.kiwi.com/airlines/64/${route.airlineCode}.png`
+          };
+          
+          flights.push({
+            id: `${route.airlineCode}-${flightTime.flightNumber}-${departureDate}`,
+            airline: airlineObj,
+            flightNumber: flightTime.flightNumber,
+            departure: {
+              airport: fromAirport,
+              time: flightTime.departureTime,
+              date: departureDate,
+            },
+            arrival: {
+              airport: toAirport,
+              time: flightTime.arrivalTime,
+              date: departureDate, // Simplified: assume same-day arrival for now
+            },
+            duration: route.duration,
+            stops: 0, // Direct flights in simulation
+            class: flightClass,
+            originalPrice: Math.round(originalPrice),
+            discountedPrice: Math.round(discountedPrice),
+            discount: 40,
+            amenities: {
+              wifi: originalPrice > 400,
+              meals: originalPrice > 300,
+              entertainment: originalPrice > 500,
+              power: originalPrice > 350,
+            },
+            returnFlight: null,
+          });
+        }
+      }
+      
       // Sort by price (cheapest first)
-      flights.sort((a, b) => a.discountedPrice - b.discountedPrice);
+      limitedFlights.sort((a, b) => a.discountedPrice - b.discountedPrice);
 
       res.json({
-        flights,
+        flights: limitedFlights,
         searchParams: {
           fromAirport,
           toAirport,
