@@ -158,6 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Use simulated flights - routes already have correct airline segmentation built-in
       const { findSimulatedFlights, generateFlightTimes, applyPriceVariation } = await import('./simulatedFlights.js');
       const { getOriginCityInfo } = await import('./internationalOriginCities.js');
+      const { calculateFlightStops } = await import('./flightStopsCalculator.js');
       
       // Search for simulated routes matching this origin-destination pair
       let simulatedRoutes = findSimulatedFlights(fromIataCode, toIataCode);
@@ -226,29 +227,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      // === ROUND-TRIP SUPPORT ===
+      // Search for return flights if trip is round-trip
+      let returnRoutes: any[] = [];
+      if (tripType === 'round-trip' && returnDate) {
+        returnRoutes = findSimulatedFlights(toIataCode, fromIataCode);
+        
+        // If no direct return routes, try hub connections
+        // CRITICAL: For return flights, we need toIataCode (international) → hub → fromIataCode (USA)
+        const isUSAOrigin = departureAirport.country === 'United States' || departureAirport.country === 'USA';
+        const isInternationalDestination = destinationAirport.country !== 'United States' && destinationAirport.country !== 'USA';
+        
+        if (returnRoutes.length === 0 && isUSAOrigin && isInternationalDestination) {
+          // Return flights need to go FROM international destination TO USA
+          // Try both major hubs (JFK for east coast final dest, LAX for west coast final dest)
+          let referenceHub: string;
+          let hubRoutes: any[] = [];
+          
+          // Determine hub based on USA FINAL destination (fromIataCode)
+          const finalDestInfo = getOriginCityInfo(fromIataCode);
+          
+          if (finalDestInfo && finalDestInfo.coast === 'west') {
+            // Final destination is west coast USA, use LAX hub
+            referenceHub = 'LAX';
+            hubRoutes = findSimulatedFlights(toIataCode, referenceHub);
+            
+            // If no LAX routes, try JFK as fallback
+            if (hubRoutes.length === 0) {
+              referenceHub = 'JFK';
+              hubRoutes = findSimulatedFlights(toIataCode, referenceHub);
+            }
+          } else {
+            // Final destination is east/central USA, use JFK hub
+            referenceHub = 'JFK';
+            hubRoutes = findSimulatedFlights(toIataCode, referenceHub);
+            
+            // If no JFK routes, try LAX as fallback
+            if (hubRoutes.length === 0) {
+              referenceHub = 'LAX';
+              hubRoutes = findSimulatedFlights(toIataCode, referenceHub);
+            }
+          }
+          
+          if (hubRoutes.length > 0) {
+            // Construct proper return routes: International → Hub → Final USA destination
+            returnRoutes = hubRoutes.map(route => ({
+              ...route,
+              from: toIataCode, // FROM international destination
+              to: fromIataCode, // TO USA origin (final destination)
+              // countries remain unchanged: route goes International → USA (correct for returns)
+              basePrice: route.basePrice * 1.15, // 15% more for connection
+              duration: route.duration.replace(/(\d+)h/, (_match: string, hours: string) => `${parseInt(hours) + 2}h`), // Add 2 hours
+            }));
+            console.log(`[Flight Search] Using ${returnRoutes.length} return routes from ${referenceHub} hub with connection`);
+          }
+        }
+        
+        console.log(`[Flight Search] Return Route: ${toIataCode} -> ${fromIataCode}`);
+        console.log(`[Flight Search] Found ${returnRoutes.length} return routes`);
+      }
+
       // Generate flights from simulated routes with price variations
       // Each route already has the correct airline based on manual segmentation
       const flights: any[] = [];
+      
+      const classMultipliers: Record<string, number> = {
+        'economy': 1,
+        'premium_economy': 1.5,
+        'business': 2.5,
+        'first': 4.0,
+      };
       
       for (const route of simulatedRoutes) {
         const flightTimes = generateFlightTimes(route, departureDate);
         
         for (const flightTime of flightTimes) {
           // Apply price variation and class multipliers
-          let basePrice = applyPriceVariation(route.basePrice);
-          
-          // Apply class multipliers
-          const classMultipliers: Record<string, number> = {
-            'economy': 1,
-            'premium_economy': 1.5,
-            'business': 2.5,
-            'first': 4.0,
-          };
-          basePrice = basePrice * (classMultipliers[flightClass] || 1);
-          
-          // Calculate discounted price (40% off)
-          const originalPrice = basePrice;
-          const discountedPrice = originalPrice * 0.6;
+          let outboundBasePrice = applyPriceVariation(route.basePrice);
+          outboundBasePrice = outboundBasePrice * (classMultipliers[flightClass] || 1);
           
           // Get airline info
           const airlineObj = ALL_AIRLINES[route.airline] || {
@@ -256,6 +312,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
             name: route.airline,
             logo: `https://images.kiwi.com/airlines/64/${route.airlineCode}.png`
           };
+          
+          // === ROUND-TRIP PRICING ===
+          // For round-trip: generate return flight options and calculate combined price
+          let returnFlightOptions: any[] = [];
+          
+          if (tripType === 'round-trip' && returnRoutes.length > 0 && returnDate) {
+            // Generate up to 3 return flight options per outbound flight
+            const selectedReturnRoutes = returnRoutes.slice(0, 3);
+            
+            for (const returnRoute of selectedReturnRoutes) {
+              const returnFlightTimes = generateFlightTimes(returnRoute, returnDate);
+              const returnFlightTime = returnFlightTimes[0]; // Take first return time
+              
+              if (returnFlightTime) {
+                let returnBasePrice = applyPriceVariation(returnRoute.basePrice);
+                returnBasePrice = returnBasePrice * (classMultipliers[flightClass] || 1);
+                
+                const returnAirlineObj = ALL_AIRLINES[returnRoute.airline] || {
+                  code: returnRoute.airlineCode,
+                  name: returnRoute.airline,
+                  logo: `https://images.kiwi.com/airlines/64/${returnRoute.airlineCode}.png`
+                };
+                
+                returnFlightOptions.push({
+                  id: `${returnRoute.airlineCode}-${returnFlightTime.flightNumber}-${returnDate}`,
+                  airline: returnAirlineObj,
+                  flightNumber: returnFlightTime.flightNumber,
+                  departure: {
+                    airport: toAirport,
+                    time: returnFlightTime.departureTime,
+                    date: returnDate,
+                  },
+                  arrival: {
+                    airport: fromAirport,
+                    time: returnFlightTime.arrivalTime,
+                    date: returnDate,
+                  },
+                  duration: returnRoute.duration,
+                  stops: calculateFlightStops(returnRoute.duration, returnRoute.countries.from, returnRoute.countries.to, returnRoute.airlineCode).stops,
+                  basePrice: returnBasePrice,
+                });
+              }
+            }
+          }
+          
+          // Calculate total price
+          let originalPrice: number;
+          let discountedPrice: number;
+          
+          if (tripType === 'round-trip' && returnFlightOptions.length > 0) {
+            // Use the cheapest return flight for pricing
+            const cheapestReturn = returnFlightOptions.reduce((min, flight) => 
+              flight.basePrice < min.basePrice ? flight : min
+            );
+            
+            // CRITICAL: Sum outbound + return BEFORE applying 40% discount
+            const totalBeforeDiscount = outboundBasePrice + cheapestReturn.basePrice;
+            originalPrice = totalBeforeDiscount;
+            discountedPrice = totalBeforeDiscount * 0.6; // 40% discount on TOTAL
+          } else {
+            // One-way pricing
+            originalPrice = outboundBasePrice;
+            discountedPrice = outboundBasePrice * 0.6;
+          }
           
           flights.push({
             id: `${route.airlineCode}-${flightTime.flightNumber}-${departureDate}`,
@@ -269,10 +389,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             arrival: {
               airport: toAirport,
               time: flightTime.arrivalTime,
-              date: departureDate, // Simplified: assume same-day arrival for now
+              date: departureDate,
             },
             duration: route.duration,
-            stops: 0, // Direct flights in simulation
+            stops: calculateFlightStops(route.duration, route.countries.from, route.countries.to, route.airlineCode).stops,
             class: flightClass,
             originalPrice: Math.round(originalPrice),
             discountedPrice: Math.round(discountedPrice),
@@ -283,7 +403,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               entertainment: originalPrice > 500,
               power: originalPrice > 350,
             },
-            returnFlight: null,
+            returnFlightOptions: tripType === 'round-trip' ? returnFlightOptions : null,
           });
         }
       }

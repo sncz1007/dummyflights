@@ -19,29 +19,42 @@ interface SimulatedRoute {
 const filePath = join(process.cwd(), 'server', 'simulatedFlights.ts');
 const fileContent = readFileSync(filePath, 'utf-8');
 
-// Extract international routes (routes where TO country is not USA)
-const internationalRoutesRegex = /{ from: "([A-Z]{3})", to: "([A-Z]{3})", airline: "([^"]+)", airlineCode: "([A-Z]{2,3})", basePrice: (\d+), duration: "([^"]+)", typical_flights_per_day: (\d+), countries: { from: "USA", to: "([^"]+)" } }/g;
+// Extract ONLY international routes (routes where FROM = "USA" and TO != "USA")
+// This regex matches routes with countries: { from: "USA", to: "SomeCountry" } where SomeCountry != "USA"
+const routeRegex = /{ from: "([A-Z]{3})", to: "([A-Z]{3})", airline: "([^"]+)", airlineCode: "([A-Z0-9]{2,3})", basePrice: (\d+), duration: "([^"]+)", typical_flights_per_day: (\d+), countries: { from: "USA", to: "([^"]+)" } }/g;
 
 const internationalRoutes: SimulatedRoute[] = [];
 let match;
 
-while ((match = internationalRoutesRegex.exec(fileContent)) !== null) {
-  internationalRoutes.push({
-    from: match[1],
-    to: match[2],
-    airline: match[3],
-    airlineCode: match[4],
-    basePrice: parseInt(match[5]),
-    duration: match[6],
-    typical_flights_per_day: parseInt(match[7]),
-    countries: {
-      from: 'USA',
-      to: match[8],
-    },
-  });
+while ((match = routeRegex.exec(fileContent)) !== null) {
+  const fromAirport = match[1];
+  const toAirport = match[2];
+  const airline = match[3];
+  const airlineCode = match[4];
+  const basePrice = parseInt(match[5]);
+  const duration = match[6];
+  const flightsPerDay = parseInt(match[7]);
+  const toCountry = match[8];
+  
+  // ONLY include if destination country is NOT "USA"
+  if (toCountry !== 'USA') {
+    internationalRoutes.push({
+      from: fromAirport,
+      to: toAirport,
+      airline,
+      airlineCode,
+      basePrice,
+      duration,
+      typical_flights_per_day: flightsPerDay,
+      countries: {
+        from: 'USA',
+        to: toCountry,
+      },
+    });
+  }
 }
 
-console.log(`\n📊 Found ${internationalRoutes.length} international routes (USA → World)\n`);
+console.log(`\n📊 Found ${internationalRoutes.length} TRUE international routes (USA → World)\n`);
 
 // Generate reverse routes (World → USA)
 const reverseRoutes: string[] = [];
@@ -58,36 +71,47 @@ console.log(`✅ Generated ${reverseRoutes.length} reverse routes (World → USA
 // Generate the code to add to simulatedFlights.ts
 const reverseRoutesCode = `
 // ===== RUTAS INTERNACIONALES INVERSAS (WORLD → USA) =====
-// Generadas automáticamente para permitir vuelos de regreso
+// Generadas automáticamente - ${new Date().toISOString().split('T')[0]}
 const INTERNATIONAL_REVERSE_ROUTES: SimulatedRoute[] = [
 ${reverseRoutes.join('\n')}
 ];
 `;
 
-console.log('📄 REVERSE ROUTES CODE:\n');
-console.log(reverseRoutesCode);
+console.log('📄 Sample of generated routes:\n');
+console.log(reverseRoutes.slice(0, 10).join('\n'));
+console.log('...\n');
 
-// Save to a separate file
-const outputPath = join(process.cwd(), 'server', 'internationalReverseRoutes.generated.txt');
+// Save to file
+const outputPath = join(process.cwd(), 'server', 'internationalReverseRoutes.ts');
 writeFileSync(outputPath, reverseRoutesCode, 'utf-8');
 
 console.log(`\n💾 Reverse routes saved to: ${outputPath}`);
-console.log('\n📋 NEXT STEPS:');
-console.log('1. Review the generated routes in server/internationalReverseRoutes.generated.txt');
-console.log('2. Copy the INTERNATIONAL_REVERSE_ROUTES array to server/simulatedFlights.ts');
-console.log('3. Add ...INTERNATIONAL_REVERSE_ROUTES to the ALL_SIMULATED_ROUTES array\n');
 
 // Generate summary statistics
 const routesByCountry: Record<string, number> = {};
+const routesByOrigin: Record<string, number> = {};
+
 for (const route of internationalRoutes) {
   routesByCountry[route.countries.to] = (routesByCountry[route.countries.to] || 0) + 1;
+  routesByOrigin[route.from] = (routesByOrigin[route.from] || 0) + 1;
 }
 
-console.log('📊 ROUTES BY DESTINATION COUNTRY:');
+console.log('\n📊 ROUTES BY DESTINATION COUNTRY:');
 Object.entries(routesByCountry)
   .sort((a, b) => b[1] - a[1])
   .forEach(([country, count]) => {
-    console.log(`   ${country}: ${count} routes`);
+    console.log(`   ${country.padEnd(20)} ${count} routes`);
   });
 
-console.log(`\n🎯 TOTAL: ${reverseRoutes.length} reverse routes will be added\n`);
+console.log('\n📊 ROUTES BY US ORIGIN CITY:');
+Object.entries(routesByOrigin)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10)
+  .forEach(([city, count]) => {
+    console.log(`   ${city.padEnd(10)} ${count} routes`);
+  });
+
+console.log(`\n🎯 TOTAL: ${reverseRoutes.length} reverse routes generated`);
+console.log('\n📋 NEXT STEP:');
+console.log('   The routes have been saved to server/internationalReverseRoutes.ts');
+console.log('   They will be automatically imported in the next step.\n');
