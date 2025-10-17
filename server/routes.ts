@@ -263,9 +263,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // Limit to top 10 flights and sort by price (cheapest first)
+      // Sort all flights by price (cheapest first), THEN limit to top 10
+      flights.sort((a: any, b: any) => a.discountedPrice - b.discountedPrice);
       const limitedFlights = flights.slice(0, 10);
-      limitedFlights.sort((a: any, b: any) => a.discountedPrice - b.discountedPrice);
 
       res.json({
         flights: limitedFlights,

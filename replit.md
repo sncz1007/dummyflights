@@ -14,7 +14,7 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 ### Technical Implementations
 - **Frontend**: React 18 with TypeScript, Wouter for routing, TanStack React Query for server state, React Context for internationalization (i18n), and React Hook Form with Zod for form management. Vite is used as the build tool.
 - **Backend**: Node.js with Express.js and TypeScript (ESM modules) providing RESTful APIs for airports and quotes.
-- **Flight Data**: Real-time flight search powered by **Amadeus API** with intelligent regional airline filtering. Returns actual flight availability, schedules, and prices with automatic 40% discount applied.
+- **Flight Data**: **Realistic Flight Simulator** based on actual American Airlines 2025 routes and pricing with intelligent regional airline filtering. Returns simulated flight availability, schedules, and prices with automatic 40% discount applied.
 - **Database**: PostgreSQL (Neon serverless) managed by Drizzle ORM, with tables for users, airports, quotes, and bookings.
 
 ### Feature Specifications
@@ -52,7 +52,7 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
-- **Amadeus Flight Offers API (Production)**: Real-time flight search and pricing using production credentials. Returns actual flight availability from global airlines with operating carrier-based filtering to ensure only approved partner airlines appear. Uses 40% discount multiplier on live Amadeus prices.
+- **Flight Simulator (server/simulatedFlights.ts)**: Realistic flight simulation based on actual American Airlines 2025 routes and market pricing. Includes 50+ routes covering domestic USA, South America, Europe, and Asia with accurate hub operations (DFW, CLT, MIA, ORD, PHX, PHL, JFK, LAX). Applies distance-based pricing with ±15% variations and 40% discount multiplier. Partner airlines include British Airways, Japan Airlines, Korean Air, and other Alaska Mileage Plan partners.
 - **Airport Data API**: Accessible via `/api/airports/search` for 500+ international airports.
 
 ### External Libraries
@@ -65,6 +65,8 @@ The platform features a comprehensive, responsive landing page with a mobile-fir
 
 ### Environment Variables
 - `DATABASE_URL`
-- `AMADEUS_API_KEY`, `AMADEUS_API_SECRET` (Production credentials)
 - `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
 - `VITE_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY`
+
+### Recent Changes (October 2025)
+- **Flight Data Migration**: Transitioned from Amadeus API to realistic flight simulator due to API limitations (lack of American Airlines inventory). New simulator based on actual AA 2025 routes with accurate hub operations and market pricing. Maintains 40% discount model and regional airline filtering.
