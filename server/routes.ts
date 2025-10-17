@@ -157,14 +157,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Use simulated flights - routes already have correct airline segmentation built-in
       const { findSimulatedFlights, generateFlightTimes, applyPriceVariation } = await import('./simulatedFlights.js');
+      const { getOriginCityInfo } = await import('./internationalOriginCities.js');
       
       // Search for simulated routes matching this origin-destination pair
-      const simulatedRoutes = findSimulatedFlights(fromIataCode, toIataCode);
+      let simulatedRoutes = findSimulatedFlights(fromIataCode, toIataCode);
 
       console.log(`[Flight Search] Route: ${fromIataCode} -> ${toIataCode}`);
-      console.log(`[Flight Search] Found ${simulatedRoutes.length} simulated routes`);
+      console.log(`[Flight Search] Found ${simulatedRoutes.length} direct simulated routes`);
 
-      // If no routes found in simulator, return no flights available
+      // If no routes found, try to find routes from reference hubs (JFK for east, LAX for west, ORD for central)
+      const isUSAOrigin = departureAirport.country === 'United States' || departureAirport.country === 'USA';
+      const isInternationalDestination = destinationAirport.country !== 'United States' && destinationAirport.country !== 'USA';
+      
+      if (simulatedRoutes.length === 0 && isUSAOrigin) {
+        const originInfo = getOriginCityInfo(fromIataCode);
+        
+        if (originInfo && isInternationalDestination) {
+          // This is an international flight from a city that might have connections
+          let referenceHub: string;
+          let hubRoutes: any[] = [];
+          
+          if (originInfo.coast === 'east') {
+            referenceHub = 'JFK';
+            hubRoutes = findSimulatedFlights(referenceHub, toIataCode);
+          } else if (originInfo.coast === 'west') {
+            referenceHub = 'LAX';
+            hubRoutes = findSimulatedFlights(referenceHub, toIataCode);
+          } else {
+            // Central - try JFK first (for Europe, Africa, Middle East), then LAX (for Asia, Oceania)
+            referenceHub = 'JFK';
+            hubRoutes = findSimulatedFlights(referenceHub, toIataCode);
+            if (hubRoutes.length === 0) {
+              referenceHub = 'LAX';
+              hubRoutes = findSimulatedFlights(referenceHub, toIataCode);
+            }
+          }
+          
+          if (hubRoutes.length > 0) {
+            // Adapt routes from hub to this city
+            simulatedRoutes = hubRoutes.map(route => ({
+              ...route,
+              from: fromIataCode,
+              // Adjust price slightly for connection
+              basePrice: route.basePrice * 1.15, // 15% more for connection
+              // Adjust duration for connection
+              duration: route.duration.replace(/(\d+)h/, (_match: string, hours: string) => `${parseInt(hours) + 2}h`), // Add 2 hours
+            }));
+            console.log(`[Flight Search] Using ${simulatedRoutes.length} routes from ${referenceHub} hub with connection`);
+          }
+        }
+      }
+
+      // If still no routes found, return no flights available
       if (simulatedRoutes.length === 0) {
         return res.json({
           flights: [],

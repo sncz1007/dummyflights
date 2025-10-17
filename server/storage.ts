@@ -30,6 +30,7 @@ export interface IStorage {
 export class DatabaseStorage implements IStorage {
   // Airport methods
   async searchAirports(query: string, country?: string): Promise<Airport[]> {
+    const { MAIN_AIRPORTS } = await import('./mainAirports.js');
     const searchQuery = `%${query.toLowerCase()}%`;
     
     const searchConditions = or(
@@ -43,12 +44,15 @@ export class DatabaseStorage implements IStorage {
       ? and(searchConditions, eq(airports.country, country))
       : searchConditions;
     
-    return await db
+    const results = await db
       .select()
       .from(airports)
       .where(whereClause)
-      .limit(20)
+      .limit(50)
       .orderBy(airports.city);
+    
+    // Filtrar solo aeropuertos principales (1 por ciudad internacional)
+    return results.filter(airport => MAIN_AIRPORTS.includes(airport.iataCode));
   }
   
   async getAirportByIata(code: string): Promise<Airport | undefined> {
