@@ -5,9 +5,12 @@ export const MAIN_AIRPORTS = [
   // === USA - Aeropuertos principales por ciudad ===
   // Costa Este
   "JFK", // New York (principal internacional)
+  "LGA", // New York LaGuardia
+  "EWR", // Newark (New York área)
   "BOS", // Boston
   "PHL", // Philadelphia  
-  "DCA", // Washington DC (principal)
+  "DCA", // Washington DC National
+  "IAD", // Washington Dulles
   "BWI", // Baltimore
   "MIA", // Miami
   "FLL", // Fort Lauderdale
