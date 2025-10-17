@@ -40,6 +40,7 @@ const ALL_AIRLINES: Record<string, { code: string; name: string; logo: string }>
   'Malaysia Airlines': { code: "MH", name: "Malaysia Airlines", logo: "https://images.kiwi.com/airlines/64/MH.png" },
   'Oman Air': { code: "WY", name: "Oman Air", logo: "https://images.kiwi.com/airlines/64/WY.png" },
   'Philippine Airlines': { code: "PR", name: "Philippine Airlines", logo: "https://images.kiwi.com/airlines/64/PR.png" },
+  'Porter Airlines': { code: "PD", name: "Porter Airlines", logo: "https://images.kiwi.com/airlines/64/PD.png" },
   'Qantas': { code: "QF", name: "Qantas", logo: "https://images.kiwi.com/airlines/64/QF.png" },
   'Qatar Airways': { code: "QR", name: "Qatar Airways", logo: "https://images.kiwi.com/airlines/64/QR.png" },
   'Royal Air Maroc': { code: "AT", name: "Royal Air Maroc", logo: "https://images.kiwi.com/airlines/64/AT.png" },
@@ -154,43 +155,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Get allowed airlines for this route using regional segmentation
-      const allowedAirlineNames = getAllowedAirlinesForRoute(departureAirport.country, destinationAirport.country);
-      
-      // If no airlines available for this route, return empty results
-      if (allowedAirlineNames.length === 0) {
-        return res.json({
-          flights: [],
-          noFlightsAvailable: true,
-          message: "No flights available for this destination at this time",
-          searchParams: {
-            fromAirport,
-            toAirport,
-            departureDate,
-            returnDate,
-            passengers,
-            flightClass,
-            tripType,
-          },
-        });
-      }
-
-      // Use simulated flights instead of Amadeus
+      // Use simulated flights - routes already have correct airline segmentation built-in
       const { findSimulatedFlights, generateFlightTimes, applyPriceVariation } = await import('./simulatedFlights.js');
       
       // Search for simulated routes matching this origin-destination pair
       const simulatedRoutes = findSimulatedFlights(fromIataCode, toIataCode);
 
       console.log(`[Flight Search] Route: ${fromIataCode} -> ${toIataCode}`);
-      console.log(`[Flight Search] Allowed airlines:`, allowedAirlineNames);
       console.log(`[Flight Search] Found ${simulatedRoutes.length} simulated routes`);
 
-      // Filter routes to only show airlines allowed for this region
-      const allowedRoutes = simulatedRoutes.filter(route => 
-        allowedAirlineNames.includes(route.airline)
-      );
-
-      if (allowedRoutes.length === 0) {
+      // If no routes found in simulator, return no flights available
+      if (simulatedRoutes.length === 0) {
         return res.json({
           flights: [],
           noFlightsAvailable: true,
@@ -207,10 +182,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Generate flights from allowed routes with price variations
+      // Generate flights from simulated routes with price variations
+      // Each route already has the correct airline based on manual segmentation
       const flights: any[] = [];
       
-      for (const route of allowedRoutes) {
+      for (const route of simulatedRoutes) {
         const flightTimes = generateFlightTimes(route, departureDate);
         
         for (const flightTime of flightTimes) {

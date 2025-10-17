@@ -1,0 +1,109 @@
+Te voy a compartir una segmentación que hice manual de forma mas detallada y precisa con datos reales de vuelos para estos destino operados por aerolíneas asociadas a Alaska que se pueden pagar con Millas, obviamente lo de las millas es información interna, al cliente si hay que mostrarle el precio real del vuelo el mas cercano posible según el análisis que hiciste al cual le aplicas el 40 % de descuento, mostrando ambos precios, asi como ya lo vienes haciendo.
+ 
+Para los vuelos domésticos o dentro de Estados Unidos mantén las rutas que ya estructuraste pero trata de agregar además todas las ciudades en las que operan vuelos American Airlines y Alaska Airlines, obviamente que no falte ninguna de las ciudades principales como las capitales de los diferentes estados y las mas importantes y con mas trafico aéreo de USA asi sean varias ciudades del mismo estado, pero que sean ciudades importantes.
+(Al terminar podrías darme un listado de las ciudades que agregaste de USA) 
+
+Importante vamos a mostrar información de vuelos solo para estos países y ciudades que te voy a listar no muestres ningún vuelo a otros destinos diferentes a estos, te comparto el país y ciudad de los destinos que si vamos a ofrecer, pero no te compartí el Aeropuerto de cada una de ellas, ya que omití ese paso, por lo cual agrega el aeropuerto principal de estas ciudades que te comparto, si hay mas de un aeropuerto en cada ciudad seleccionar el principal y que sea internacional y con mas trafico aéreo, además que según tu información si sea donde llegan estos vuelos ya que la información que te estoy dando es la real de los vuelos que operan las aerolíneas asociadas a Alaska para estos destinos, también ten en cuenta que como ya lo hemos mencionado los vuelos son solo dentro de USA, desde y hacia USA con todos los países que te voy a enlistar, no ofrecemos vuelos entre otros países que no sean Estados Unidos, también te voy a dar mostrar en algunos destinos que aerolíneas operan según la zona de Estados Unidos donde clasifiqué como costa Este tomando como partida de ejemplo New York JFK y la costa oeste tomando como partida de ejemplo Los Angeles LAX.
+
+Importante que en el buscador de nuestro formulario estén todos estos destinos sin falta alguna, no importa si hay otros destinos que no ofrecemos, pero es ahí donde tienes que mostrar el mensaje que ya configuraste de que no hay vuelos disponibles para ese destino en este momento.
+
+Otro dato importante es que te voy a compartir una sola aerolínea por destino para segmentar mejor y poder tener mas posibilidades de encontrar un vuelo real similar después del pago, asi que muestra solo vuelos de la aerolínea en especifico que te muestro. Los destinos donde muestre que operan 2 aerolíneas te especifico claramente si salen de la costa Este o la Oste desde USA, por lo que igual se sigue mostrando vuelos de una sola aerolínea, que es la que mas vuelos tiene según mi búsqueda real en Alaska Airlines con sus asociados.
+
+
+Puedes hacer también una consulta de precios de varios días, ya que hay días en que los vuelos son mas costosos que otros, para que saques un promedio inteligente o segmentes los precios según el día, con la información que puedas tener de diferentes costos de vuelos en linea.
+
+
+Los destinos son:
+
+
+Europa
+
+• 	Reino Unido (Londres): American Airlines 
+•       Irlanda (Dublin) costa este Aer Lingus / costa oeste AlaskaHorizon
+•       Escocia  (Edinburgh) : costa este Aer Lingus / costa oeste British Airways
+• 	Francia (París): costa este Aer Lingus: / costa oeste American Airlines
+• 	Alemania (Munich costa este British Airways / costa oeste American Airlines)
+• 	España (Madrid American Airlines, Barcelona American Airlines)
+• 	Italia (Roma costa este British Airways / costa oeste American Airlines, Milán costa este British Airways / costa oeste American Airlines)
+• 	Países Bajos (Amsterdam) : costa este British Airways / costa oeste American Airlines
+• 	Suiza (Zúrich, Geneva) : costa este British Airways / costa oeste American Airlines
+• 	Portugal (Lisbon) : costa este British Airways / costa oeste American Airlines
+• 	Grecia (Athens) : costa este British Airways / costa oeste American Airlines
+
+
+Dinamarca  Copenhagen : costa este Finnair / costa oeste Qatar Airways 
+Suecia     Stockholm : costa este British Airways / costa oeste Icelandair
+Noruega    Oslo   :  Icelandair
+Finlandia  Helsinki : Icelandair 
+Polonia    Varsovia :  Qatar Airways
+República  Checa  Prague : Condor
+Rumanía    Bucharest : Qatar Airways
+
+
+
+África:
+
+•       Sudáfrica (Johannesburgo, Ciudad del Cabo) : Qatar Airways
+• 	Egipto (Cairo) : Qatar Airways
+• 	Marruecos (Casablanca costa este Royal Air Maroc / costa oeste Qatar Airways)
+• 	Kenia (Nairobi) :    Qatar Airways
+• 	Túnez=  Tunis  :    Qatar Airways
+• 	Tanzania (Zanzibar) :    Qatar Airways
+• 	Ghana (Accra) :    Qatar Airways
+• 	Nigeria (Abuja) :    Qatar Airways
+
+
+Asia:
+
+•       Japón= (Tokio, Osaka) : Costa Oeste Hawaiian Airlines / American Airlines 
+• 	Corea del Sur= (Seúl) : Hawaiian Airlines 
+• 	China= (Beijing Daxing Qatar Airways, Shanghái Costa oeste Cathay Pacific / costa este American Airlines, Guangzhou costa este Qatar Airways / costa oeste Cathay Pacific)
+• 	India= (Delhi Qatar Airways, Mumbai Qatar Airways)
+• 	Singapur= (Singapore costa este Qatar Airways / costa oeste Cathay Pacific)
+• 	Tailandia= (Bangkok costa este Qatar Airways / costa oeste Cathay Pacific)
+• 	Vietnam= (Hanói costa este Qatar Airways / costa oeste Cathay Pacific)
+• 	Indonesia= (Denpasar Bali costa este Qatar Airways / costa oeste Cathay Pacific, Jakarta costa este Qatar Airways / costa oeste Cathay Pacific )
+• 	Filipinas= (Manila costa este Qatar Airways / costa oeste Cathay Pacific)
+• 	Malasia= (Kuala Lumpur costa este Qatar Airways / costa oeste Cathay Pacific)
+
+
+Medio Oriente:
+
+- Emiratos Árabes Unidos= (Dubái, Abu Dabi) Qatar Airways
+- Qatar= (Doha) : Qatar Airways
+- Arabia Saudita= (Riyadh, Jedda): Qatar Airways
+- Turquía= (Istanbul) : Qatar Airways
+- Jordania= (Ammán) : Qatar Airways
+- Kuwait= (Ciudad de Kuwait): Qatar Airways
+
+
+
+Oceanía:
+• 	Australia (Sidney, Melbourne) : Desde la costa este American Airlines / Desde la costa oeste Qantas Airways
+• 	Nueva Zelanda (Auckland) : American Airlines 
+• 	Fiyi (Nadi) : Fiji Airways
+
+
+
+Norte America:
+
+Canada=  Toronto: Porter Airlines Inc, Vancouver: Alaska Airlines, Montreal : costa este Porter Airlines Inc / costa oeste American Airlines 
+Mexico=  Ciudad de México, Cancún : American Airlines
+
+
+Centro America:
+ 
+Costa Rica= San José   : American Airlines
+Panamá= ciudad de panama : American Airlines
+Republica dominicana= Santo Domingo, punta cana: American Airlines 
+
+
+
+Sur America:
+
+Colombia=   Bogotá, Medellín :   American Airlines
+Argentina=  Buenos Aires : American Airlines
+Brasil=     São Paulo, Río de Janeiro : American Airlines
+Chile=      Santiago  :   American Airlines
+Perú=       Lima      :   American Airlines
+Ecuador=    Quito     :   American Airlines
