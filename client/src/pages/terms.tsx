@@ -55,13 +55,6 @@ export default function Terms() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">{t('terms.booking.title')}</h2>
-              <p className="mb-4">
-                {t('terms.booking.text')}
-              </p>
-            </section>
-
-            <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('terms.cancellation.title')}</h2>
               <p className="mb-4">
                 {t('terms.cancellation.text')}
