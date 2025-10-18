@@ -136,6 +136,7 @@ export const COUNTRY_TO_REGION: Record<string, Region> = {
   'IQ': 'middle_east', // Iraq
   'SY': 'middle_east', // Syria
   'YE': 'middle_east', // Yemen
+  'TR': 'middle_east', // Turkey
   
   // Oceania
   'AU': 'oceania', // Australia
@@ -217,6 +218,8 @@ export const COUNTRY_NAME_TO_CODE: Record<string, string> = {
   'Poland': 'PL',
   'Czech Republic': 'CZ',
   'Czechia': 'CZ',
+  'Greece': 'GR',
+  'Romania': 'RO',
   'Sweden': 'SE',
   'Finland': 'FI',
   'Norway': 'NO',
@@ -232,6 +235,8 @@ export const COUNTRY_NAME_TO_CODE: Record<string, string> = {
   'Saudi Arabia': 'SA',
   'Oman': 'OM',
   'Kuwait': 'KW',
+  'Turkey': 'TR',
+  'Jordan': 'JO',
   'Australia': 'AU',
   'New Zealand': 'NZ',
   'Fiji': 'FJ',
@@ -240,6 +245,9 @@ export const COUNTRY_NAME_TO_CODE: Record<string, string> = {
   'South Africa': 'ZA',
   'Nigeria': 'NG',
   'Kenya': 'KE',
+  'Tunisia': 'TN',
+  'Tanzania': 'TZ',
+  'Ghana': 'GH',
   'China': 'CN',
   'Japan': 'JP',
   'South Korea': 'KR',
