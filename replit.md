@@ -24,6 +24,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
   - **Cache Keys**: `cachedFlightResults` (search params + flight data), `returningFromCheckout` (navigation flag)
   - **Cache Invalidation**: Cleared on new homepage searches; flag removed after use to prevent stale hits
 - **Booking and Payment**: Integrates Stripe for secure payments, generates discounted flight data, captures customer information, and tracks booking/payment status. A 20-minute payment window is enforced after reservation code receipt.
+- **Booking Notifications**: Automated email notifications are sent via EmailJS when customers click "Continue to Payment" after filling out their contact information. These notifications include complete flight details, customer info, all passengers, and pricing breakdown, enabling manual ticket purchase before payment completion.
 - **Internationalization (i18n)**: Full support for English and Spanish, with language preference stored in localStorage. All content, including legal pages, is bilingual.
 - **Homepage Structure**: Includes a Hero Section with flight search, Trust Badges, Video Strip, Popular Destinations, "About Us" section, "Why Choose Us" benefits, Customer Testimonials, FAQ, and a comprehensive Footer.
 - **Legal Pages**: Dedicated, bilingual Terms of Service and Privacy Policy pages, requiring acceptance during flight search.
@@ -37,7 +38,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 
 ### Third-Party Services
 - **Stripe**: For secure payment processing, including payment intent creation and webhooks.
-- **EmailJS**: Client-side email service for sending quote requests.
+- **EmailJS**: Client-side email service for sending quote requests and automated booking notifications. Two templates configured: one for flight quote requests and one for booking notifications sent immediately when customers proceed to payment.
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
@@ -55,5 +56,5 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 
 ### Environment Variables
 - `DATABASE_URL`
-- `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
+- `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_BOOKING_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
 - `VITE_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY`
