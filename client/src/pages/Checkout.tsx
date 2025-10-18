@@ -55,21 +55,30 @@ interface SearchParams {
   tripType: string;
 }
 
+interface AdditionalPassenger {
+  fullName: string;
+  dateOfBirth: string;
+}
+
 interface CustomerInfo {
   fullName: string;
   email: string;
   phone: string;
+  dateOfBirth: string;
+  additionalPassengers: AdditionalPassenger[];
 }
 
 // Customer Info Form Component (no Stripe hooks)
 const CustomerInfoForm = ({ 
   onSubmit,
   customerInfo,
-  setCustomerInfo
+  setCustomerInfo,
+  totalPassengers
 }: { 
   onSubmit: () => Promise<void>;
   customerInfo: CustomerInfo;
   setCustomerInfo: (info: CustomerInfo) => void;
+  totalPassengers: number;
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -78,13 +87,26 @@ const CustomerInfoForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!customerInfo.fullName || !customerInfo.email) {
+    if (!customerInfo.fullName || !customerInfo.email || !customerInfo.dateOfBirth) {
       toast({
         title: t('checkout.error'),
         description: 'Please fill in all required fields',
         variant: 'destructive',
       });
       return;
+    }
+
+    // Validate additional passengers
+    if (totalPassengers > 1) {
+      const missingPassengers = customerInfo.additionalPassengers.some(p => !p.fullName || !p.dateOfBirth);
+      if (missingPassengers) {
+        toast({
+          title: t('checkout.error'),
+          description: 'Please fill in all passenger information',
+          variant: 'destructive',
+        });
+        return;
+      }
     }
 
     setIsProcessing(true);
@@ -99,6 +121,12 @@ const CustomerInfoForm = ({
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const updateAdditionalPassenger = (index: number, field: keyof AdditionalPassenger, value: string) => {
+    const updatedPassengers = [...customerInfo.additionalPassengers];
+    updatedPassengers[index] = { ...updatedPassengers[index], [field]: value };
+    setCustomerInfo({ ...customerInfo, additionalPassengers: updatedPassengers });
   };
 
   return (
@@ -145,12 +173,68 @@ const CustomerInfoForm = ({
               data-testid="input-phone"
             />
           </div>
+          
+          <div>
+            <Label htmlFor="dateOfBirth">{t('checkout.dateOfBirth')} *</Label>
+            <Input
+              id="dateOfBirth"
+              type="date"
+              value={customerInfo.dateOfBirth}
+              onChange={(e) => setCustomerInfo({ ...customerInfo, dateOfBirth: e.target.value })}
+              required
+              data-testid="input-dob"
+              max={new Date().toISOString().split('T')[0]}
+            />
+          </div>
         </div>
       </Card>
 
+      {totalPassengers > 1 && (
+        <Card className="p-6">
+          <h3 className="text-lg font-semibold mb-4" data-testid="text-additional-passengers">
+            {t('checkout.additionalPassengers')} ({totalPassengers - 1} {totalPassengers - 1 === 1 ? t('checkout.passenger') : t('checkout.passengers')})
+          </h3>
+          
+          <div className="space-y-6">
+            {customerInfo.additionalPassengers.map((passenger, index) => (
+              <div key={index} className="space-y-4 pb-6 border-b last:border-b-0">
+                <h4 className="font-medium text-sm text-muted-foreground">
+                  {t('checkout.passenger')} {index + 2}
+                </h4>
+                
+                <div>
+                  <Label htmlFor={`passenger-name-${index}`}>{t('checkout.name')} *</Label>
+                  <Input
+                    id={`passenger-name-${index}`}
+                    value={passenger.fullName}
+                    onChange={(e) => updateAdditionalPassenger(index, 'fullName', e.target.value)}
+                    placeholder="Jane Doe"
+                    required
+                    data-testid={`input-passenger-name-${index}`}
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor={`passenger-dob-${index}`}>{t('checkout.dateOfBirth')} *</Label>
+                  <Input
+                    id={`passenger-dob-${index}`}
+                    type="date"
+                    value={passenger.dateOfBirth}
+                    onChange={(e) => updateAdditionalPassenger(index, 'dateOfBirth', e.target.value)}
+                    required
+                    data-testid={`input-passenger-dob-${index}`}
+                    max={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
       <Button
         type="submit"
-        disabled={isProcessing || !customerInfo.fullName || !customerInfo.email}
+        disabled={isProcessing || !customerInfo.fullName || !customerInfo.email || !customerInfo.dateOfBirth}
         className="w-full"
         size="lg"
         data-testid="button-continue-payment"
@@ -263,6 +347,8 @@ export default function Checkout() {
     fullName: '',
     email: '',
     phone: '',
+    dateOfBirth: '',
+    additionalPassengers: [],
   });
 
   useEffect(() => {
@@ -305,6 +391,17 @@ export default function Checkout() {
     
     setFlight(flightData);
     setSearchParams(searchData);
+    
+    // Initialize additional passengers array based on total passengers
+    const totalPassengers = Number(searchData.passengers);
+    if (totalPassengers > 1) {
+      const additionalPassengersArray = Array(totalPassengers - 1).fill(null).map(() => ({
+        fullName: '',
+        dateOfBirth: '',
+      }));
+      setCustomerInfo(prev => ({ ...prev, additionalPassengers: additionalPassengersArray }));
+    }
+    
     setIsLoading(false);
   }, []);
 
@@ -318,6 +415,10 @@ export default function Checkout() {
         fullName: customerInfo.fullName,
         email: customerInfo.email,
         phone: customerInfo.phone || '',
+        dateOfBirth: customerInfo.dateOfBirth,
+        additionalPassengers: customerInfo.additionalPassengers.length > 0 
+          ? JSON.stringify(customerInfo.additionalPassengers) 
+          : undefined,
         fromAirport: searchParams.fromAirport,
         toAirport: searchParams.toAirport,
         departureDate: searchParams.departureDate,
@@ -464,6 +565,7 @@ export default function Checkout() {
                 onSubmit={handleCreateBooking}
                 customerInfo={customerInfo}
                 setCustomerInfo={setCustomerInfo}
+                totalPassengers={Number(searchParams.passengers)}
               />
             ) : (
               <Elements stripe={stripePromise} options={{ clientSecret }}>

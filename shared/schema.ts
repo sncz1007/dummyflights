@@ -62,6 +62,10 @@ export const bookings = pgTable("bookings", {
   fullName: text("full_name").notNull(),
   email: text("email").notNull(),
   phone: text("phone"),
+  dateOfBirth: text("date_of_birth").notNull(),
+  
+  // Additional Passengers (stored as JSON array)
+  additionalPassengers: text("additional_passengers"), // JSON string with [{fullName: string, dateOfBirth: string}]
   
   // Flight Search Parameters
   fromAirport: text("from_airport").notNull(),
@@ -128,6 +132,8 @@ export const insertBookingSchema = createInsertSchema(bookings).omit({
 }).extend({
   departureDate: z.string(),
   returnDate: z.string().optional(),
+  dateOfBirth: z.string(),
+  additionalPassengers: z.string().optional(),
 });
 
 // Types
