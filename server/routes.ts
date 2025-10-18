@@ -7,30 +7,11 @@ import { z } from "zod";
 import Stripe from "stripe";
 
 // Initialize Stripe (from blueprint:javascript_stripe)
-// Use TESTING_STRIPE_SECRET_KEY in dev, STRIPE_SECRET_KEY in production
-const isDev = process.env.NODE_ENV === 'development';
-const stripeSecretKey = isDev && process.env.TESTING_STRIPE_SECRET_KEY 
-  ? process.env.TESTING_STRIPE_SECRET_KEY 
-  : process.env.STRIPE_SECRET_KEY;
-
-if (!stripeSecretKey) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY or TESTING_STRIPE_SECRET_KEY');
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
 
-// Validate key format (allow sk_test_, sk_live_, rk_ for Replit)
-const isValidKey = stripeSecretKey.startsWith('sk_test_') || 
-                   stripeSecretKey.startsWith('sk_live_') || 
-                   stripeSecretKey.startsWith('rk_');
-
-if (!isValidKey) {
-  if (isDev) {
-    console.warn('⚠️  Warning: STRIPE_SECRET_KEY format may be invalid. Expected sk_test_, sk_live_, or rk_');
-  } else {
-    throw new Error('Invalid STRIPE_SECRET_KEY: must start with sk_test_, sk_live_, or rk_');
-  }
-}
-
-const stripe = new Stripe(stripeSecretKey, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-09-30.clover",
 });
 
