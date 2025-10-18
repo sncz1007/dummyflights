@@ -279,7 +279,11 @@ export default function FlightResults() {
 
                   {/* Return Flight - Round Trip */}
                   {flight.returnFlightOptions && flight.returnFlightOptions.length > 0 && flight.returnFlightOptions[0] && (
-                    <div className="flex items-center gap-4 mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
+                    <div className="mt-4 pt-4 border-t-2 border-primary">
+                      <p className="text-sm font-bold text-primary mb-3 uppercase">
+                        ✈ Vuelo de Regreso
+                      </p>
+                    <div className="flex items-center gap-4">
                       <div className="text-center">
                         <p className="text-2xl font-bold" data-testid={`text-return-departure-time-${flight.id}`}>
                           {flight.returnFlightOptions[0].departure.time}
@@ -309,6 +313,7 @@ export default function FlightResults() {
                           {flight.returnFlightOptions[0].arrival.airport}
                         </p>
                       </div>
+                    </div>
                     </div>
                   )}
 
