@@ -37,7 +37,8 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
-- **Flight Simulator**: Provides comprehensive flight simulation for 150+ realistic routes (Domestic USA, North America, Central America, South America, Europe, Asia, Middle East, Oceania, Africa), based on 2025 airline operations and market pricing, applying a 40% discount. It includes manual coast-based segmentation and accurate hub operations.
+- **Flight Simulator**: Provides comprehensive flight simulation for 150+ realistic routes (Domestic USA, North America, Central America, South America, Europe, Russia, Asia, Middle East, Oceania, Africa), based on 2025 airline operations and market pricing, applying a 40% discount. It includes manual coast-based segmentation and accurate hub operations.
+  - **Russia (Moscow)**: Alaska Airlines operates flights to Moscow Sheremetyevo (SVO) from both East Coast (JFK, BOS, PHL, MIA) and West Coast (LAX, SFO, SEA) origins.
 - **Airport Data API**: Accessible via `/api/airports/search` for 204 international airports loaded from CSV.
 
 ### External Libraries

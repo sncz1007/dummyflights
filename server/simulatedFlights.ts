@@ -788,6 +788,15 @@ const EUROPE_ROUTES: SimulatedRoute[] = [
   // Rumanía
   { from: "JFK", to: "OTP", airline: "Qatar Airways", airlineCode: "QR", basePrice: 780, duration: "17h 20m", typical_flights_per_day: 3, countries: { from: "USA", to: "Romania" } },
   { from: "LAX", to: "OTP", airline: "Qatar Airways", airlineCode: "QR", basePrice: 880, duration: "21h 0m", typical_flights_per_day: 3, countries: { from: "USA", to: "Romania" } },
+  
+  // Rusia (Moscú) - Alaska Airlines opera desde ambas costas
+  { from: "JFK", to: "SVO", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 850, duration: "10h 30m", typical_flights_per_day: 3, countries: { from: "USA", to: "Russia" } },
+  { from: "BOS", to: "SVO", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 840, duration: "10h 15m", typical_flights_per_day: 3, countries: { from: "USA", to: "Russia" } },
+  { from: "PHL", to: "SVO", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 860, duration: "10h 45m", typical_flights_per_day: 2, countries: { from: "USA", to: "Russia" } },
+  { from: "MIA", to: "SVO", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 900, duration: "12h 0m", typical_flights_per_day: 2, countries: { from: "USA", to: "Russia" } },
+  { from: "LAX", to: "SVO", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 950, duration: "13h 30m", typical_flights_per_day: 4, countries: { from: "USA", to: "Russia" } },
+  { from: "SFO", to: "SVO", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 940, duration: "13h 15m", typical_flights_per_day: 4, countries: { from: "USA", to: "Russia" } },
+  { from: "SEA", to: "SVO", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 920, duration: "12h 45m", typical_flights_per_day: 5, countries: { from: "USA", to: "Russia" } },
 ];
 
 // === ÁFRICA ===
