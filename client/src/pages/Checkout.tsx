@@ -248,6 +248,12 @@ const CustomerInfoForm = ({
           'Continue to Payment'
         )}
       </Button>
+      
+      <div className="mt-4 text-center text-sm text-muted-foreground">
+        <p>
+          {t('checkout.ticketDeliveryMessage', 'Posterior al pago recibirás tus tickets o código de reserva directamente en tu correo')}
+        </p>
+      </div>
     </form>
   );
 };
@@ -411,6 +417,17 @@ export default function Checkout() {
     }
 
     try {
+      // Calculate total price including return flight and all passengers
+      const numberOfPassengers = Number(searchParams.passengers);
+      const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
+      const returnDiscounted = returnPrice * (1 - flight.discount / 100);
+      
+      const pricePerPassengerOriginal = flight.originalPrice + returnPrice;
+      const pricePerPassengerDiscounted = flight.discountedPrice + returnDiscounted;
+      
+      const totalOriginalPrice = pricePerPassengerOriginal * numberOfPassengers;
+      const totalDiscountedPrice = pricePerPassengerDiscounted * numberOfPassengers;
+      
       const bookingData = {
         fullName: customerInfo.fullName,
         email: customerInfo.email,
@@ -427,8 +444,8 @@ export default function Checkout() {
         flightClass: searchParams.flightClass,
         tripType: searchParams.tripType,
         selectedFlightData: JSON.stringify(flight),
-        originalPrice: flight.originalPrice.toString(),
-        discountedPrice: flight.discountedPrice.toString(),
+        originalPrice: totalOriginalPrice.toString(),
+        discountedPrice: totalDiscountedPrice.toString(),
         currency: 'USD',
         language: localStorage.getItem('preferredLanguage') || 'en',
       };
@@ -466,7 +483,19 @@ export default function Checkout() {
     );
   }
 
-  const savings = flight.originalPrice - flight.discountedPrice;
+  // Calculate total price including return flight and all passengers
+  const numberOfPassengers = Number(searchParams.passengers);
+  const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
+  const returnDiscounted = returnPrice * (1 - flight.discount / 100);
+  
+  // Price per passenger (outbound + return if applicable)
+  const pricePerPassengerOriginal = flight.originalPrice + returnPrice;
+  const pricePerPassengerDiscounted = flight.discountedPrice + returnDiscounted;
+  
+  // Total price for all passengers
+  const totalOriginalPrice = pricePerPassengerOriginal * numberOfPassengers;
+  const totalDiscountedPrice = pricePerPassengerDiscounted * numberOfPassengers;
+  const savings = totalOriginalPrice - totalDiscountedPrice;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -524,12 +553,20 @@ export default function Checkout() {
               </div>
 
               <div className="border-t pt-4 space-y-2">
+                {numberOfPassengers > 1 && (
+                  <div className="flex justify-between mb-2 pb-2 border-b">
+                    <span className="text-xs text-muted-foreground">
+                      {numberOfPassengers} {numberOfPassengers === 1 ? t('checkout.passenger') : t('checkout.passengers')}
+                    </span>
+                  </div>
+                )}
+                
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">
                     {t('checkout.originalPrice')}
                   </span>
                   <span className="text-sm line-through" data-testid="text-summary-original-price">
-                    ${flight.originalPrice.toFixed(2)}
+                    ${totalOriginalPrice.toFixed(2)}
                   </span>
                 </div>
                 
@@ -547,7 +584,7 @@ export default function Checkout() {
                     {t('checkout.youPay')}
                   </span>
                   <span className="text-2xl font-bold text-primary" data-testid="text-summary-total">
-                    ${flight.discountedPrice.toFixed(2)}
+                    ${totalDiscountedPrice.toFixed(2)}
                   </span>
                 </div>
               </div>

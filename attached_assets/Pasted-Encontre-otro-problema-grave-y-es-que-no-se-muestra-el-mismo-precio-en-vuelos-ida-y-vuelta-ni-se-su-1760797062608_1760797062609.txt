@@ -1,0 +1,29 @@
+Encontre otro problema grave, y es que no se muestra el mismo precio en vuelos ida y vuelta ni se suma el valor de los demas pasajeros cuando son 2 o mas en cuanto al valor en la subpagina Complete Your Booking que es donde deberia aparecer el total correcto, ya que en la subpagina Available Flights aparece el precio por persona aunque tambien deberia especificarse eso (valor por pasajero) y sumarse en la siguiente subpagina Complete Your Booking. Hice este test para que mires lo que pasa:
+
+1 persona solo ida:
+JFK - MAD 1 persona:  20/10    fecha ida: 20/10/25  Solo ida.
+ Available Flights: $489 -40%= $293  
+Complete Your Booking: $489 -40%= $293
+Es la informacion correcta en ambas subpaginas
+
+1 persona ida y vuelta:
+JFK - MAD 1 persona:  fecha ida: 20/10/25  fecha de vuelta: 07/11/25
+ Available Flights: $1548 -40%= $929 
+Complete Your Booking: $1056.00 -40%= $634.00
+Da un valor diferente en la segunda ventana.
+
+2 personas solo ida:
+JFK - MAD 2 personas:  fecha ida: 20/10/25  Solo ida.
+Available Flights: $523.00 -40%= $314.00 
+Complete Your Booking: $523.00 -40%= $314.00
+No esta sumando el valor de la otra u otras personas en caso de ser mas de 2. 
+
+2 personas ida y vuelta:
+JFK - MAD 2 personas:  fecha ida: 20/10/25  fecha de vuelta: 07/11/25
+Available Flights: $1506.00 -40%= $904.00 
+Complete Your Booking: $1016.00 -40%= $610.00
+Da un valor diferente en la segunda ventana y ademas no esta sumando el valor de la otra u otras personas en caso de ser mas de 2.  
+
+Otro problema es que al dar atras desde la parte donde se pone los datos de las personas que es la ventana Complete Your Booking no vuelven a salir los vuelos sino una pagina en blanco con un letrero de no hay vuelos seleccionados, deberian volver a aparecer los vuelos en la ventana Available Flights.
+
+Y por ultimo necesito que en la subpagina Complete Your Booking, debajo de la informacion de los pasajeros y del boton de continuar al pago, aparezca un mensaje que diga "Posterior al pago recibiras tus ticketes o codigo de reserva directamente en tu correo"
