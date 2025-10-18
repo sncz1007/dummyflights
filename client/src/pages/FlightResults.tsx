@@ -108,8 +108,10 @@ export default function FlightResults() {
     noFlightsAvailable?: boolean;
     message?: string;
   }>({
-    queryKey: ['/api/flights/search', searchParams],
+    queryKey: ['/api/flights/search', searchParams, Date.now()],
     enabled: !!searchParams,
+    staleTime: 0,
+    gcTime: 0,
     queryFn: async () => {
       const response = await fetch('/api/flights/search', {
         method: 'POST',
@@ -273,9 +275,9 @@ export default function FlightResults() {
                     </div>
                   </div>
 
-                  {/* Return Flight */}
-                  {flight.returnFlightOptions && flight.returnFlightOptions.length > 0 && (
-                    <div className="flex items-center gap-4 mt-4 pt-4 border-t">
+                  {/* Return Flight - Round Trip */}
+                  {flight.returnFlightOptions && flight.returnFlightOptions.length > 0 && flight.returnFlightOptions[0] && (
+                    <div className="flex items-center gap-4 mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
                       <div className="text-center">
                         <p className="text-2xl font-bold" data-testid={`text-return-departure-time-${flight.id}`}>
                           {flight.returnFlightOptions[0].departure.time}
