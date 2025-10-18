@@ -251,7 +251,9 @@ const CustomerInfoForm = ({
       
       <div className="mt-4 text-center text-sm text-muted-foreground">
         <p>
-          {t('checkout.ticketDeliveryMessage', 'Posterior al pago recibirás tus tickets o código de reserva directamente en tu correo')}
+          {localStorage.getItem('preferredLanguage') === 'es' 
+            ? 'Posterior al pago recibirás tus tickets o código de reserva directamente en tu correo'
+            : 'After payment, you will receive your tickets or reservation code directly in your email'}
         </p>
       </div>
     </form>
@@ -504,7 +506,23 @@ export default function Checkout() {
         <div className="mb-8">
           <Button
             variant="ghost"
-            onClick={() => setLocation('/flights' + window.location.search)}
+            onClick={() => {
+              // Reconstruct the search URL with parameters from sessionStorage
+              if (searchParams) {
+                const params = new URLSearchParams({
+                  from: searchParams.fromAirport,
+                  to: searchParams.toAirport,
+                  departure: searchParams.departureDate,
+                  ...(searchParams.returnDate && { return: searchParams.returnDate }),
+                  passengers: searchParams.passengers,
+                  class: searchParams.flightClass,
+                  type: searchParams.tripType,
+                });
+                setLocation('/flights?' + params.toString());
+              } else {
+                setLocation('/');
+              }
+            }}
             className="mb-4"
             data-testid="button-back"
           >

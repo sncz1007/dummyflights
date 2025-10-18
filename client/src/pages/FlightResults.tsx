@@ -367,6 +367,9 @@ export default function FlightResults() {
                           <p className="text-3xl font-bold text-primary" data-testid={`text-discounted-price-${flight.id}`}>
                             ${totalDiscounted.toFixed(2)}
                           </p>
+                          <p className="text-xs text-muted-foreground italic" data-testid={`text-per-passenger-${flight.id}`}>
+                            {localStorage.getItem('preferredLanguage') === 'es' ? 'Precio por pasajero' : 'Price per passenger'}
+                          </p>
                           <p className="text-sm text-green-600 font-medium" data-testid={`text-savings-${flight.id}`}>
                             {t('results.save')} ${(totalOriginal - totalDiscounted).toFixed(2)}
                           </p>
