@@ -78,6 +78,10 @@ export default function HeroSection() {
       return;
     }
     
+    // Clear cached flight results for fresh search
+    sessionStorage.removeItem('cachedFlightResults');
+    sessionStorage.removeItem('returningFromCheckout');
+    
     // Navigate to results page with search params
     const params = new URLSearchParams({
       from: completeData.fromAirport,

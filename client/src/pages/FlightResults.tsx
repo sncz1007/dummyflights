@@ -79,6 +79,7 @@ export default function FlightResults() {
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
+  const [useCachedResults, setUseCachedResults] = useState<boolean>(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -91,7 +92,7 @@ export default function FlightResults() {
     const tripType = params.get('type') || 'roundtrip';
 
     if (fromAirport && toAirport && departureDate) {
-      setSearchParams({
+      const currentSearchParams = {
         fromAirport,
         toAirport,
         departureDate,
@@ -99,7 +100,28 @@ export default function FlightResults() {
         passengers,
         flightClass,
         tripType,
-      });
+      };
+      
+      // Check if we're returning from checkout and have cached results
+      const cachedResults = sessionStorage.getItem('cachedFlightResults');
+      const returningFromCheckout = sessionStorage.getItem('returningFromCheckout');
+      
+      if (cachedResults && returningFromCheckout === 'true') {
+        try {
+          const cached = JSON.parse(cachedResults);
+          // Verify cached results match current search parameters
+          if (JSON.stringify(cached.searchParams) === JSON.stringify(currentSearchParams)) {
+            setUseCachedResults(true);
+          }
+        } catch (e) {
+          console.error('Error parsing cached results:', e);
+        }
+      }
+      
+      // Clear the returning flag
+      sessionStorage.removeItem('returningFromCheckout');
+      
+      setSearchParams(currentSearchParams);
     }
   }, []);
 
@@ -111,10 +133,24 @@ export default function FlightResults() {
   }>({
     queryKey: ['/api/flights/search', searchParams],
     enabled: !!searchParams,
-    refetchOnMount: 'always',
+    refetchOnMount: !useCachedResults,
     staleTime: 0,
     gcTime: 0,
     queryFn: async () => {
+      // Try to use cached results first
+      if (useCachedResults) {
+        const cachedResults = sessionStorage.getItem('cachedFlightResults');
+        if (cachedResults) {
+          try {
+            const cached = JSON.parse(cachedResults);
+            return cached.data;
+          } catch (e) {
+            console.error('Error using cached results:', e);
+          }
+        }
+      }
+      
+      // Fetch fresh results from API
       const response = await fetch('/api/flights/search', {
         method: 'POST',
         headers: {
@@ -127,12 +163,21 @@ export default function FlightResults() {
         throw new Error('Failed to search flights');
       }
       
-      return response.json();
+      const result = await response.json();
+      
+      // Cache the results for potential back navigation
+      sessionStorage.setItem('cachedFlightResults', JSON.stringify({
+        searchParams,
+        data: result,
+      }));
+      
+      return result;
     },
   });
 
   const handleBookFlight = (flight: Flight) => {
-    // Store flight data in sessionStorage to pass to checkout
+    // Mark that we're going to checkout (so we can detect back navigation)
+    sessionStorage.setItem('returningFromCheckout', 'false');
     sessionStorage.setItem('selectedFlight', JSON.stringify(flight));
     sessionStorage.setItem('searchParams', JSON.stringify(searchParams));
     setLocation('/checkout');

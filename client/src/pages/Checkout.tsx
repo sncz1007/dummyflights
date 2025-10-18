@@ -507,6 +507,9 @@ export default function Checkout() {
           <Button
             variant="ghost"
             onClick={() => {
+              // Mark that we're returning to flight results to preserve cached data
+              sessionStorage.setItem('returningFromCheckout', 'true');
+              
               // Reconstruct the search URL with parameters from sessionStorage
               if (searchParams) {
                 const params = new URLSearchParams({
