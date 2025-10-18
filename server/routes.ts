@@ -330,6 +330,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           let returnFlightOptions: any[] = [];
           
           if ((tripType === 'round-trip' || tripType === 'roundtrip') && returnRoutes.length > 0 && returnDate) {
+            console.log(`[Return Flights] Processing return flights. returnRoutes: ${returnRoutes.length}`);
             // Generate up to 3 return flight options per outbound flight
             const selectedReturnRoutes = returnRoutes.slice(0, 3);
             
@@ -367,6 +368,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 });
               }
             }
+            console.log(`[Return Flights] Generated ${returnFlightOptions.length} return flight options`);
           }
           
           // Calculate total price
