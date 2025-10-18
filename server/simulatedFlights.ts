@@ -1086,6 +1086,14 @@ const INTERNATIONAL_REVERSE_ROUTES: SimulatedRoute[] = [
   { from: "AKL", to: "JFK", airline: "American Airlines", airlineCode: "AA", basePrice: 1350, duration: "19h 15m", typical_flights_per_day: 4, countries: { from: "New Zealand", to: "USA" } },
   { from: "AKL", to: "LAX", airline: "American Airlines", airlineCode: "AA", basePrice: 1280, duration: "13h 0m", typical_flights_per_day: 4, countries: { from: "New Zealand", to: "USA" } },
   { from: "NAN", to: "LAX", airline: "Fiji Airways", airlineCode: "FJ", basePrice: 980, duration: "11h 15m", typical_flights_per_day: 3, countries: { from: "Fiji", to: "USA" } },
+  
+  { from: "SVO", to: "JFK", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 850, duration: "10h 30m", typical_flights_per_day: 3, countries: { from: "Russia", to: "USA" } },
+  { from: "SVO", to: "BOS", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 840, duration: "10h 15m", typical_flights_per_day: 3, countries: { from: "Russia", to: "USA" } },
+  { from: "SVO", to: "PHL", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 860, duration: "10h 45m", typical_flights_per_day: 2, countries: { from: "Russia", to: "USA" } },
+  { from: "SVO", to: "MIA", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 900, duration: "12h 0m", typical_flights_per_day: 2, countries: { from: "Russia", to: "USA" } },
+  { from: "SVO", to: "LAX", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 950, duration: "13h 30m", typical_flights_per_day: 4, countries: { from: "Russia", to: "USA" } },
+  { from: "SVO", to: "SFO", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 940, duration: "13h 15m", typical_flights_per_day: 4, countries: { from: "Russia", to: "USA" } },
+  { from: "SVO", to: "SEA", airline: "Alaska Airlines", airlineCode: "AS", basePrice: 920, duration: "12h 45m", typical_flights_per_day: 5, countries: { from: "Russia", to: "USA" } },
 ];
 
 // Consolidar todas las rutas
