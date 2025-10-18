@@ -242,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // === ROUND-TRIP SUPPORT ===
       // Search for return flights if trip is round-trip
       let returnRoutes: any[] = [];
-      if (tripType === 'round-trip' && returnDate) {
+      if ((tripType === 'round-trip' || tripType === 'roundtrip') && returnDate) {
         returnRoutes = findSimulatedFlights(toIataCode, fromIataCode);
         
         // If no direct return routes, try hub connections
@@ -329,7 +329,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // For round-trip: generate return flight options and calculate combined price
           let returnFlightOptions: any[] = [];
           
-          if (tripType === 'round-trip' && returnRoutes.length > 0 && returnDate) {
+          if ((tripType === 'round-trip' || tripType === 'roundtrip') && returnRoutes.length > 0 && returnDate) {
             // Generate up to 3 return flight options per outbound flight
             const selectedReturnRoutes = returnRoutes.slice(0, 3);
             
@@ -373,7 +373,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           let originalPrice: number;
           let discountedPrice: number;
           
-          if (tripType === 'round-trip' && returnFlightOptions.length > 0) {
+          if ((tripType === 'round-trip' || tripType === 'roundtrip') && returnFlightOptions.length > 0) {
             // Use the cheapest return flight for pricing
             const cheapestReturn = returnFlightOptions.reduce((min, flight) => 
               flight.basePrice < min.basePrice ? flight : min
@@ -415,7 +415,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               entertainment: originalPrice > 500,
               power: originalPrice > 350,
             },
-            returnFlightOptions: tripType === 'round-trip' ? returnFlightOptions : null,
+            returnFlightOptions: (tripType === 'round-trip' || tripType === 'roundtrip') ? returnFlightOptions : null,
           });
         }
       }
