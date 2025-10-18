@@ -34,6 +34,7 @@ interface FlightLeg {
   };
   duration: string;
   stops: number;
+  basePrice?: number;
 }
 
 interface Flight {
@@ -347,15 +348,26 @@ export default function FlightResults() {
                   </Badge>
                   
                   <div className="text-right">
-                    <p className="text-sm text-muted-foreground line-through" data-testid={`text-original-price-${flight.id}`}>
-                      ${flight.originalPrice.toFixed(2)}
-                    </p>
-                    <p className="text-3xl font-bold text-primary" data-testid={`text-discounted-price-${flight.id}`}>
-                      ${flight.discountedPrice.toFixed(2)}
-                    </p>
-                    <p className="text-sm text-green-600 font-medium" data-testid={`text-savings-${flight.id}`}>
-                      {t('results.save')} ${(flight.originalPrice - flight.discountedPrice).toFixed(2)}
-                    </p>
+                    {(() => {
+                      const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
+                      const returnDiscounted = returnPrice * (1 - flight.discount / 100);
+                      const totalOriginal = flight.originalPrice + returnPrice;
+                      const totalDiscounted = flight.discountedPrice + returnDiscounted;
+                      
+                      return (
+                        <>
+                          <p className="text-sm text-muted-foreground line-through" data-testid={`text-original-price-${flight.id}`}>
+                            ${totalOriginal.toFixed(2)}
+                          </p>
+                          <p className="text-3xl font-bold text-primary" data-testid={`text-discounted-price-${flight.id}`}>
+                            ${totalDiscounted.toFixed(2)}
+                          </p>
+                          <p className="text-sm text-green-600 font-medium" data-testid={`text-savings-${flight.id}`}>
+                            {t('results.save')} ${(totalOriginal - totalDiscounted).toFixed(2)}
+                          </p>
+                        </>
+                      );
+                    })()}
                   </div>
 
                   <Button 
