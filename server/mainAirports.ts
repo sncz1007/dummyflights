@@ -85,6 +85,7 @@ export const MAIN_AIRPORTS = [
   "WAW", // Varsovia
   "PRG", // Praga
   "OTP", // Bucarest
+  "SVO", // Moscú
   
   // === ASIA ===
   "NRT", // Tokio (principal internacional)
