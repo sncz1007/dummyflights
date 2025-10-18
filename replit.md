@@ -19,6 +19,10 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 
 ### Feature Specifications
 - **Advanced Regional Airline Segmentation**: An intelligent coast-based system displays partner airlines authorized for specific regions and routes. This includes differentiated partners for East coast vs. West coast origins to various international destinations. The system automatically indicates "No flights available" if a route is not served by partner airlines.
+- **Flight Results Caching System**: Intelligent sessionStorage-based caching preserves exact flight results and prices when users navigate back from checkout, improving UX by showing consistent pricing. Cache is automatically cleared on fresh searches from homepage.
+  - **Cache Lifecycle**: New search → Fetch fresh → Cache results → Book flight → Checkout → Back button → Use cached results (same prices)
+  - **Cache Keys**: `cachedFlightResults` (search params + flight data), `returningFromCheckout` (navigation flag)
+  - **Cache Invalidation**: Cleared on new homepage searches; flag removed after use to prevent stale hits
 - **Booking and Payment**: Integrates Stripe for secure payments, generates discounted flight data, captures customer information, and tracks booking/payment status. A 20-minute payment window is enforced after reservation code receipt.
 - **Internationalization (i18n)**: Full support for English and Spanish, with language preference stored in localStorage. All content, including legal pages, is bilingual.
 - **Homepage Structure**: Includes a Hero Section with flight search, Trust Badges, Video Strip, Popular Destinations, "About Us" section, "Why Choose Us" benefits, Customer Testimonials, FAQ, and a comprehensive Footer.
