@@ -25,7 +25,7 @@ export default function Privacy() {
             <h1 className="text-4xl font-display font-bold text-foreground mb-4" data-testid="text-privacy-title">
               {t('privacy.title')}
             </h1>
-            <p className="text-muted-foreground mb-8" data-testid="text-privacy-intro">
+            <p className="text-muted-foreground mb-8 text-justify" data-testid="text-privacy-intro">
               {t('privacy.intro')}
             </p>
           </div>
@@ -33,42 +33,42 @@ export default function Privacy() {
           <div className="prose prose-lg max-w-none text-foreground">
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('privacy.collection.title')}</h2>
-              <p className="mb-4">
+              <p className="mb-4 text-justify">
                 {t('privacy.collection.text')}
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('privacy.use.title')}</h2>
-              <p className="mb-4">
+              <p className="mb-4 text-justify">
                 {t('privacy.use.text')}
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('privacy.sharing.title')}</h2>
-              <p className="mb-4">
+              <p className="mb-4 text-justify">
                 {t('privacy.sharing.text')}
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('privacy.security.title')}</h2>
-              <p className="mb-4">
+              <p className="mb-4 text-justify">
                 {t('privacy.security.text')}
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('privacy.cookies.title')}</h2>
-              <p className="mb-4">
+              <p className="mb-4 text-justify">
                 {t('privacy.cookies.text')}
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('privacy.contact.title')}</h2>
-              <p className="mb-4">
+              <p className="mb-4 text-justify">
                 {t('privacy.contact.text')} <a href="mailto:info@skybudgetfly.vip" className="text-primary hover:underline">info@skybudgetfly.vip</a>
               </p>
             </section>
