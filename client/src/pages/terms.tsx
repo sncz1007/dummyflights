@@ -45,6 +45,9 @@ export default function Terms() {
               <p className="mb-4">
                 {t('terms.services.p2')}
               </p>
+              <p className="mb-4">
+                {t('terms.services.p3')}
+              </p>
             </section>
 
             <section className="mb-8">
