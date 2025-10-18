@@ -5,6 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
+import { sendBookingNotificationEmail } from '@/lib/emailjs';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -456,6 +457,35 @@ export default function Checkout() {
       const data = await response.json();
       
       setClientSecret(data.clientSecret);
+      
+      // Send booking notification email immediately
+      try {
+        await sendBookingNotificationEmail({
+          fromAirport: searchParams.fromAirport,
+          toAirport: searchParams.toAirport,
+          departureDate: searchParams.departureDate,
+          returnDate: searchParams.returnDate,
+          passengers: numberOfPassengers,
+          flightClass: searchParams.flightClass,
+          tripType: searchParams.tripType,
+          flightNumber: flight.flightNumber,
+          airline: flight.airline.name,
+          customerName: customerInfo.fullName,
+          customerEmail: customerInfo.email,
+          customerPhone: customerInfo.phone || 'Not provided',
+          customerDOB: customerInfo.dateOfBirth,
+          additionalPassengers: customerInfo.additionalPassengers,
+          totalPrice: `$${totalDiscountedPrice.toFixed(2)}`,
+          originalPrice: `$${totalOriginalPrice.toFixed(2)}`,
+          discount: `${flight.discount}%`,
+          language: localStorage.getItem('preferredLanguage') || 'en',
+        });
+        
+        console.log('Booking notification email sent successfully');
+      } catch (emailError) {
+        console.error('Failed to send booking notification email:', emailError);
+        // Don't block the checkout process if email fails
+      }
       
       toast({
         title: 'Booking Created',
