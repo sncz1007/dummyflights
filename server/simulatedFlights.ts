@@ -841,9 +841,12 @@ const ASIA_ROUTES: SimulatedRoute[] = [
   { from: "LAX", to: "NRT", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 820, duration: "11h 30m", typical_flights_per_day: 6, countries: { from: "USA", to: "Japan" } },
   { from: "LAX", to: "HND", airline: "American Airlines", airlineCode: "AA", basePrice: 870, duration: "11h 25m", typical_flights_per_day: 6, countries: { from: "USA", to: "Japan" } },
   { from: "LAX", to: "KIX", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 890, duration: "12h 0m", typical_flights_per_day: 5, countries: { from: "USA", to: "Japan" } },
+  { from: "JFK", to: "NRT", airline: "American Airlines", airlineCode: "AA", basePrice: 950, duration: "14h 0m", typical_flights_per_day: 5, countries: { from: "USA", to: "Japan" } },
+  { from: "JFK", to: "HND", airline: "American Airlines", airlineCode: "AA", basePrice: 980, duration: "13h 55m", typical_flights_per_day: 5, countries: { from: "USA", to: "Japan" } },
   
   // Corea del Sur
   { from: "LAX", to: "ICN", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 850, duration: "12h 15m", typical_flights_per_day: 6, countries: { from: "USA", to: "South Korea" } },
+  { from: "JFK", to: "ICN", airline: "American Airlines", airlineCode: "AA", basePrice: 970, duration: "14h 30m", typical_flights_per_day: 5, countries: { from: "USA", to: "South Korea" } },
   
   // China
   { from: "JFK", to: "PKX", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1100, duration: "19h 30m", typical_flights_per_day: 1, countries: { from: "USA", to: "China" } },
@@ -1037,9 +1040,12 @@ const INTERNATIONAL_REVERSE_ROUTES: SimulatedRoute[] = [
   { from: "ABV", to: "JFK", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1050, duration: "19h 15m", typical_flights_per_day: 3, countries: { from: "Nigeria", to: "USA" } },
   { from: "ABV", to: "LAX", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1150, duration: "23h 0m", typical_flights_per_day: 3, countries: { from: "Nigeria", to: "USA" } },
   { from: "NRT", to: "LAX", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 820, duration: "11h 30m", typical_flights_per_day: 6, countries: { from: "Japan", to: "USA" } },
+  { from: "NRT", to: "JFK", airline: "American Airlines", airlineCode: "AA", basePrice: 950, duration: "14h 0m", typical_flights_per_day: 5, countries: { from: "Japan", to: "USA" } },
   { from: "HND", to: "LAX", airline: "American Airlines", airlineCode: "AA", basePrice: 870, duration: "11h 25m", typical_flights_per_day: 6, countries: { from: "Japan", to: "USA" } },
+  { from: "HND", to: "JFK", airline: "American Airlines", airlineCode: "AA", basePrice: 980, duration: "13h 55m", typical_flights_per_day: 5, countries: { from: "Japan", to: "USA" } },
   { from: "KIX", to: "LAX", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 890, duration: "12h 0m", typical_flights_per_day: 5, countries: { from: "Japan", to: "USA" } },
   { from: "ICN", to: "LAX", airline: "Hawaiian Airlines", airlineCode: "HA", basePrice: 850, duration: "12h 15m", typical_flights_per_day: 6, countries: { from: "South Korea", to: "USA" } },
+  { from: "ICN", to: "JFK", airline: "American Airlines", airlineCode: "AA", basePrice: 970, duration: "14h 30m", typical_flights_per_day: 5, countries: { from: "South Korea", to: "USA" } },
   { from: "PKX", to: "JFK", airline: "Qatar Airways", airlineCode: "QR", basePrice: 1100, duration: "19h 30m", typical_flights_per_day: 1, countries: { from: "China", to: "USA" } },
   { from: "PVG", to: "JFK", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 880, duration: "13h 0m", typical_flights_per_day: 5, countries: { from: "China", to: "USA" } },
   { from: "PVG", to: "LAX", airline: "Cathay Pacific", airlineCode: "CX", basePrice: 880, duration: "13h 0m", typical_flights_per_day: 5, countries: { from: "China", to: "USA" } },

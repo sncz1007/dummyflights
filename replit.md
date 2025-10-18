@@ -44,6 +44,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 ### API Integrations
 - **Flight Simulator**: Provides comprehensive flight simulation for 150+ realistic routes (Domestic USA, North America, Central America, South America, Europe, Russia, Asia, Middle East, Oceania, Africa), based on 2025 airline operations and market pricing, applying a 40% discount. It includes manual coast-based segmentation and accurate hub operations.
   - **Russia (Moscow)**: Alaska Airlines operates bidirectional flights to/from Moscow Sheremetyevo (SVO) from both East Coast (JFK, BOS, PHL, MIA) and West Coast (LAX, SFO, SEA) origins. Round-trip functionality is fully implemented with return routes in INTERNATIONAL_REVERSE_ROUTES.
+  - **Asia (Japan & South Korea)**: American Airlines and Hawaiian Airlines operate flights to Tokyo (NRT, HND) and Seoul (ICN) from both East Coast (JFK) and West Coast (LAX) origins. Full round-trip support implemented.
 - **Airport Data API**: Accessible via `/api/airports/search` for 204 international airports loaded from CSV.
 
 ### External Libraries
