@@ -60,7 +60,10 @@ export default function Terms() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('terms.cancellation.title')}</h2>
               <p className="mb-4">
-                {t('terms.cancellation.text')}
+                {t('terms.cancellation.p1')}
+              </p>
+              <p className="mb-4">
+                {t('terms.cancellation.p2')}
               </p>
             </section>
 
