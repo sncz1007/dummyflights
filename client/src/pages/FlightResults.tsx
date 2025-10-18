@@ -108,8 +108,9 @@ export default function FlightResults() {
     noFlightsAvailable?: boolean;
     message?: string;
   }>({
-    queryKey: ['/api/flights/search', searchParams, Date.now()],
+    queryKey: ['/api/flights/search', searchParams],
     enabled: !!searchParams,
+    refetchOnMount: 'always',
     staleTime: 0,
     gcTime: 0,
     queryFn: async () => {
