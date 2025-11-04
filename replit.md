@@ -1,7 +1,7 @@
 # SkyBudgetFly - Flight Quote Platform
 
 ## Overview
-SkyBudgetFly is a web application that facilitates discounted global flight bookings, offering up to a 40% discount through exclusive airline partnerships. The platform provides a bilingual (English/Spanish) interface for flight search, secure payments via Stripe, and booking management. The business model involves manual ticket purchase and email delivery to customers after payment.
+SkyBudgetFly is a web application that facilitates global flight bookings through exclusive airline partnerships. The platform provides a bilingual (English/Spanish) interface for flight search, secure payments, and booking management. The business model involves manual ticket purchase and email delivery to customers after payment.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -14,7 +14,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 ### Technical Implementations
 - **Frontend**: React 18, TypeScript, Wouter for routing, TanStack React Query for server state, React Context for i18n, React Hook Form with Zod for form management, and Vite as the build tool.
 - **Backend**: Node.js with Express.js and TypeScript (ESM modules) providing RESTful APIs for airports and quotes.
-- **Flight Data**: A realistic flight simulator based on actual American Airlines 2025 routes and pricing, featuring intelligent regional airline filtering. It provides simulated flight availability, schedules, and prices with an automatic 40% discount.
+- **Flight Data**: A realistic flight simulator based on actual American Airlines 2025 routes and pricing, featuring intelligent regional airline filtering. It provides simulated flight availability, schedules, and realistic market prices.
 - **Database**: PostgreSQL (Neon serverless) managed by Drizzle ORM, with tables for users, airports, quotes, and bookings.
 
 ### Feature Specifications
@@ -45,7 +45,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 - **Amadeus Flight API**: Primary flight search system using Amadeus Test API for real flight data with realistic pricing and availability. Supports one-way and round-trip searches across all airline partners and destinations.
   - **Environment**: Currently using Test environment (test.api.amadeus.com) for development and testing
   - **Fallback**: If Amadeus API fails or credentials are not configured, system automatically falls back to simulated flight data
-- **Flight Simulator (Fallback)**: Provides comprehensive flight simulation for 150+ realistic routes when Amadeus is unavailable, based on 2025 airline operations and market pricing, applying a 40% discount.
+- **Flight Simulator (Fallback)**: Provides comprehensive flight simulation for 150+ realistic routes when Amadeus is unavailable, based on 2025 airline operations and realistic market pricing.
   - **Russia (Moscow)**: Alaska Airlines operates bidirectional flights to/from Moscow Sheremetyevo (SVO) from both East Coast (JFK, BOS, PHL, MIA) and West Coast (LAX, SFO, SEA) origins.
   - **Asia (Japan & South Korea)**: American Airlines and Hawaiian Airlines operate flights to Tokyo (NRT, HND) and Seoul (ICN) from both East Coast (JFK) and West Coast (LAX) origins.
 - **Airport Data API**: Accessible via `/api/airports/search` for 199 international airports loaded from CSV.
