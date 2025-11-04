@@ -297,6 +297,88 @@ const CustomerInfoForm = ({
                 : 'Pay with Card'}</>
             )}
           </Button>
+
+          {/* TEST BUTTON - Remove in production */}
+          <div className="mt-4 pt-4 border-t">
+            <p className="text-xs text-center text-yellow-600 dark:text-yellow-500 mb-2 font-semibold">
+              ⚠️ {localStorage.getItem('preferredLanguage') === 'es' 
+                ? 'BOTÓN DE PRUEBA - Solo para desarrollo' 
+                : 'TEST BUTTON - Development only'}
+            </p>
+            <Button
+              onClick={async () => {
+                if (!formValid) {
+                  toast({
+                    title: localStorage.getItem('preferredLanguage') === 'es' ? 'Error' : 'Error',
+                    description: localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Por favor completa todos los campos requeridos' 
+                      : 'Please fill in all required fields',
+                    variant: 'destructive',
+                  });
+                  return;
+                }
+                
+                setIsProcessing(true);
+                try {
+                  // Get flight and search data from sessionStorage
+                  const flightDataStr = sessionStorage.getItem('selectedFlight');
+                  const searchParamsStr = sessionStorage.getItem('searchParams');
+                  
+                  if (!flightDataStr || !searchParamsStr) {
+                    throw new Error('Missing flight data');
+                  }
+                  
+                  const flightData = JSON.parse(flightDataStr);
+                  const searchParams = JSON.parse(searchParamsStr);
+                  
+                  // Create booking
+                  const bookingData = {
+                    customerName: customerInfo.fullName,
+                    customerEmail: customerInfo.email,
+                    customerPhone: customerInfo.phone || '',
+                    customerDOB: customerInfo.dateOfBirth,
+                    additionalPassengers: customerInfo.additionalPassengers,
+                    fromAirport: searchParams.fromAirport,
+                    toAirport: searchParams.toAirport,
+                    departureDate: searchParams.departureDate,
+                    returnDate: searchParams.returnDate || null,
+                    passengers: parseInt(searchParams.passengers),
+                    flightClass: searchParams.flightClass,
+                    tripType: searchParams.tripType,
+                    flightData: flightData,
+                    serviceFee: serviceFee,
+                    paymentIntentId: 'test_' + Date.now(),
+                    paymentStatus: 'succeeded'
+                  };
+                  
+                  const response: any = await apiRequest('POST', '/api/create-booking', bookingData);
+                  
+                  // Save booking ID and redirect to success
+                  sessionStorage.setItem('bookingId', response.id.toString());
+                  window.location.href = '/checkout?payment_success=true&test=true';
+                } catch (error: any) {
+                  toast({
+                    title: localStorage.getItem('preferredLanguage') === 'es' ? 'Error' : 'Error',
+                    description: error.message || 'Failed to create test booking',
+                    variant: 'destructive',
+                  });
+                  setIsProcessing(false);
+                }
+              }}
+              disabled={!formValid || isProcessing}
+              className="w-full h-12 text-lg bg-yellow-600 hover:bg-yellow-700 text-white"
+              data-testid="button-test-payment"
+            >
+              {isProcessing ? (
+                <><Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                {localStorage.getItem('preferredLanguage') === 'es' ? 'Procesando...' : 'Processing...'}</>
+              ) : (
+                <>🧪 {localStorage.getItem('preferredLanguage') === 'es' 
+                  ? 'Simular Pago Exitoso (Ver PDFs)' 
+                  : 'Simulate Successful Payment (View PDFs)'}</>
+              )}
+            </Button>
+          </div>
         </div>
 
         <div className="mt-4 text-center text-sm text-muted-foreground">
