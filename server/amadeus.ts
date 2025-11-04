@@ -2,10 +2,11 @@
 import Amadeus from 'amadeus';
 
 // Initialize Amadeus client
+// Use 'test' for test credentials, 'production' for production credentials
 const amadeus = new Amadeus({
   clientId: process.env.AMADEUS_API_KEY || '',
   clientSecret: process.env.AMADEUS_API_SECRET || '',
-  hostname: 'production',
+  hostname: 'test', // Using test environment (free, simulated data but real API structure)
 });
 
 export interface AmadeusFlightOffer {

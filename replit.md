@@ -37,15 +37,18 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 ## External Dependencies
 
 ### Third-Party Services
-- **Stripe**: For secure payment processing, including payment intent creation and webhooks.
+- **Stripe**: OPTIONAL - Configured for secure payment processing, including payment intent creation and webhooks. App functions without Stripe (payment gateway can be changed).
 - **EmailJS**: Client-side email service for sending quote requests and automated booking notifications. Two templates configured: one for flight quote requests and one for booking notifications sent immediately when customers proceed to payment.
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
-- **Flight Simulator**: Provides comprehensive flight simulation for 150+ realistic routes (Domestic USA, North America, Central America, South America, Europe, Russia, Asia, Middle East, Oceania, Africa), based on 2025 airline operations and market pricing, applying a 40% discount. It includes manual coast-based segmentation and accurate hub operations.
-  - **Russia (Moscow)**: Alaska Airlines operates bidirectional flights to/from Moscow Sheremetyevo (SVO) from both East Coast (JFK, BOS, PHL, MIA) and West Coast (LAX, SFO, SEA) origins. Round-trip functionality is fully implemented with return routes in INTERNATIONAL_REVERSE_ROUTES.
-  - **Asia (Japan & South Korea)**: American Airlines and Hawaiian Airlines operate flights to Tokyo (NRT, HND) and Seoul (ICN) from both East Coast (JFK) and West Coast (LAX) origins. Full round-trip support implemented.
-- **Airport Data API**: Accessible via `/api/airports/search` for 204 international airports loaded from CSV.
+- **Amadeus Flight API**: Primary flight search system using Amadeus Test API for real flight data with realistic pricing and availability. Supports one-way and round-trip searches across all airline partners and destinations.
+  - **Environment**: Currently using Test environment (test.api.amadeus.com) for development and testing
+  - **Fallback**: If Amadeus API fails or credentials are not configured, system automatically falls back to simulated flight data
+- **Flight Simulator (Fallback)**: Provides comprehensive flight simulation for 150+ realistic routes when Amadeus is unavailable, based on 2025 airline operations and market pricing, applying a 40% discount.
+  - **Russia (Moscow)**: Alaska Airlines operates bidirectional flights to/from Moscow Sheremetyevo (SVO) from both East Coast (JFK, BOS, PHL, MIA) and West Coast (LAX, SFO, SEA) origins.
+  - **Asia (Japan & South Korea)**: American Airlines and Hawaiian Airlines operate flights to Tokyo (NRT, HND) and Seoul (ICN) from both East Coast (JFK) and West Coast (LAX) origins.
+- **Airport Data API**: Accessible via `/api/airports/search` for 199 international airports loaded from CSV.
 
 ### External Libraries
 - **Radix UI**: For accessible UI components.
@@ -58,4 +61,5 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 ### Environment Variables
 - `DATABASE_URL`
 - `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_BOOKING_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
-- `VITE_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY`
+- `VITE_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY` (OPTIONAL - Payment gateway can be changed)
+- `AMADEUS_API_KEY`, `AMADEUS_API_SECRET` (For real flight data integration)

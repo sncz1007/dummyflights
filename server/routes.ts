@@ -153,25 +153,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Check if Amadeus API is configured
       const hasAmadeusKeys = process.env.AMADEUS_API_KEY && process.env.AMADEUS_API_SECRET;
+      let useAmadeus = false;
       
       if (hasAmadeusKeys) {
-        // Use Amadeus API for real flight data
-        console.log(`[Amadeus] Searching flights: ${fromIataCode} -> ${toIataCode}`);
-        
-        const { searchFlights, getAirlineNameFromCode } = await import('./amadeus.js');
-        
-        // Map flight class to Amadeus format
-        const travelClassMap: Record<string, 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST'> = {
-          'economy': 'ECONOMY',
-          'premium_economy': 'PREMIUM_ECONOMY',
-          'business': 'BUSINESS',
-          'first': 'FIRST',
-        };
-        
-        const amadeusClass = travelClassMap[flightClass] || 'ECONOMY';
-        
-        // Search outbound flights
-        const outboundResults = await searchFlights({
+        try {
+          // Use Amadeus API for real flight data
+          console.log(`[Amadeus] Searching flights: ${fromIataCode} -> ${toIataCode}`);
+          
+          const { searchFlights, getAirlineNameFromCode } = await import('./amadeus.js');
+          
+          // Map flight class to Amadeus format
+          const travelClassMap: Record<string, 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST'> = {
+            'economy': 'ECONOMY',
+            'premium_economy': 'PREMIUM_ECONOMY',
+            'business': 'BUSINESS',
+            'first': 'FIRST',
+          };
+          
+          const amadeusClass = travelClassMap[flightClass] || 'ECONOMY';
+          
+          // Search outbound flights
+          const outboundResults = await searchFlights({
           originLocationCode: fromIataCode,
           destinationLocationCode: toIataCode,
           departureDate: departureDate,
@@ -183,6 +185,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
 
         console.log(`[Amadeus] Found ${outboundResults.data.length} outbound flights`);
+
+        // If Amadeus returns 0 results, fall back to simulated flights
+        if (outboundResults.data.length === 0) {
+          console.log('[Amadeus] No flights found, falling back to simulated flights');
+          throw new Error('No flights available from Amadeus');
+        }
 
         // Search return flights if round-trip
         let returnResults: any = null;
@@ -329,23 +337,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
 
-        return res.json({
-          flights: flights,
-          searchParams: {
-            fromAirport,
-            toAirport,
-            departureDate,
-            returnDate,
-            passengers,
-            flightClass,
-            tripType,
-          },
-        });
+          useAmadeus = true;
+          return res.json({
+            flights: flights,
+            searchParams: {
+              fromAirport,
+              toAirport,
+              departureDate,
+              returnDate,
+              passengers,
+              flightClass,
+              tripType,
+            },
+          });
+        } catch (error: any) {
+          console.error('[Amadeus] API error, falling back to simulated flights:', {
+            message: error.message,
+            code: error.code,
+            description: error.description
+          });
+          // Continue to fallback (simulated flights)
+        }
       }
 
-      // FALLBACK: Use simulated flights if Amadeus is not configured
-      console.log(`[Flight Search] Using simulated flights (Amadeus not configured)`);
-      const { findSimulatedFlights, generateFlightTimes, applyPriceVariation } = await import('./simulatedFlights.js');
+      // FALLBACK: Use simulated flights if Amadeus is not configured or failed
+      if (!useAmadeus) {
+        console.log(`[Flight Search] Using simulated flights${hasAmadeusKeys ? ' (Amadeus failed)' : ' (Amadeus not configured)'}`);
+        const { findSimulatedFlights, generateFlightTimes, applyPriceVariation } = await import('./simulatedFlights.js');
       const { getOriginCityInfo } = await import('./internationalOriginCities.js');
       const { calculateFlightStops } = await import('./flightStopsCalculator.js');
       
@@ -603,18 +621,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       flights.sort((a: any, b: any) => a.discountedPrice - b.discountedPrice);
       const limitedFlights = flights.slice(0, 10);
 
-      res.json({
-        flights: limitedFlights,
-        searchParams: {
-          fromAirport,
-          toAirport,
-          departureDate,
-          returnDate,
-          passengers,
-          flightClass,
-          tripType,
-        },
-      });
+        res.json({
+          flights: limitedFlights,
+          searchParams: {
+            fromAirport,
+            toAirport,
+            departureDate,
+            returnDate,
+            passengers,
+            flightClass,
+            tripType,
+          },
+        });
+      }
     } catch (error: any) {
       console.error("Flight search error:", error);
       
