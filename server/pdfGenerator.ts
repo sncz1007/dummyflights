@@ -354,19 +354,8 @@ export async function generateReceiptPDF(booking: Booking, paymentMethod: string
   doc.fontSize(10).font('Helvetica')
      .text(`Paid with ${paymentMethod} ************${Math.floor(Math.random() * 9000 + 1000)}`, 50, detailsY + 60);
   
-  // Important note about service fee
-  doc.fontSize(10).font('Helvetica-Bold')
-     .fillColor('#CC0000')
-     .text('IMPORTANT:', 50, detailsY + 95);
-  
-  doc.fontSize(9).font('Helvetica')
-     .fillColor('#000000')
-     .text(`This receipt is for the SkyBudgetFly search and booking service fee of $${parseFloat(booking.discountedPrice).toFixed(2)} USD.`, 50, detailsY + 110)
-     .text('Your actual flight ticket will be purchased separately and emailed to you within 24-48 hours.', 50, detailsY + 125)
-     .text(`Flight ticket price (not included above): $${parseFloat(booking.originalPrice).toFixed(2)} USD`, 50, detailsY + 140);
-  
   // Key of terms section
-  const termsY = detailsY + 180;
+  const termsY = detailsY + 100;
   doc.fontSize(12).font('Helvetica-Bold')
      .text('KEY OF TERMS', 50, termsY);
   
