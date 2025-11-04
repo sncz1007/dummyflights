@@ -327,10 +327,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             discountedPrice: Math.round(discountedPrice),
             discount: 0,
             amenities: {
-              wifi: basePrice > 400,
-              meals: basePrice > 300,
-              entertainment: basePrice > 500,
-              power: basePrice > 350,
+              wifi: false,
+              meals: true,
+              entertainment: false,
+              power: false,
             },
             returnFlightOptions: returnFlightOptions,
           });
