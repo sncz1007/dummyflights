@@ -5,6 +5,7 @@ import { insertQuoteSchema, insertBookingSchema } from "@shared/schema";
 import { getAllowedAirlinesForRoute } from "@shared/airlineSegmentation";
 import { z } from "zod";
 import Stripe from "stripe";
+import { createPaypalOrder, capturePaypalOrder, loadPaypalDefault } from "./paypal";
 
 // Initialize Stripe (from blueprint:javascript_stripe) - OPTIONAL for migration
 let stripe: Stripe | null = null;
@@ -734,6 +735,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Get booking error:", error);
       res.status(500).json({ error: "Failed to get booking" });
     }
+  });
+
+  // PayPal integration routes (from blueprint:javascript_paypal)
+  app.get("/paypal/setup", async (req, res) => {
+    await loadPaypalDefault(req, res);
+  });
+
+  app.post("/paypal/order", async (req, res) => {
+    // Request body should contain: { intent, amount, currency }
+    await createPaypalOrder(req, res);
+  });
+
+  app.post("/paypal/order/:orderID/capture", async (req, res) => {
+    await capturePaypalOrder(req, res);
   });
 
   const httpServer = createServer(app);

@@ -11,7 +11,9 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Plane, Shield, ArrowLeft } from 'lucide-react';
+import { Loader2, Plane, Shield, ArrowLeft, CreditCard } from 'lucide-react';
+import PayPalButton from '@/components/PayPalButton';
+import { SiPaypal } from 'react-icons/si';
 
 // Load Stripe (from blueprint:javascript_stripe) - OPTIONAL during migration
 let stripePromise: Promise<any> | null = null;
@@ -356,6 +358,7 @@ export default function Checkout() {
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
   const [clientSecret, setClientSecret] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal' | null>(null);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     fullName: '',
     email: '',
@@ -424,12 +427,8 @@ export default function Checkout() {
     }
 
     try {
-      // Calculate total price including return flight and all passengers
-      const numberOfPassengers = Number(searchParams.passengers);
-      const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
-      
-      const pricePerPassenger = flight.discountedPrice + returnPrice;
-      const totalPrice = pricePerPassenger * numberOfPassengers;
+      // Fixed price: Always $15 USD
+      const totalPrice = 15;
       
       const bookingData = {
         fullName: customerInfo.fullName,
@@ -515,15 +514,8 @@ export default function Checkout() {
     );
   }
 
-  // Calculate total price including return flight and all passengers
-  const numberOfPassengers = Number(searchParams.passengers);
-  const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
-  
-  // Price per passenger (outbound + return if applicable)
-  const pricePerPassenger = flight.discountedPrice + returnPrice;
-  
-  // Total price for all passengers
-  const totalPrice = pricePerPassenger * numberOfPassengers;
+  // Fixed price: Always $15 USD regardless of passengers or route
+  const totalPrice = 15;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -622,33 +614,117 @@ export default function Checkout() {
 
           {/* Checkout Form - Right Column */}
           <div className="lg:col-span-2">
-            {!clientSecret ? (
+            {!clientSecret && !paymentMethod ? (
               <CustomerInfoForm 
                 onSubmit={handleCreateBooking}
                 customerInfo={customerInfo}
                 setCustomerInfo={setCustomerInfo}
                 totalPassengers={Number(searchParams.passengers)}
               />
-            ) : stripePromise ? (
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
-                <PaymentForm customerInfo={customerInfo} />
-              </Elements>
+            ) : !paymentMethod ? (
+              <Card className="p-6">
+                <h2 className="text-2xl font-semibold mb-6" data-testid="text-payment-method-title">
+                  {localStorage.getItem('preferredLanguage') === 'es' 
+                    ? 'Selecciona método de pago' 
+                    : 'Select Payment Method'}
+                </h2>
+                
+                <div className="space-y-4">
+                  <div className="text-center mb-6">
+                    <p className="text-3xl font-bold text-primary">$15.00 USD</p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {localStorage.getItem('preferredLanguage') === 'es' 
+                        ? 'Precio total de tu vuelo' 
+                        : 'Total flight price'}
+                    </p>
+                  </div>
+
+                  <Button
+                    onClick={() => setPaymentMethod('paypal')}
+                    className="w-full h-12 text-lg bg-[#0070ba] hover:bg-[#005ea6]"
+                    data-testid="button-select-paypal"
+                  >
+                    <SiPaypal className="mr-2 h-5 w-5" />
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Pagar con PayPal' 
+                      : 'Pay with PayPal'}
+                  </Button>
+
+                  <Button
+                    onClick={() => setPaymentMethod('stripe')}
+                    className="w-full h-12 text-lg"
+                    variant="outline"
+                    data-testid="button-select-stripe"
+                  >
+                    <CreditCard className="mr-2 h-5 w-5" />
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Pagar con Tarjeta' 
+                      : 'Pay with Card'}
+                  </Button>
+                </div>
+              </Card>
+            ) : paymentMethod === 'paypal' ? (
+              <Card className="p-6">
+                <h2 className="text-2xl font-semibold mb-6">PayPal Payment</h2>
+                <div className="mb-4">
+                  <p className="text-center text-lg mb-4">
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Total a pagar: ' 
+                      : 'Total to pay: '}
+                    <span className="font-bold text-primary">$15.00 USD</span>
+                  </p>
+                </div>
+                <PayPalButton amount="15.00" currency="USD" intent="CAPTURE" />
+                <Button
+                  onClick={() => setPaymentMethod(null)}
+                  variant="ghost"
+                  className="w-full mt-4"
+                  data-testid="button-back-payment"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  {localStorage.getItem('preferredLanguage') === 'es' 
+                    ? 'Cambiar método de pago' 
+                    : 'Change payment method'}
+                </Button>
+              </Card>
+            ) : paymentMethod === 'stripe' && stripePromise && clientSecret ? (
+              <Card className="p-6">
+                <h2 className="text-2xl font-semibold mb-6">
+                  {localStorage.getItem('preferredLanguage') === 'es' 
+                    ? 'Pago con Tarjeta' 
+                    : 'Card Payment'}
+                </h2>
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                  <PaymentForm customerInfo={customerInfo} />
+                </Elements>
+                <Button
+                  onClick={() => setPaymentMethod(null)}
+                  variant="ghost"
+                  className="w-full mt-4"
+                  data-testid="button-back-payment-stripe"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  {localStorage.getItem('preferredLanguage') === 'es' 
+                    ? 'Cambiar método de pago' 
+                    : 'Change payment method'}
+                </Button>
+              </Card>
             ) : (
               <Card className="p-6">
                 <div className="text-center space-y-4">
                   <Shield className="h-12 w-12 mx-auto text-yellow-500" />
                   <h3 className="text-lg font-semibold">
                     {localStorage.getItem('preferredLanguage') === 'es' 
-                      ? 'Pasarela de pago en configuración'
-                      : 'Payment Gateway Configuration Pending'}
+                      ? 'Configuración de pago pendiente' 
+                      : 'Payment Configuration Pending'}
                   </h3>
                   <p className="text-muted-foreground">
                     {localStorage.getItem('preferredLanguage') === 'es' 
-                      ? 'Tu reserva ha sido creada exitosamente. El sistema de pagos está siendo configurado. Recibirás las instrucciones de pago por correo electrónico.'
-                      : 'Your booking has been created successfully. The payment system is being configured. You will receive payment instructions via email.'}
+                      ? 'El sistema de pagos está siendo configurado. Por favor, contacta al soporte.' 
+                      : 'Payment system is being configured. Please contact support.'}
                   </p>
-                  <Button onClick={() => setLocation('/')} data-testid="button-return-home">
-                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Volver al inicio' : 'Return to Home'}
+                  <Button onClick={() => setPaymentMethod(null)} data-testid="button-retry-payment">
+                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Intentar de nuevo' : 'Try Again'}
                   </Button>
                 </div>
               </Card>
