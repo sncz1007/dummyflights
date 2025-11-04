@@ -245,7 +245,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Get price
           const basePrice = parseFloat(offer.price.total);
           const originalPrice = basePrice;
-          const discountedPrice = basePrice * 0.6; // Apply 40% discount
+          const discountedPrice = basePrice; // No discount applied
           
           // Prepare return flight options if round-trip
           let returnFlightOptions: any[] | null = null;
@@ -276,7 +276,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               });
               
               const returnStops = returnItinerary.segments.length - 1;
-              const returnBasePrice = parseFloat(returnOffer.price.total) * 0.6;
+              const returnBasePrice = parseFloat(returnOffer.price.total); // No discount applied
               
               return {
                 id: `${returnAirlineCode}-${returnFirstSegment.number}-${returnDate}`,
@@ -326,7 +326,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             class: flightClass,
             originalPrice: Math.round(originalPrice),
             discountedPrice: Math.round(discountedPrice),
-            discount: 40,
+            discount: 0,
             amenities: {
               wifi: basePrice > 400,
               meals: basePrice > 300,
@@ -576,14 +576,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
               flight.basePrice < min.basePrice ? flight : min
             );
             
-            // CRITICAL: Sum outbound + return BEFORE applying 40% discount
-            const totalBeforeDiscount = outboundBasePrice + cheapestReturn.basePrice;
-            originalPrice = totalBeforeDiscount;
-            discountedPrice = totalBeforeDiscount * 0.6; // 40% discount on TOTAL
+            // Sum outbound + return for total price
+            const totalPrice = outboundBasePrice + cheapestReturn.basePrice;
+            originalPrice = totalPrice;
+            discountedPrice = totalPrice; // No discount applied
           } else {
             // One-way pricing
             originalPrice = outboundBasePrice;
-            discountedPrice = outboundBasePrice * 0.6;
+            discountedPrice = outboundBasePrice; // No discount applied
           }
           
           flights.push({
@@ -605,7 +605,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             class: flightClass,
             originalPrice: Math.round(originalPrice),
             discountedPrice: Math.round(discountedPrice),
-            discount: 40,
+            discount: 0,
             amenities: {
               wifi: originalPrice > 400,
               meals: originalPrice > 300,
