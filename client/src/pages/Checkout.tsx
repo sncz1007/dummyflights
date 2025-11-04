@@ -331,13 +331,13 @@ const CustomerInfoForm = ({
                   const flightData = JSON.parse(flightDataStr);
                   const searchParams = JSON.parse(searchParamsStr);
                   
-                  // Create booking
+                  // Create booking with correct field names
                   const bookingData = {
-                    customerName: customerInfo.fullName,
-                    customerEmail: customerInfo.email,
-                    customerPhone: customerInfo.phone || '',
-                    customerDOB: customerInfo.dateOfBirth,
-                    additionalPassengers: customerInfo.additionalPassengers,
+                    fullName: customerInfo.fullName,
+                    email: customerInfo.email,
+                    phone: customerInfo.phone || '',
+                    dateOfBirth: customerInfo.dateOfBirth,
+                    additionalPassengers: JSON.stringify(customerInfo.additionalPassengers),
                     fromAirport: searchParams.fromAirport,
                     toAirport: searchParams.toAirport,
                     departureDate: searchParams.departureDate,
@@ -345,10 +345,14 @@ const CustomerInfoForm = ({
                     passengers: parseInt(searchParams.passengers),
                     flightClass: searchParams.flightClass,
                     tripType: searchParams.tripType,
-                    flightData: flightData,
-                    serviceFee: serviceFee,
-                    paymentIntentId: 'test_' + Date.now(),
-                    paymentStatus: 'succeeded'
+                    selectedFlightData: JSON.stringify(flightData),
+                    originalPrice: flightData.originalPrice.toString(),
+                    discountedPrice: flightData.discountedPrice.toString(),
+                    currency: 'USD',
+                    stripePaymentIntentId: 'test_' + Date.now(),
+                    paymentStatus: 'completed',
+                    bookingStatus: 'confirmed',
+                    language: localStorage.getItem('preferredLanguage') || 'en'
                   };
                   
                   const response: any = await apiRequest('POST', '/api/create-booking', bookingData);
