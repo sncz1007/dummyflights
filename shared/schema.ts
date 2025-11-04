@@ -88,6 +88,10 @@ export const bookings = pgTable("bookings", {
   stripePaymentIntentId: text("stripe_payment_intent_id"),
   paymentStatus: varchar("payment_status", { length: 20 }).notNull().default("pending"), // pending, completed, failed
   
+  // Amadeus Booking Info
+  pnrCode: varchar("pnr_code", { length: 10 }), // Real PNR from Amadeus (e.g., "RXGMKL")
+  amadeusOrderId: text("amadeus_order_id"), // Amadeus flight order ID
+  
   // Status
   bookingStatus: varchar("booking_status", { length: 20 }).notNull().default("pending"), // pending, confirmed, ticketed, cancelled
   ticketSent: boolean("ticket_sent").notNull().default(false),

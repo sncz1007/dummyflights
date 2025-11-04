@@ -2,11 +2,11 @@
 import Amadeus from 'amadeus';
 
 // Initialize Amadeus client
-// Use 'production' for production credentials (real flight data)
+// Use 'test' for test environment (free PNR generation without consolidator)
 const amadeus = new Amadeus({
   clientId: process.env.AMADEUS_API_KEY || '',
   clientSecret: process.env.AMADEUS_API_SECRET || '',
-  hostname: 'production', // Using production environment for real flight data
+  hostname: 'test', // Using test environment for free PNR generation
 });
 
 export interface AmadeusFlightOffer {
@@ -328,6 +328,162 @@ export async function searchAirports(keyword: string, limit: number = 50): Promi
     }
     
     throw new Error(`Failed to search airports: ${error.message || 'Unknown error'}`);
+  }
+}
+
+// Traveler interface for flight booking
+export interface AmadeusTraveler {
+  id: string;
+  dateOfBirth: string; // Format: YYYY-MM-DD
+  name: {
+    firstName: string;
+    lastName: string;
+  };
+  gender?: 'MALE' | 'FEMALE';
+  contact?: {
+    emailAddress?: string;
+    phones?: Array<{
+      deviceType: 'MOBILE' | 'LANDLINE';
+      countryCallingCode: string;
+      number: string;
+    }>;
+  };
+  documents?: Array<{
+    documentType: 'PASSPORT' | 'IDENTITY_CARD';
+    birthPlace?: string;
+    issuanceLocation?: string;
+    issuanceDate?: string;
+    number?: string;
+    expiryDate?: string;
+    issuanceCountry?: string;
+    validityCountry?: string;
+    nationality?: string;
+    holder?: boolean;
+  }>;
+}
+
+// Flight Order response interface
+export interface AmadeusFlightOrder {
+  type: string;
+  id: string;
+  queuingOfficeId?: string;
+  associatedRecords: Array<{
+    reference: string; // PNR code
+    creationDate: string;
+    originSystemCode: string;
+    flightOfferId?: string;
+  }>;
+  flightOffers: AmadeusFlightOffer[];
+  travelers: AmadeusTraveler[];
+  remarks?: {
+    general?: Array<{
+      subType: string;
+      text: string;
+    }>;
+  };
+  ticketingAgreement?: {
+    option: string;
+    delay?: string;
+  };
+  contacts?: Array<{
+    addresseeName: {
+      firstName: string;
+      lastName: string;
+    };
+    companyName?: string;
+    purpose: string;
+    phones: Array<{
+      deviceType: string;
+      countryCallingCode: string;
+      number: string;
+    }>;
+    emailAddress?: string;
+    address?: {
+      lines: string[];
+      postalCode?: string;
+      cityName?: string;
+      countryCode?: string;
+    };
+  }>;
+}
+
+// Price flight offer to confirm availability and price before booking
+export async function priceFlightOffer(flightOffer: AmadeusFlightOffer): Promise<any> {
+  try {
+    console.log('[Amadeus] Pricing flight offer:', flightOffer.id);
+    
+    const response = await amadeus.shopping.flightOffers.pricing.post(
+      JSON.stringify({
+        data: {
+          type: 'flight-offers-pricing',
+          flightOffers: [flightOffer]
+        }
+      })
+    );
+    
+    console.log('[Amadeus] Flight offer priced successfully');
+    return response.data;
+  } catch (error: any) {
+    console.error('[Amadeus] Pricing error:', {
+      message: error.message,
+      code: error.code,
+      description: error.description
+    });
+    
+    if (error.response) {
+      console.error('[Amadeus] Error response:', JSON.stringify(error.response, null, 2));
+    }
+    
+    throw new Error(`Failed to price flight offer: ${error.message || 'Unknown error'}`);
+  }
+}
+
+// Create flight order and get PNR
+export async function createFlightOrder(
+  flightOffer: AmadeusFlightOffer,
+  travelers: AmadeusTraveler[]
+): Promise<AmadeusFlightOrder> {
+  try {
+    console.log('[Amadeus] Creating flight order with', travelers.length, 'travelers');
+    
+    // Step 1: Price the offer first to confirm availability
+    const pricedOffer = await priceFlightOffer(flightOffer);
+    
+    // Step 2: Create the order
+    const response = await amadeus.booking.flightOrders.post(
+      JSON.stringify({
+        data: {
+          type: 'flight-order',
+          flightOffers: [pricedOffer.flightOffers[0]],
+          travelers: travelers
+        }
+      })
+    );
+    
+    if (!response || !response.data) {
+      throw new Error('Invalid response from Amadeus Flight Create Orders API');
+    }
+    
+    const order = response.data as AmadeusFlightOrder;
+    const pnr = order.associatedRecords?.[0]?.reference;
+    
+    console.log('[Amadeus] Flight order created successfully');
+    console.log('[Amadeus] PNR Code:', pnr);
+    console.log('[Amadeus] Order ID:', order.id);
+    
+    return order;
+  } catch (error: any) {
+    console.error('[Amadeus] Flight order creation error:', {
+      message: error.message,
+      code: error.code,
+      description: error.description
+    });
+    
+    if (error.response) {
+      console.error('[Amadeus] Error response:', JSON.stringify(error.response, null, 2));
+    }
+    
+    throw new Error(`Failed to create flight order: ${error.message || 'Unknown error'}`);
   }
 }
 
