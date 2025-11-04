@@ -393,30 +393,18 @@ export default function FlightResults() {
 
                 {/* Pricing & Book */}
                 <div className="lg:w-64 flex flex-col items-end gap-3">
-                  <Badge variant="default" className="bg-green-600 hover:bg-green-700" data-testid={`badge-discount-${flight.id}`}>
-                    {flight.discount}% {t('results.discount')}
-                  </Badge>
-                  
                   <div className="text-right">
                     {(() => {
                       const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
-                      const returnDiscounted = returnPrice * (1 - flight.discount / 100);
-                      const totalOriginal = flight.originalPrice + returnPrice;
-                      const totalDiscounted = flight.discountedPrice + returnDiscounted;
+                      const totalPrice = flight.discountedPrice + returnPrice;
                       
                       return (
                         <>
-                          <p className="text-sm text-muted-foreground line-through" data-testid={`text-original-price-${flight.id}`}>
-                            ${totalOriginal.toFixed(2)}
-                          </p>
-                          <p className="text-3xl font-bold text-primary" data-testid={`text-discounted-price-${flight.id}`}>
-                            ${totalDiscounted.toFixed(2)}
+                          <p className="text-3xl font-bold text-primary" data-testid={`text-price-${flight.id}`}>
+                            ${totalPrice.toFixed(2)}
                           </p>
                           <p className="text-xs text-muted-foreground italic" data-testid={`text-per-passenger-${flight.id}`}>
                             {localStorage.getItem('preferredLanguage') === 'es' ? 'Precio por pasajero' : 'Price per passenger'}
-                          </p>
-                          <p className="text-sm text-green-600 font-medium" data-testid={`text-savings-${flight.id}`}>
-                            {t('results.save')} ${(totalOriginal - totalDiscounted).toFixed(2)}
                           </p>
                         </>
                       );

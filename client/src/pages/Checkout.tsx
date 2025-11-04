@@ -427,13 +427,9 @@ export default function Checkout() {
       // Calculate total price including return flight and all passengers
       const numberOfPassengers = Number(searchParams.passengers);
       const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
-      const returnDiscounted = returnPrice * (1 - flight.discount / 100);
       
-      const pricePerPassengerOriginal = flight.originalPrice + returnPrice;
-      const pricePerPassengerDiscounted = flight.discountedPrice + returnDiscounted;
-      
-      const totalOriginalPrice = pricePerPassengerOriginal * numberOfPassengers;
-      const totalDiscountedPrice = pricePerPassengerDiscounted * numberOfPassengers;
+      const pricePerPassenger = flight.discountedPrice + returnPrice;
+      const totalPrice = pricePerPassenger * numberOfPassengers;
       
       const bookingData = {
         fullName: customerInfo.fullName,
@@ -451,8 +447,8 @@ export default function Checkout() {
         flightClass: searchParams.flightClass,
         tripType: searchParams.tripType,
         selectedFlightData: JSON.stringify(flight),
-        originalPrice: totalOriginalPrice.toString(),
-        discountedPrice: totalDiscountedPrice.toString(),
+        originalPrice: totalPrice.toString(),
+        discountedPrice: totalPrice.toString(),
         currency: 'USD',
         language: localStorage.getItem('preferredLanguage') || 'en',
       };
@@ -479,9 +475,9 @@ export default function Checkout() {
           customerPhone: customerInfo.phone || 'Not provided',
           customerDOB: customerInfo.dateOfBirth,
           additionalPassengers: customerInfo.additionalPassengers,
-          totalPrice: `$${totalDiscountedPrice.toFixed(2)}`,
-          originalPrice: `$${totalOriginalPrice.toFixed(2)}`,
-          discount: `${flight.discount}%`,
+          totalPrice: `$${totalPrice.toFixed(2)}`,
+          originalPrice: `$${totalPrice.toFixed(2)}`,
+          discount: '0%',
           language: localStorage.getItem('preferredLanguage') || 'en',
         });
         
@@ -522,16 +518,12 @@ export default function Checkout() {
   // Calculate total price including return flight and all passengers
   const numberOfPassengers = Number(searchParams.passengers);
   const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
-  const returnDiscounted = returnPrice * (1 - flight.discount / 100);
   
   // Price per passenger (outbound + return if applicable)
-  const pricePerPassengerOriginal = flight.originalPrice + returnPrice;
-  const pricePerPassengerDiscounted = flight.discountedPrice + returnDiscounted;
+  const pricePerPassenger = flight.discountedPrice + returnPrice;
   
   // Total price for all passengers
-  const totalOriginalPrice = pricePerPassengerOriginal * numberOfPassengers;
-  const totalDiscountedPrice = pricePerPassengerDiscounted * numberOfPassengers;
-  const savings = totalOriginalPrice - totalDiscountedPrice;
+  const totalPrice = pricePerPassenger * numberOfPassengers;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -616,37 +608,15 @@ export default function Checkout() {
                   </div>
                 )}
                 
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    {t('checkout.originalPrice')}
-                  </span>
-                  <span className="text-sm line-through" data-testid="text-summary-original-price">
-                    ${totalOriginalPrice.toFixed(2)}
-                  </span>
-                </div>
-                
-                <div className="flex justify-between text-green-600">
-                  <span className="text-sm font-medium">
-                    {t('checkout.discount')}
-                  </span>
-                  <span className="text-sm font-medium" data-testid="text-summary-discount">
-                    -${savings.toFixed(2)}
-                  </span>
-                </div>
-                
-                <div className="flex justify-between items-center pt-2 border-t">
+                <div className="flex justify-between items-center pt-2">
                   <span className="text-lg font-semibold">
-                    {t('checkout.youPay')}
+                    {t('checkout.totalPrice')}
                   </span>
                   <span className="text-2xl font-bold text-primary" data-testid="text-summary-total">
-                    ${totalDiscountedPrice.toFixed(2)}
+                    ${totalPrice.toFixed(2)}
                   </span>
                 </div>
               </div>
-
-              <Badge variant="default" className="w-full justify-center bg-green-600 hover:bg-green-700">
-                {flight.discount}% {t('results.discount')}
-              </Badge>
             </Card>
           </div>
 
