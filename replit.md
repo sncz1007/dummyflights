@@ -25,6 +25,11 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
   - **Cache Invalidation**: Cleared on new homepage searches; flag removed after use to prevent stale hits
 - **Booking and Payment**: Integrates both Stripe and PayPal as payment options for maximum flexibility. Flight prices from Amadeus API or simulator are displayed for reference only (informational). The platform charges ONLY $15 USD per passenger for the search and booking service (e.g., 1 passenger = $15, 2 passengers = $30, 3 passengers = $45). After payment, tickets are manually purchased by the business and delivered to customers. Payment buttons appear directly below the contact form for immediate checkout.
 - **Booking Notifications**: Automated email notifications are sent via EmailJS when customers click "Continue to Payment" after filling out their contact information. These notifications include complete flight details, customer info, all passengers, and pricing breakdown, enabling manual ticket purchase before payment completion.
+- **PDF Document Generation**: After successful payment, the system automatically generates two professional PDF documents for each booking:
+  - **Booking Confirmation PDF**: Flight itinerary with airline branding, confirmation codes, flight details, passenger information, and seat assignments. Mimics real airline booking confirmations with realistic formatting.
+  - **Payment Receipt PDF**: Detailed receipt showing service fee breakdown, payment method, and important notes about the ticket delivery process. Clearly distinguishes between the service fee charged ($15/passenger) and the flight ticket price (informational).
+  - Both PDFs use real flight data, customer information, and randomly generated booking codes for authenticity.
+  - PDFs are available for immediate download on the payment success page via dedicated download buttons.
 - **Internationalization (i18n)**: Full support for English and Spanish, with language preference stored in localStorage. All content, including legal pages, is bilingual.
 - **Homepage Structure**: Includes a Hero Section with flight search, Trust Badges, Video Strip, Popular Destinations, "About Us" section, "Why Choose Us" benefits, Customer Testimonials, FAQ, and a comprehensive Footer.
 - **Legal Pages**: Dedicated, bilingual Terms of Service and Privacy Policy pages, requiring acceptance during flight search.
@@ -57,6 +62,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 - **date-fns**: For date manipulation.
 - **csv-parse**: For airport data imports.
 - **Lucide React**: For icons.
+- **PDFKit**: For server-side PDF document generation of booking confirmations and payment receipts.
 
 ### Environment Variables
 - `DATABASE_URL`

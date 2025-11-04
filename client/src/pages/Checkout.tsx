@@ -403,6 +403,8 @@ export default function Checkout() {
   const [clientSecret, setClientSecret] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'paypal' | null>(null);
+  const [bookingId, setBookingId] = useState<string | null>(null);
+  const [paymentComplete, setPaymentComplete] = useState(false);
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     fullName: '',
     email: '',
@@ -415,20 +417,18 @@ export default function Checkout() {
     // Check for success parameter (payment completed)
     const urlParams = new URLSearchParams(window.location.search);
     const paymentIntentId = urlParams.get('payment_intent');
-    if (paymentIntentId && urlParams.get('redirect_status') === 'succeeded') {
+    const storedBookingId = sessionStorage.getItem('bookingId');
+    
+    if (paymentIntentId && urlParams.get('redirect_status') === 'succeeded' && storedBookingId) {
+      setBookingId(storedBookingId);
+      setPaymentComplete(true);
+      setIsLoading(false);
+      
       toast({
         title: t('checkout.success'),
         description: t('checkout.successMessage'),
       });
       
-      // Clear session storage
-      sessionStorage.removeItem('selectedFlight');
-      sessionStorage.removeItem('searchParams');
-      
-      // Redirect to home after a delay
-      setTimeout(() => {
-        setLocation('/');
-      }, 3000);
       return;
     }
 
@@ -510,6 +510,10 @@ export default function Checkout() {
       const data = await response.json();
       
       setClientSecret(data.clientSecret);
+      setBookingId(data.booking.id);
+      
+      // Store booking ID in session storage for PDF downloads
+      sessionStorage.setItem('bookingId', data.booking.id);
       
       // Send booking notification email immediately
       try {
@@ -580,6 +584,100 @@ export default function Checkout() {
   
   // Total to pay = ONLY the service fee ($15 × passengers)
   const totalPrice = totalServiceFee;
+
+  // Show success page with PDF download links
+  if (paymentComplete && bookingId) {
+    return (
+      <div className="min-h-screen bg-background py-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="p-8 text-center">
+            <div className="mb-6">
+              <div className="mx-auto h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                <svg className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h1 className="text-3xl font-bold text-green-600 mb-2" data-testid="text-payment-success">
+                {t('checkout.success')}
+              </h1>
+              <p className="text-lg text-muted-foreground mb-6">
+                {t('checkout.successMessage')}
+              </p>
+            </div>
+
+            <div className="bg-muted p-6 rounded-lg mb-6">
+              <h2 className="text-xl font-semibold mb-4">Download Your Documents</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-auto py-4 flex flex-col items-center gap-2"
+                  data-testid="button-download-booking-confirmation"
+                >
+                  <a 
+                    href={`/api/bookings/${bookingId}/confirmation-pdf`}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Plane className="h-6 w-6" />
+                    <div>
+                      <p className="font-semibold">Booking Confirmation</p>
+                      <p className="text-xs text-muted-foreground">Flight details and itinerary</p>
+                    </div>
+                  </a>
+                </Button>
+
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-auto py-4 flex flex-col items-center gap-2"
+                  data-testid="button-download-receipt"
+                >
+                  <a 
+                    href={`/api/bookings/${bookingId}/receipt-pdf?paymentMethod=${paymentMethod === 'paypal' ? 'PayPal' : 'Card'}`}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <CreditCard className="h-6 w-6" />
+                    <div>
+                      <p className="font-semibold">Payment Receipt</p>
+                      <p className="text-xs text-muted-foreground">Service fee receipt</p>
+                    </div>
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg mb-6 text-left">
+              <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Next Steps</h3>
+              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-2">
+                <li>✓ A confirmation email has been sent to your email address</li>
+                <li>✓ We will purchase your flight tickets within 24-48 hours</li>
+                <li>✓ Your tickets will be emailed to you once purchased</li>
+                <li>✓ Please save the PDFs above for your records</li>
+              </ul>
+            </div>
+
+            <div className="flex gap-4 justify-center">
+              <Button
+                onClick={() => {
+                  sessionStorage.removeItem('selectedFlight');
+                  sessionStorage.removeItem('searchParams');
+                  sessionStorage.removeItem('bookingId');
+                  setLocation('/');
+                }}
+                data-testid="button-back-to-home"
+              >
+                {t('nav.home')}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background py-8">

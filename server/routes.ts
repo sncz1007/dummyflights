@@ -737,6 +737,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Generate and download booking confirmation PDF
+  app.get("/api/bookings/:id/confirmation-pdf", async (req, res) => {
+    try {
+      const booking = await storage.getBooking(req.params.id);
+      
+      if (!booking) {
+        return res.status(404).json({ error: "Booking not found" });
+      }
+      
+      const { generateBookingConfirmationPDF } = await import('./pdfGenerator');
+      const doc = generateBookingConfirmationPDF(booking);
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=booking-confirmation-${booking.bookingNumber}.pdf`);
+      
+      doc.pipe(res);
+      doc.end();
+    } catch (error) {
+      console.error("Generate confirmation PDF error:", error);
+      res.status(500).json({ error: "Failed to generate confirmation PDF" });
+    }
+  });
+
+  // Generate and download receipt PDF
+  app.get("/api/bookings/:id/receipt-pdf", async (req, res) => {
+    try {
+      const booking = await storage.getBooking(req.params.id);
+      
+      if (!booking) {
+        return res.status(404).json({ error: "Booking not found" });
+      }
+      
+      const { generateReceiptPDF } = await import('./pdfGenerator');
+      const paymentMethod = req.query.paymentMethod as string || 'Card';
+      const doc = generateReceiptPDF(booking, paymentMethod);
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=receipt-${booking.bookingNumber}.pdf`);
+      
+      doc.pipe(res);
+      doc.end();
+    } catch (error) {
+      console.error("Generate receipt PDF error:", error);
+      res.status(500).json({ error: "Failed to generate receipt PDF" });
+    }
+  });
+
   // PayPal integration routes (from blueprint:javascript_paypal)
   app.get("/paypal/setup", async (req, res) => {
     await loadPaypalDefault(req, res);
