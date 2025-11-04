@@ -228,16 +228,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log(`[Amadeus] Found ${returnResults.data.length} return flights`);
         }
 
-        // Transform Amadeus data to our format
+        // Transform ALL Amadeus flight offers to our format with complete information
         const flights: any[] = [];
         
-        for (const offer of outboundResults.data.slice(0, 10)) {
+        for (const offer of outboundResults.data) {
           const firstItinerary = offer.itineraries[0];
           const firstSegment = firstItinerary.segments[0];
           const lastSegment = firstItinerary.segments[firstItinerary.segments.length - 1];
           
-          // Get airline info
-          const airlineCode = firstSegment.carrierCode;
+          // Get airline info from operating carrier (real airline operating the flight)
+          const operatingCarrier = firstSegment.operating?.carrierCode || firstSegment.carrierCode;
+          const airlineCode = operatingCarrier;
           const airlineName = getAirlineNameFromCode(airlineCode, outboundResults.dictionaries.carriers) || outboundResults.dictionaries.carriers[airlineCode] || airlineCode;
           
           // Calculate duration in hours and minutes
@@ -262,98 +263,173 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Calculate number of stops
           const stops = firstItinerary.segments.length - 1;
           
-          // Use real flight prices from Amadeus API
+          // Use EXACT flight prices from Amadeus API (DO NOT ROUND)
           const originalPrice = parseFloat(offer.price.grandTotal);
           const discountedPrice = parseFloat(offer.price.grandTotal);
           
-          // Prepare return flight options if round-trip
-          let returnFlightOptions: any[] | null = null;
-          if (returnResults && returnResults.data.length > 0) {
-            returnFlightOptions = returnResults.data.slice(0, 3).map((returnOffer: any) => {
-              const returnItinerary = returnOffer.itineraries[0];
-              const returnFirstSegment = returnItinerary.segments[0];
-              const returnLastSegment = returnItinerary.segments[returnItinerary.segments.length - 1];
-              
-              const returnAirlineCode = returnFirstSegment.carrierCode;
-              const returnAirlineName = getAirlineNameFromCode(returnAirlineCode, returnResults.dictionaries.carriers) || returnResults.dictionaries.carriers[returnAirlineCode] || returnAirlineCode;
-              
-              const returnDurationMatch = returnItinerary.duration.match(/PT(\d+)H(\d+)?M?/);
-              const returnHours = returnDurationMatch ? parseInt(returnDurationMatch[1]) : 0;
-              const returnMinutes = returnDurationMatch && returnDurationMatch[2] ? parseInt(returnDurationMatch[2]) : 0;
-              const returnDuration = returnMinutes > 0 ? `${returnHours}h ${returnMinutes}m` : `${returnHours}h`;
-              
-              const returnDepartureTime = new Date(returnFirstSegment.departure.at).toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: false 
-              });
-              
-              const returnArrivalTime = new Date(returnLastSegment.arrival.at).toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: false 
-              });
-              
-              const returnStops = returnItinerary.segments.length - 1;
-              const returnBasePrice = parseFloat(returnOffer.price.grandTotal);
-              
-              return {
-                id: `${returnAirlineCode}-${returnFirstSegment.number}-${returnDate}`,
-                airline: {
-                  code: returnAirlineCode,
-                  name: returnAirlineName,
-                  logo: `https://images.kiwi.com/airlines/64/${returnAirlineCode}.png`
-                },
-                flightNumber: `${returnAirlineCode}${returnFirstSegment.number}`,
-                departure: {
-                  airport: toAirport,
-                  time: returnDepartureTime,
-                  date: returnDate,
-                },
-                arrival: {
-                  airport: fromAirport,
-                  time: returnArrivalTime,
-                  date: returnDate,
-                },
-                duration: returnDuration,
-                stops: returnStops,
-                basePrice: returnBasePrice,
-              };
-            });
-          }
+          // Extract ALL segments/stops information
+          const segmentsInfo = firstItinerary.segments.map((seg: any, index: number) => {
+            const segAirlineCode = seg.operating?.carrierCode || seg.carrierCode;
+            const segAirlineName = getAirlineNameFromCode(segAirlineCode, outboundResults.dictionaries.carriers) || outboundResults.dictionaries.carriers[segAirlineCode] || segAirlineCode;
+            
+            return {
+              segmentNumber: index + 1,
+              airline: {
+                code: segAirlineCode,
+                name: segAirlineName
+              },
+              flightNumber: `${seg.carrierCode}${seg.number}`,
+              departure: {
+                airport: seg.departure.iataCode,
+                terminal: seg.departure.terminal,
+                time: new Date(seg.departure.at).toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit',
+                  hour12: false 
+                }),
+                dateTime: seg.departure.at
+              },
+              arrival: {
+                airport: seg.arrival.iataCode,
+                terminal: seg.arrival.terminal,
+                time: new Date(seg.arrival.at).toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit',
+                  hour12: false 
+                }),
+                dateTime: seg.arrival.at
+              },
+              duration: seg.duration,
+              aircraft: {
+                code: seg.aircraft?.code
+              }
+            };
+          });
           
+          // Build complete flight object with ALL Amadeus data
           flights.push({
-            id: `${airlineCode}-${firstSegment.number}-${departureDate}`,
+            id: offer.id, // Use Amadeus unique offer ID
+            amadeusOfferId: offer.id, // Store for booking reference
             airline: {
               code: airlineCode,
               name: airlineName,
               logo: `https://images.kiwi.com/airlines/64/${airlineCode}.png`
             },
-            flightNumber: `${airlineCode}${firstSegment.number}`,
+            flightNumber: `${firstSegment.carrierCode}${firstSegment.number}`,
             departure: {
               airport: fromAirport,
+              iataCode: firstSegment.departure.iataCode,
+              terminal: firstSegment.departure.terminal,
               time: departureTime,
               date: departureDate,
+              dateTime: firstSegment.departure.at
             },
             arrival: {
               airport: toAirport,
+              iataCode: lastSegment.arrival.iataCode,
+              terminal: lastSegment.arrival.terminal,
               time: arrivalTime,
               date: departureDate,
+              dateTime: lastSegment.arrival.at
             },
             duration: duration,
             stops: stops,
+            segments: segmentsInfo, // Complete segments information with all stops
             class: 'economy',
-            originalPrice: Math.round(originalPrice),
-            discountedPrice: Math.round(discountedPrice),
+            originalPrice: originalPrice, // EXACT price from Amadeus (not rounded)
+            discountedPrice: discountedPrice, // EXACT price from Amadeus (not rounded)
             discount: 0,
+            currency: offer.price.currency,
+            priceBreakdown: {
+              base: parseFloat(offer.price.base),
+              total: parseFloat(offer.price.total),
+              grandTotal: parseFloat(offer.price.grandTotal),
+              currency: offer.price.currency
+            },
+            bookingDetails: {
+              validatingAirlines: offer.validatingAirlineCodes,
+              lastTicketingDate: offer.lastTicketingDate,
+              numberOfBookableSeats: offer.numberOfBookableSeats,
+              instantTicketingRequired: offer.instantTicketingRequired
+            },
             amenities: {
               wifi: false,
               meals: true,
               entertainment: false,
               power: false,
             },
-            returnFlightOptions: returnFlightOptions,
+            returnFlightOptions: null, // Will be populated below if round-trip
           });
+        }
+        
+        console.log(`[Amadeus] Transformed ${flights.length} outbound flights with complete data`);
+        
+        // Add return flight options for round-trip searches
+        if (returnResults && returnResults.data.length > 0) {
+          // For each outbound flight, add top 3 return options from Amadeus
+          flights.forEach((outboundFlight) => {
+            outboundFlight.returnFlightOptions = returnResults.data.slice(0, 3).map((returnOffer: any) => {
+                const returnItinerary = returnOffer.itineraries[0];
+                const returnFirstSegment = returnItinerary.segments[0];
+                const returnLastSegment = returnItinerary.segments[returnItinerary.segments.length - 1];
+                
+                const returnAirlineCode = returnFirstSegment.operating?.carrierCode || returnFirstSegment.carrierCode;
+                const returnAirlineName = getAirlineNameFromCode(returnAirlineCode, returnResults.dictionaries.carriers) || returnResults.dictionaries.carriers[returnAirlineCode] || returnAirlineCode;
+                
+                const returnDurationMatch = returnItinerary.duration.match(/PT(\d+)H(\d+)?M?/);
+                const returnHours = returnDurationMatch ? parseInt(returnDurationMatch[1]) : 0;
+                const returnMinutes = returnDurationMatch && returnDurationMatch[2] ? parseInt(returnDurationMatch[2]) : 0;
+                const returnDuration = returnMinutes > 0 ? `${returnHours}h ${returnMinutes}m` : `${returnHours}h`;
+                
+                const returnDepartureTime = new Date(returnFirstSegment.departure.at).toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit',
+                  hour12: false 
+                });
+                
+                const returnArrivalTime = new Date(returnLastSegment.arrival.at).toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit',
+                  hour12: false 
+                });
+                
+                const returnStops = returnItinerary.segments.length - 1;
+                const returnBasePrice = parseFloat(returnOffer.price.grandTotal);
+                
+                return {
+                  id: returnOffer.id,
+                  amadeusOfferId: returnOffer.id,
+                  airline: {
+                    code: returnAirlineCode,
+                    name: returnAirlineName,
+                    logo: `https://images.kiwi.com/airlines/64/${returnAirlineCode}.png`
+                  },
+                  flightNumber: `${returnFirstSegment.carrierCode}${returnFirstSegment.number}`,
+                  departure: {
+                    airport: toAirport,
+                    iataCode: returnFirstSegment.departure.iataCode,
+                    terminal: returnFirstSegment.departure.terminal,
+                    time: returnDepartureTime,
+                    date: returnDate,
+                    dateTime: returnFirstSegment.departure.at
+                  },
+                  arrival: {
+                    airport: fromAirport,
+                    iataCode: returnLastSegment.arrival.iataCode,
+                    terminal: returnLastSegment.arrival.terminal,
+                    time: returnArrivalTime,
+                    date: returnDate,
+                    dateTime: returnLastSegment.arrival.at
+                  },
+                  duration: returnDuration,
+                  stops: returnStops,
+                  basePrice: returnBasePrice,
+                  currency: returnOffer.price.currency,
+                };
+              });
+          });
+          
+          console.log(`[Amadeus] Added return flight options for ${flights.length} outbound flights`);
         }
 
         // Return ONLY Amadeus results - NO SIMULATOR FALLBACK
