@@ -385,9 +385,21 @@ const CustomerInfoForm = ({
                   
                   console.log('Test button: response', response);
                   
-                  // Save booking ID and redirect to success
+                  // Save booking ID and send confirmation email
                   if (response && response.booking && response.booking.id) {
                     sessionStorage.setItem('bookingId', response.booking.id);
+                    
+                    // Send confirmation email with PDF links
+                    try {
+                      await apiRequest('POST', `/api/bookings/${response.booking.id}/send-confirmation-email`, {
+                        paymentMethod: 'Card'
+                      });
+                      console.log('Test button: Confirmation email sent');
+                    } catch (emailError) {
+                      console.error('Test button: Error sending confirmation email:', emailError);
+                      // Don't fail the booking if email fails
+                    }
+                    
                     window.location.href = '/success';
                   } else {
                     throw new Error('Invalid response from server');

@@ -701,6 +701,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           if (bookingId) {
             await storage.updateBookingPaymentStatus(bookingId, 'completed');
+            
+            // Send payment confirmation email with PDF links
+            try {
+              const booking = await storage.getBooking(bookingId);
+              if (booking) {
+                const { sendPaymentConfirmationEmail } = await import('./emailService');
+                const domain = process.env.REPLIT_DEV_DOMAIN || req.get('host');
+                const protocol = req.protocol;
+                const baseUrl = `${protocol}://${domain}`;
+                
+                await sendPaymentConfirmationEmail({
+                  booking,
+                  pdfLinks: {
+                    confirmationPdfUrl: `${baseUrl}/api/bookings/${booking.id}/confirmation-pdf`,
+                    receiptPdfUrl: `${baseUrl}/api/bookings/${booking.id}/receipt-pdf?paymentMethod=Card`,
+                  },
+                });
+              }
+            } catch (emailError) {
+              console.error('[Stripe Webhook] Error sending confirmation email:', emailError);
+              // Don't fail the webhook if email fails
+            }
           }
           break;
         
@@ -781,6 +803,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Generate receipt PDF error:", error);
       res.status(500).json({ error: "Failed to generate receipt PDF" });
+    }
+  });
+
+  // Send payment confirmation email with PDFs
+  app.post("/api/bookings/:id/send-confirmation-email", async (req, res) => {
+    try {
+      const booking = await storage.getBooking(req.params.id);
+      
+      if (!booking) {
+        return res.status(404).json({ error: "Booking not found" });
+      }
+      
+      const { sendPaymentConfirmationEmail } = await import('./emailService');
+      const domain = process.env.REPLIT_DEV_DOMAIN || req.get('host');
+      const protocol = req.protocol;
+      const baseUrl = `${protocol}://${domain}`;
+      
+      await sendPaymentConfirmationEmail({
+        booking,
+        pdfLinks: {
+          confirmationPdfUrl: `${baseUrl}/api/bookings/${booking.id}/confirmation-pdf`,
+          receiptPdfUrl: `${baseUrl}/api/bookings/${booking.id}/receipt-pdf?paymentMethod=${req.body.paymentMethod || 'Card'}`,
+        },
+      });
+      
+      res.json({ success: true, message: "Confirmation email sent successfully" });
+    } catch (error) {
+      console.error("Send confirmation email error:", error);
+      res.status(500).json({ error: "Failed to send confirmation email" });
     }
   });
 
