@@ -388,7 +388,7 @@ const CustomerInfoForm = ({
                   // Save booking ID and redirect to success
                   if (response && response.booking && response.booking.id) {
                     sessionStorage.setItem('bookingId', response.booking.id);
-                    window.location.href = '/checkout?payment_success=true&test=true';
+                    window.location.href = '/success';
                   } else {
                     throw new Error('Invalid response from server');
                   }

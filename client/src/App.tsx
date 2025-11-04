@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/hooks/useLanguage";
 import Home from "@/pages/home";
 import FlightResults from "@/pages/FlightResults";
 import Checkout from "@/pages/Checkout";
+import PaymentSuccess from "@/pages/PaymentSuccess";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
 import NotFound from "@/pages/not-found";
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/flights" component={FlightResults} />
       <Route path="/checkout" component={Checkout} />
+      <Route path="/success" component={PaymentSuccess} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
       <Route component={NotFound} />
