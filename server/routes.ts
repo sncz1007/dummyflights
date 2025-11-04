@@ -164,18 +164,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const toIataMatch = toAirport.match(/\(([A-Z]{3})\)/);
       const toIataCode = toIataMatch ? toIataMatch[1] : toAirport.split(' ')[0];
       
-      // Get both airports from database
-      const departureAirport = await storage.getAirportByIata(fromIataCode);
-      if (!departureAirport) {
-        return res.status(400).json({ error: "Invalid departure airport" });
+      // Validate IATA codes format (3-letter codes)
+      if (!fromIataCode || fromIataCode.length !== 3) {
+        return res.status(400).json({ error: "Invalid departure airport code" });
       }
       
-      const destinationAirport = await storage.getAirportByIata(toIataCode);
-      if (!destinationAirport) {
-        return res.status(400).json({ 
-          error: "Invalid destination airport",
-          message: "The destination airport could not be found in our database."
-        });
+      if (!toIataCode || toIataCode.length !== 3) {
+        return res.status(400).json({ error: "Invalid destination airport code" });
       }
 
       // Amadeus API is REQUIRED - no fallback to simulator

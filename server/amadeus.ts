@@ -2,11 +2,11 @@
 import Amadeus from 'amadeus';
 
 // Initialize Amadeus client
-// Use 'test' for test credentials, 'production' for production credentials
+// Use 'production' for production credentials (real flight data)
 const amadeus = new Amadeus({
   clientId: process.env.AMADEUS_API_KEY || '',
   clientSecret: process.env.AMADEUS_API_SECRET || '',
-  hostname: 'test', // Using test environment (free, simulated data but real API structure)
+  hostname: 'production', // Using production environment for real flight data
 });
 
 export interface AmadeusFlightOffer {
@@ -271,6 +271,8 @@ export async function searchAirports(keyword: string, limit: number = 50): Promi
       return [];
     }
 
+    console.log(`[Amadeus] Searching airports with keyword: ${keyword}`);
+    
     const response = await amadeus.referenceData.locations.get({
       keyword: keyword,
       subType: 'AIRPORT,CITY',
@@ -279,7 +281,19 @@ export async function searchAirports(keyword: string, limit: number = 50): Promi
       view: 'FULL'
     });
     
-    return response.data.data as AmadeusLocation[];
+    console.log(`[Amadeus] Airport search response received`);
+    
+    // Validate response structure
+    if (!response || !response.data) {
+      console.error('[Amadeus] Invalid response structure:', response);
+      throw new Error('Invalid response from Amadeus API');
+    }
+    
+    // Handle different response structures
+    const locations = response.data.data || response.data || [];
+    console.log(`[Amadeus] Found ${locations.length} locations`);
+    
+    return locations as AmadeusLocation[];
   } catch (error: any) {
     console.error('[Amadeus] Airport search error:', error.message);
     
