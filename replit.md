@@ -1,7 +1,7 @@
-# SkyBudgetFly - Flight Quote Platform
+# SkyBudgetFly - Dummy Flight Ticket Platform
 
 ## Overview
-SkyBudgetFly is a web application that facilitates global flight bookings through exclusive airline partnerships. The platform provides a bilingual (English/Spanish) interface for flight search, secure payments, and booking management. The business model involves manual ticket purchase and email delivery to customers after payment.
+SkyBudgetFly is a web application that provides professional dummy flight tickets (also known as flight reservations or itineraries) with real flight data from the Amadeus global database. The platform offers a bilingual (English/Spanish) interface for flight search, secure payments, and instant delivery of dummy tickets via email. Dummy tickets include valid 6-digit alphanumeric PNR codes that can be verified on airline websites, making them perfect for visa applications, proof of return travel, passport renewal, HR documentation, and other official purposes. **Important**: Dummy tickets are NOT actual flight tickets and cannot be used to board a plane - they are for documentation purposes only.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
