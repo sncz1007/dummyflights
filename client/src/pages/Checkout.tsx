@@ -13,11 +13,15 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Plane, Shield, ArrowLeft } from 'lucide-react';
 
-// Load Stripe (from blueprint:javascript_stripe)
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
+// Load Stripe (from blueprint:javascript_stripe) - OPTIONAL during migration
+let stripePromise: Promise<any> | null = null;
+
+if (import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
+  stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+  console.log('[Payment] Stripe configured on frontend');
+} else {
+  console.warn('[Payment] Stripe not configured - payment gateway pending configuration');
 }
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 interface FlightData {
   id: string;
@@ -655,10 +659,29 @@ export default function Checkout() {
                 setCustomerInfo={setCustomerInfo}
                 totalPassengers={Number(searchParams.passengers)}
               />
-            ) : (
+            ) : stripePromise ? (
               <Elements stripe={stripePromise} options={{ clientSecret }}>
                 <PaymentForm customerInfo={customerInfo} />
               </Elements>
+            ) : (
+              <Card className="p-6">
+                <div className="text-center space-y-4">
+                  <Shield className="h-12 w-12 mx-auto text-yellow-500" />
+                  <h3 className="text-lg font-semibold">
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Pasarela de pago en configuración'
+                      : 'Payment Gateway Configuration Pending'}
+                  </h3>
+                  <p className="text-muted-foreground">
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Tu reserva ha sido creada exitosamente. El sistema de pagos está siendo configurado. Recibirás las instrucciones de pago por correo electrónico.'
+                      : 'Your booking has been created successfully. The payment system is being configured. You will receive payment instructions via email.'}
+                  </p>
+                  <Button onClick={() => setLocation('/')} data-testid="button-return-home">
+                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Volver al inicio' : 'Return to Home'}
+                  </Button>
+                </div>
+              </Card>
             )}
           </div>
         </div>

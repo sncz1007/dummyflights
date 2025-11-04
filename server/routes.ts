@@ -6,14 +6,17 @@ import { getAllowedAirlinesForRoute } from "@shared/airlineSegmentation";
 import { z } from "zod";
 import Stripe from "stripe";
 
-// Initialize Stripe (from blueprint:javascript_stripe)
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
+// Initialize Stripe (from blueprint:javascript_stripe) - OPTIONAL for migration
+let stripe: Stripe | null = null;
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-09-30.clover",
-});
+if (process.env.STRIPE_SECRET_KEY) {
+  stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: "2025-09-30.clover",
+  });
+  console.log('[Payment] Stripe initialized successfully');
+} else {
+  console.warn('[Payment] Stripe not configured - payment gateway pending configuration');
+}
 
 // All available airline partners (master list)
 const ALL_AIRLINES: Record<string, { code: string; name: string; logo: string }> = {
@@ -450,6 +453,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create booking in database
       const booking = await storage.createBooking(bookingData);
+
+      // Check if Stripe is configured
+      if (!stripe) {
+        console.warn('[Payment] Stripe not configured - booking created without payment');
+        return res.status(201).json({
+          booking,
+          clientSecret: null,
+          paymentGatewayNotConfigured: true,
+          message: "Booking created successfully. Payment gateway configuration pending."
+        });
+      }
 
       // Create Stripe payment intent
       const paymentIntent = await stripe.paymentIntents.create({
