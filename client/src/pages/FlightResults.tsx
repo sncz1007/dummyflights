@@ -37,6 +37,33 @@ interface FlightLeg {
   basePrice?: number;
 }
 
+interface FlightSegment {
+  segmentNumber: number;
+  airline: {
+    code: string;
+    name: string;
+  };
+  flightNumber: string;
+  departure: {
+    airport: string;
+    city: string;
+    terminal?: string;
+    time: string;
+    dateTime: string;
+  };
+  arrival: {
+    airport: string;
+    city: string;
+    terminal?: string;
+    time: string;
+    dateTime: string;
+  };
+  duration: string;
+  aircraft: {
+    code?: string;
+  };
+}
+
 interface Flight {
   id: string;
   airline: {
@@ -57,6 +84,7 @@ interface Flight {
   };
   duration: string;
   stops: number;
+  segments?: FlightSegment[];
   class: string;
   originalPrice: number;
   discountedPrice: number;
@@ -310,6 +338,11 @@ export default function FlightResults() {
                       <p className="text-xs text-muted-foreground mt-1" data-testid={`text-stops-${flight.id}`}>
                         {flight.stops === 0 ? t('results.direct') : `${flight.stops} ${flight.stops === 1 ? t('results.stop') : t('results.stops')}`}
                       </p>
+                      {flight.stops > 0 && flight.segments && flight.segments.length > 1 && (
+                        <p className="text-xs text-primary font-semibold mt-1">
+                          {flight.segments.slice(0, -1).map((seg, idx) => seg.arrival.city).join(', ')}
+                        </p>
+                      )}
                     </div>
 
                     <div className="text-center">

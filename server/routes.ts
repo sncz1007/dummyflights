@@ -267,10 +267,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const originalPrice = parseFloat(offer.price.grandTotal);
           const discountedPrice = parseFloat(offer.price.grandTotal);
           
-          // Extract ALL segments/stops information
+          // Debug: Log Amadeus prices to verify uniqueness
+          console.log(`[Amadeus Price] ${airlineCode} ${firstSegment.carrierCode}${firstSegment.number}: $${originalPrice} ${offer.price.currency}`);
+          
+          // Extract ALL segments/stops information with city names
           const segmentsInfo = firstItinerary.segments.map((seg: any, index: number) => {
             const segAirlineCode = seg.operating?.carrierCode || seg.carrierCode;
             const segAirlineName = getAirlineNameFromCode(segAirlineCode, outboundResults.dictionaries.carriers) || outboundResults.dictionaries.carriers[segAirlineCode] || segAirlineCode;
+            
+            // Get city names from Amadeus dictionaries
+            const departureCity = outboundResults.dictionaries.locations?.[seg.departure.iataCode]?.cityCode || seg.departure.iataCode;
+            const arrivalCity = outboundResults.dictionaries.locations?.[seg.arrival.iataCode]?.cityCode || seg.arrival.iataCode;
             
             return {
               segmentNumber: index + 1,
@@ -281,6 +288,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               flightNumber: `${seg.carrierCode}${seg.number}`,
               departure: {
                 airport: seg.departure.iataCode,
+                city: departureCity,
                 terminal: seg.departure.terminal,
                 time: new Date(seg.departure.at).toLocaleTimeString('en-US', { 
                   hour: '2-digit', 
@@ -291,6 +299,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               },
               arrival: {
                 airport: seg.arrival.iataCode,
+                city: arrivalCity,
                 terminal: seg.arrival.terminal,
                 time: new Date(seg.arrival.at).toLocaleTimeString('en-US', { 
                   hour: '2-digit', 
