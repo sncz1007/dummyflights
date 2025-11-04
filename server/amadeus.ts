@@ -203,6 +203,8 @@ export function getAirlineCodeFromName(name: string): string | null {
 // Search for flights using Amadeus API
 export async function searchFlights(params: AmadeusSearchParams): Promise<AmadeusSearchResponse> {
   try {
+    console.log('[Amadeus] Requesting flights with params:', JSON.stringify(params, null, 2));
+    
     const response = await amadeus.shopping.flightOffersSearch.get({
       originLocationCode: params.originLocationCode,
       destinationLocationCode: params.destinationLocationCode,
@@ -214,15 +216,27 @@ export async function searchFlights(params: AmadeusSearchParams): Promise<Amadeu
       max: (params.max || 20).toString(),
     });
     
-    // The SDK returns the response in response.data
-    // But response.data is already the AmadeusSearchResponse
+    console.log('[Amadeus] Raw response structure:', Object.keys(response));
+    console.log('[Amadeus] Response.data structure:', response.data ? Object.keys(response.data) : 'undefined');
+    
+    // Amadeus SDK returns the full response in response.data
+    // response.data contains { data: [], dictionaries: {}, meta: {} }
+    if (!response || !response.data) {
+      throw new Error('Invalid response structure from Amadeus API');
+    }
+    
+    // Return the full response.data which is the AmadeusSearchResponse
     return response.data as AmadeusSearchResponse;
   } catch (error: any) {
-    console.error('Amadeus API error:', error);
+    console.error('[Amadeus] API error:', {
+      message: error.message,
+      code: error.code,
+      description: error.description
+    });
     
     // If it's a 400 error with response data, log it for debugging
     if (error.response) {
-      console.error('Amadeus error response:', JSON.stringify(error.response, null, 2));
+      console.error('[Amadeus] Error response:', JSON.stringify(error.response, null, 2));
     }
     
     throw new Error(`Failed to search flights: ${error.message || 'Unknown error'}`);
