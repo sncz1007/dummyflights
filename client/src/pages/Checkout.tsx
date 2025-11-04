@@ -380,7 +380,8 @@ const CustomerInfoForm = ({
                   
                   console.log('Test button: sending bookingData', bookingData);
                   
-                  const response: any = await apiRequest('POST', '/api/create-booking', bookingData);
+                  const res = await apiRequest('POST', '/api/create-booking', bookingData);
+                  const response: any = await res.json();
                   
                   console.log('Test button: response', response);
                   
