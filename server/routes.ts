@@ -195,23 +195,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Determine if this is a round-trip search
           const isRoundTrip = (tripType === 'round-trip' || tripType === 'roundtrip') && returnDate;
           
-          // Search flights (one-way or round-trip based on returnDate parameter)
-          const searchResults = await searchFlights({
-          originLocationCode: fromIataCode,
-          destinationLocationCode: toIataCode,
-          departureDate: departureDate,
-          returnDate: isRoundTrip ? returnDate : undefined, // Include returnDate for round-trip
-          adults: Number(passengers),
-          travelClass: amadeusClass,
-          nonStop: false,
-          currencyCode: 'USD',
-          max: 50,
-        });
+          // Make multiple searches to get diverse airline results
+          // Amadeus allows max 50 results per search, so we'll make multiple searches
+          console.log('[Amadeus] Fetching diverse flight results from multiple searches...');
+          
+          const allOffers: any[] = [];
+          const seenOfferIds = new Set<string>();
+          
+          // Search 1: Default search (sorted by best overall)
+          const search1 = await searchFlights({
+            originLocationCode: fromIataCode,
+            destinationLocationCode: toIataCode,
+            departureDate: departureDate,
+            returnDate: isRoundTrip ? returnDate : undefined,
+            adults: Number(passengers),
+            travelClass: amadeusClass,
+            nonStop: false,
+            currencyCode: 'USD',
+            max: 50,
+          });
+          
+          // Add unique offers from search 1
+          for (const offer of search1.data) {
+            if (!seenOfferIds.has(offer.id)) {
+              allOffers.push(offer);
+              seenOfferIds.add(offer.id);
+            }
+          }
+          
+          console.log(`[Amadeus] Search 1: ${search1.data.length} offers`);
+          
+          // Search 2: Non-stop flights only (to get premium carriers)
+          try {
+            const search2 = await searchFlights({
+              originLocationCode: fromIataCode,
+              destinationLocationCode: toIataCode,
+              departureDate: departureDate,
+              returnDate: isRoundTrip ? returnDate : undefined,
+              adults: Number(passengers),
+              travelClass: amadeusClass,
+              nonStop: true,
+              currencyCode: 'USD',
+              max: 50,
+            });
+            
+            for (const offer of search2.data) {
+              if (!seenOfferIds.has(offer.id)) {
+                allOffers.push(offer);
+                seenOfferIds.add(offer.id);
+              }
+            }
+            console.log(`[Amadeus] Search 2 (non-stop): ${search2.data.length} offers, total unique: ${allOffers.length}`);
+          } catch (err) {
+            console.log('[Amadeus] Non-stop search failed or no results, continuing with standard results');
+          }
+          
+          // Use the dictionaries from the first search
+          const searchResults = {
+            data: allOffers,
+            dictionaries: search1.dictionaries,
+            meta: {
+              count: allOffers.length,
+              links: search1.meta.links
+            }
+          };
 
-        console.log(`[Amadeus] Found ${searchResults.data.length} flight offers (${isRoundTrip ? 'round-trip' : 'one-way'})`);
+        console.log(`[Amadeus] Total unique offers collected: ${allOffers.length} (${isRoundTrip ? 'round-trip' : 'one-way'})`);
 
         // If Amadeus returns 0 results, return error
-        if (searchResults.data.length === 0) {
+        if (allOffers.length === 0) {
           console.log('[Amadeus] No flights found');
           throw new Error('No flights available from Amadeus');
         }
@@ -477,9 +529,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         console.log(`[Amadeus] Transformed ${flights.length} flight offers with complete data`);
 
+        // DIVERSIFY RESULTS BY AIRLINE
+        // Group flights by airline to ensure variety
+        const flightsByAirline = new Map<string, any[]>();
+        
+        for (const flight of flights) {
+          const airlineCode = flight.airline.code;
+          if (!flightsByAirline.has(airlineCode)) {
+            flightsByAirline.set(airlineCode, []);
+          }
+          flightsByAirline.get(airlineCode)!.push(flight);
+        }
+        
+        console.log(`[Amadeus] Found ${flightsByAirline.size} different airlines`);
+        
+        // Calculate how many flights per airline to ensure diversity
+        const TARGET_TOTAL_FLIGHTS = 100;
+        const TOTAL_AVAILABLE = flights.length;
+        const NUM_AIRLINES = flightsByAirline.size;
+        
+        // Maximum flights per airline: ensure no single airline dominates
+        // Base the limit on ACTUAL available flights, not the target
+        const effectiveTotal = Math.min(TARGET_TOTAL_FLIGHTS, TOTAL_AVAILABLE);
+        const fairShare = Math.ceil(effectiveTotal / NUM_AIRLINES);
+        
+        // Allow some flexibility (1.2x) but cap it to prevent dominance
+        const MAX_FLIGHTS_PER_AIRLINE = Math.max(
+          5, // Minimum 5 flights per airline (if available)
+          Math.min(
+            Math.ceil(fairShare * 1.2), // Allow 1.2x fair share for flexibility
+            Math.ceil(effectiveTotal * 0.4) // But never more than 40% of total
+          )
+        );
+        
+        console.log(`[Amadeus] Diversification: ${TOTAL_AVAILABLE} flights from ${NUM_AIRLINES} airlines`);
+        console.log(`[Amadeus] Fair share: ${fairShare}, Max per airline: ${MAX_FLIGHTS_PER_AIRLINE}`);
+        
+        // Sort airlines by number of flights
+        const sortedAirlines = Array.from(flightsByAirline.entries())
+          .sort((a, b) => b[1].length - a[1].length);
+        
+        // Distribute flights using round-robin WITH LIMIT PER AIRLINE
+        const diversifiedFlights: any[] = [];
+        const airlineCount = new Map<string, number>();
+        
+        let round = 0;
+        let addedInRound = 0;
+        
+        do {
+          addedInRound = 0;
+          
+          for (const [airlineCode, airlineFlights] of sortedAirlines) {
+            const currentCount = airlineCount.get(airlineCode) || 0;
+            
+            // Check if we have more flights from this airline AND haven't reached the per-airline limit
+            if (airlineFlights.length > round && currentCount < MAX_FLIGHTS_PER_AIRLINE) {
+              diversifiedFlights.push(airlineFlights[round]);
+              airlineCount.set(airlineCode, currentCount + 1);
+              addedInRound++;
+              
+              // Stop if we've reached our target
+              if (diversifiedFlights.length >= TARGET_TOTAL_FLIGHTS) {
+                break;
+              }
+            }
+          }
+          
+          round++;
+        } while (addedInRound > 0 && diversifiedFlights.length < TARGET_TOTAL_FLIGHTS);
+        
+        console.log(`[Amadeus] Diversified to ${diversifiedFlights.length} flights across ${flightsByAirline.size} airlines`);
+        
+        // Log airline distribution
+        const finalDistribution = new Map<string, number>();
+        for (const flight of diversifiedFlights) {
+          const code = flight.airline.code;
+          finalDistribution.set(code, (finalDistribution.get(code) || 0) + 1);
+        }
+        console.log('[Amadeus] Final airline distribution:', 
+          Array.from(finalDistribution.entries())
+            .sort((a, b) => b[1] - a[1]) // Sort by count descending
+            .map(([code, count]) => `${code}: ${count}`)
+            .join(', '));
+
         // Return ONLY Amadeus results - NO SIMULATOR FALLBACK
         return res.json({
-          flights: flights,
+          flights: diversifiedFlights,
           searchParams: {
             fromAirport,
             toAirport,
