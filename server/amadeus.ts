@@ -229,4 +229,66 @@ export async function searchFlights(params: AmadeusSearchParams): Promise<Amadeu
   }
 }
 
+// Search for airports and cities using Amadeus API
+export interface AmadeusLocation {
+  type: string;
+  subType: string;
+  name: string;
+  detailedName: string;
+  iataCode: string;
+  address?: {
+    cityName?: string;
+    cityCode?: string;
+    countryName?: string;
+    countryCode?: string;
+    stateCode?: string;
+    regionCode?: string;
+  };
+  geoCode?: {
+    latitude: number;
+    longitude: number;
+  };
+  timeZoneOffset?: string;
+}
+
+export interface AmadeusLocationSearchResponse {
+  data: AmadeusLocation[];
+  meta?: {
+    count: number;
+    links?: {
+      self: string;
+      next?: string;
+      previous?: string;
+      last?: string;
+      first?: string;
+    };
+  };
+}
+
+export async function searchAirports(keyword: string, limit: number = 50): Promise<AmadeusLocation[]> {
+  try {
+    if (keyword.length < 1) {
+      return [];
+    }
+
+    const response = await amadeus.referenceData.locations.get({
+      keyword: keyword,
+      subType: 'AIRPORT,CITY',
+      'page[limit]': limit.toString(),
+      sort: 'analytics.travelers.score',
+      view: 'FULL'
+    });
+    
+    return response.data.data as AmadeusLocation[];
+  } catch (error: any) {
+    console.error('[Amadeus] Airport search error:', error.message);
+    
+    if (error.response) {
+      console.error('[Amadeus] Error response:', JSON.stringify(error.response, null, 2));
+    }
+    
+    throw new Error(`Failed to search airports: ${error.message || 'Unknown error'}`);
+  }
+}
+
 export default amadeus;

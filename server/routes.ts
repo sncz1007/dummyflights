@@ -45,17 +45,43 @@ const ALL_AIRLINES: Record<string, { code: string; name: string; logo: string }>
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Airport search endpoint
+  // Airport search endpoint - Uses Amadeus API for worldwide airport database
   app.get("/api/airports/search", async (req, res) => {
     try {
       const query = req.query.q as string;
-      const country = req.query.country as string | undefined;
       
-      if (!query || query.length < 2) {
+      if (!query || query.length < 1) {
         return res.json([]);
       }
       
-      const airports = await storage.searchAirports(query, country);
+      // Try Amadeus API first for comprehensive worldwide airport database
+      const hasAmadeusKeys = process.env.AMADEUS_API_KEY && process.env.AMADEUS_API_SECRET;
+      
+      if (hasAmadeusKeys) {
+        try {
+          const { searchAirports } = await import('./amadeus.js');
+          const amadeusResults = await searchAirports(query, 50);
+          
+          // Transform Amadeus locations to our Airport format
+          const airports = amadeusResults.map((location: any) => ({
+            id: `amadeus-${location.iataCode}`,
+            iataCode: location.iataCode,
+            name: location.name,
+            city: location.address?.cityName || location.name,
+            country: location.address?.countryName || '',
+            lat: location.geoCode?.latitude || 0,
+            lon: location.geoCode?.longitude || 0,
+          }));
+          
+          console.log(`[Amadeus] Found ${airports.length} airports for query: ${query}`);
+          return res.json(airports);
+        } catch (amadeusError: any) {
+          console.error('[Amadeus] Airport search failed, falling back to database:', amadeusError.message);
+        }
+      }
+      
+      // Fallback to local database
+      const airports = await storage.searchAirports(query, undefined);
       res.json(airports);
     } catch (error) {
       console.error("Airport search error:", error);
@@ -152,16 +178,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Check if Amadeus API is configured
+      // Amadeus API is REQUIRED - no fallback to simulator
       const hasAmadeusKeys = process.env.AMADEUS_API_KEY && process.env.AMADEUS_API_SECRET;
-      let useAmadeus = false;
       
-      if (hasAmadeusKeys) {
-        try {
-          // Use Amadeus API for real flight data
-          console.log(`[Amadeus] Searching flights: ${fromIataCode} -> ${toIataCode}`);
-          
-          const { searchFlights, getAirlineNameFromCode } = await import('./amadeus.js');
+      if (!hasAmadeusKeys) {
+        return res.status(503).json({ 
+          error: "Flight search service not configured",
+          message: "Amadeus API credentials are required for real flight data"
+        });
+      }
+      
+      try {
+        // Use Amadeus API for real flight data - NO SIMULATOR FALLBACK
+        console.log(`[Amadeus] Searching flights: ${fromIataCode} -> ${toIataCode}`);
+        
+        const { searchFlights, getAirlineNameFromCode } = await import('./amadeus.js');
           
           // Map flight class to Amadeus format
           const travelClassMap: Record<string, 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST'> = {
@@ -337,91 +368,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
 
-          useAmadeus = true;
-          return res.json({
-            flights: flights,
-            searchParams: {
-              fromAirport,
-              toAirport,
-              departureDate,
-              returnDate,
-              passengers,
-              flightClass,
-              tripType,
-            },
-          });
-        } catch (error: any) {
-          console.error('[Amadeus] API error, falling back to simulated flights:', {
-            message: error.message,
-            code: error.code,
-            description: error.description
-          });
-          // Continue to fallback (simulated flights)
-        }
-      }
-
-      // FALLBACK: Use simulated flights if Amadeus is not configured or failed
-      if (!useAmadeus) {
-        console.log(`[Flight Search] Using simulated flights${hasAmadeusKeys ? ' (Amadeus failed)' : ' (Amadeus not configured)'}`);
-        const { findSimulatedFlights, generateFlightTimes, applyPriceVariation } = await import('./simulatedFlights.js');
-      const { getOriginCityInfo } = await import('./internationalOriginCities.js');
-      const { calculateFlightStops } = await import('./flightStopsCalculator.js');
-      
-      // Search for simulated routes matching this origin-destination pair
-      let simulatedRoutes = findSimulatedFlights(fromIataCode, toIataCode);
-
-      console.log(`[Flight Search] Route: ${fromIataCode} -> ${toIataCode}`);
-      console.log(`[Flight Search] Found ${simulatedRoutes.length} direct simulated routes`);
-
-      // If no routes found, try to find routes from reference hubs (JFK for east, LAX for west, ORD for central)
-      const isUSAOrigin = departureAirport.country === 'United States' || departureAirport.country === 'USA';
-      const isInternationalDestination = destinationAirport.country !== 'United States' && destinationAirport.country !== 'USA';
-      
-      if (simulatedRoutes.length === 0 && isUSAOrigin) {
-        const originInfo = getOriginCityInfo(fromIataCode);
-        
-        if (originInfo && isInternationalDestination) {
-          // This is an international flight from a city that might have connections
-          let referenceHub: string;
-          let hubRoutes: any[] = [];
-          
-          if (originInfo.coast === 'east') {
-            referenceHub = 'JFK';
-            hubRoutes = findSimulatedFlights(referenceHub, toIataCode);
-          } else if (originInfo.coast === 'west') {
-            referenceHub = 'LAX';
-            hubRoutes = findSimulatedFlights(referenceHub, toIataCode);
-          } else {
-            // Central - try JFK first (for Europe, Africa, Middle East), then LAX (for Asia, Oceania)
-            referenceHub = 'JFK';
-            hubRoutes = findSimulatedFlights(referenceHub, toIataCode);
-            if (hubRoutes.length === 0) {
-              referenceHub = 'LAX';
-              hubRoutes = findSimulatedFlights(referenceHub, toIataCode);
-            }
-          }
-          
-          if (hubRoutes.length > 0) {
-            // Adapt routes from hub to this city
-            simulatedRoutes = hubRoutes.map(route => ({
-              ...route,
-              from: fromIataCode,
-              // Adjust price slightly for connection
-              basePrice: route.basePrice * 1.15, // 15% more for connection
-              // Adjust duration for connection
-              duration: route.duration.replace(/(\d+)h/, (_match: string, hours: string) => `${parseInt(hours) + 2}h`), // Add 2 hours
-            }));
-            console.log(`[Flight Search] Using ${simulatedRoutes.length} routes from ${referenceHub} hub with connection`);
-          }
-        }
-      }
-
-      // If still no routes found, return no flights available
-      if (simulatedRoutes.length === 0) {
+        // Return ONLY Amadeus results - NO SIMULATOR FALLBACK
         return res.json({
-          flights: [],
-          noFlightsAvailable: true,
-          message: "No flights available for this destination at this time",
+          flights: flights,
           searchParams: {
             fromAirport,
             toAirport,
@@ -432,205 +381,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
             tripType,
           },
         });
-      }
-
-      // === ROUND-TRIP SUPPORT ===
-      // Search for return flights if trip is round-trip
-      let returnRoutes: any[] = [];
-      if ((tripType === 'round-trip' || tripType === 'roundtrip') && returnDate) {
-        returnRoutes = findSimulatedFlights(toIataCode, fromIataCode);
+      } catch (error: any) {
+        console.error('[Amadeus] API error:', {
+          message: error.message,
+          code: error.code,
+          description: error.description
+        });
         
-        // If no direct return routes, try hub connections
-        // CRITICAL: For return flights, we need toIataCode (international) → hub → fromIataCode (USA)
-        const isUSAOrigin = departureAirport.country === 'United States' || departureAirport.country === 'USA';
-        const isInternationalDestination = destinationAirport.country !== 'United States' && destinationAirport.country !== 'USA';
-        
-        if (returnRoutes.length === 0 && isUSAOrigin && isInternationalDestination) {
-          // Return flights need to go FROM international destination TO USA
-          // Try both major hubs (JFK for east coast final dest, LAX for west coast final dest)
-          let referenceHub: string;
-          let hubRoutes: any[] = [];
-          
-          // Determine hub based on USA FINAL destination (fromIataCode)
-          const finalDestInfo = getOriginCityInfo(fromIataCode);
-          
-          if (finalDestInfo && finalDestInfo.coast === 'west') {
-            // Final destination is west coast USA, use LAX hub
-            referenceHub = 'LAX';
-            hubRoutes = findSimulatedFlights(toIataCode, referenceHub);
-            
-            // If no LAX routes, try JFK as fallback
-            if (hubRoutes.length === 0) {
-              referenceHub = 'JFK';
-              hubRoutes = findSimulatedFlights(toIataCode, referenceHub);
-            }
-          } else {
-            // Final destination is east/central USA, use JFK hub
-            referenceHub = 'JFK';
-            hubRoutes = findSimulatedFlights(toIataCode, referenceHub);
-            
-            // If no JFK routes, try LAX as fallback
-            if (hubRoutes.length === 0) {
-              referenceHub = 'LAX';
-              hubRoutes = findSimulatedFlights(toIataCode, referenceHub);
-            }
-          }
-          
-          if (hubRoutes.length > 0) {
-            // Construct proper return routes: International → Hub → Final USA destination
-            returnRoutes = hubRoutes.map(route => ({
-              ...route,
-              from: toIataCode, // FROM international destination
-              to: fromIataCode, // TO USA origin (final destination)
-              // countries remain unchanged: route goes International → USA (correct for returns)
-              basePrice: route.basePrice * 1.15, // 15% more for connection
-              duration: route.duration.replace(/(\d+)h/, (_match: string, hours: string) => `${parseInt(hours) + 2}h`), // Add 2 hours
-            }));
-            console.log(`[Flight Search] Using ${returnRoutes.length} return routes from ${referenceHub} hub with connection`);
-          }
-        }
-        
-        console.log(`[Flight Search] Return Route: ${toIataCode} -> ${fromIataCode}`);
-        console.log(`[Flight Search] Found ${returnRoutes.length} return routes`);
-      }
-
-      // Generate flights from simulated routes with price variations
-      // Each route already has the correct airline based on manual segmentation
-      const flights: any[] = [];
-      
-      const classMultipliers: Record<string, number> = {
-        'economy': 1,
-        'premium_economy': 1.5,
-        'business': 2.5,
-        'first': 4.0,
-      };
-      
-      for (const route of simulatedRoutes) {
-        const flightTimes = generateFlightTimes(route, departureDate);
-        
-        for (const flightTime of flightTimes) {
-          // Apply price variation and class multipliers
-          let outboundBasePrice = applyPriceVariation(route.basePrice);
-          outboundBasePrice = outboundBasePrice * (classMultipliers[flightClass] || 1);
-          
-          // Get airline info
-          const airlineObj = ALL_AIRLINES[route.airline] || {
-            code: route.airlineCode,
-            name: route.airline,
-            logo: `https://images.kiwi.com/airlines/64/${route.airlineCode}.png`
-          };
-          
-          // === ROUND-TRIP PRICING ===
-          // For round-trip: generate return flight options and calculate combined price
-          let returnFlightOptions: any[] = [];
-          
-          if ((tripType === 'round-trip' || tripType === 'roundtrip') && returnRoutes.length > 0 && returnDate) {
-            console.log(`[Return Flights] Processing return flights. returnRoutes: ${returnRoutes.length}`);
-            // Generate up to 3 return flight options per outbound flight
-            const selectedReturnRoutes = returnRoutes.slice(0, 3);
-            
-            for (const returnRoute of selectedReturnRoutes) {
-              const returnFlightTimes = generateFlightTimes(returnRoute, returnDate);
-              const returnFlightTime = returnFlightTimes[0]; // Take first return time
-              
-              if (returnFlightTime) {
-                const returnBasePrice = returnRoute.basePrice; // Use real return flight price
-                
-                const returnAirlineObj = ALL_AIRLINES[returnRoute.airline] || {
-                  code: returnRoute.airlineCode,
-                  name: returnRoute.airline,
-                  logo: `https://images.kiwi.com/airlines/64/${returnRoute.airlineCode}.png`
-                };
-                
-                returnFlightOptions.push({
-                  id: `${returnRoute.airlineCode}-${returnFlightTime.flightNumber}-${returnDate}`,
-                  airline: returnAirlineObj,
-                  flightNumber: returnFlightTime.flightNumber,
-                  departure: {
-                    airport: toAirport,
-                    time: returnFlightTime.departureTime,
-                    date: returnDate,
-                  },
-                  arrival: {
-                    airport: fromAirport,
-                    time: returnFlightTime.arrivalTime,
-                    date: returnDate,
-                  },
-                  duration: returnRoute.duration,
-                  stops: calculateFlightStops(returnRoute.duration, returnRoute.countries.from, returnRoute.countries.to, returnRoute.airlineCode).stops,
-                  basePrice: returnBasePrice,
-                });
-              }
-            }
-            console.log(`[Return Flights] Generated ${returnFlightOptions.length} return flight options`);
-          }
-          
-          // Use real flight prices from simulator
-          const originalPrice = route.basePrice;
-          const discountedPrice = route.basePrice;
-          
-          flights.push({
-            id: `${route.airlineCode}-${flightTime.flightNumber}-${departureDate}`,
-            airline: airlineObj,
-            flightNumber: flightTime.flightNumber,
-            departure: {
-              airport: fromAirport,
-              time: flightTime.departureTime,
-              date: departureDate,
-            },
-            arrival: {
-              airport: toAirport,
-              time: flightTime.arrivalTime,
-              date: departureDate,
-            },
-            duration: route.duration,
-            stops: calculateFlightStops(route.duration, route.countries.from, route.countries.to, route.airlineCode).stops,
-            class: flightClass,
-            originalPrice: Math.round(originalPrice),
-            discountedPrice: Math.round(discountedPrice),
-            discount: 0,
-            amenities: {
-              wifi: originalPrice > 400,
-              meals: originalPrice > 300,
-              entertainment: originalPrice > 500,
-              power: originalPrice > 350,
-            },
-            returnFlightOptions: (tripType === 'round-trip' || tripType === 'roundtrip') ? returnFlightOptions : null,
-          });
-        }
-      }
-      
-      // Sort all flights by price (cheapest first), THEN limit to top 10
-      flights.sort((a: any, b: any) => a.discountedPrice - b.discountedPrice);
-      const limitedFlights = flights.slice(0, 10);
-
-        res.json({
-          flights: limitedFlights,
-          searchParams: {
-            fromAirport,
-            toAirport,
-            departureDate,
-            returnDate,
-            passengers,
-            flightClass,
-            tripType,
-          },
+        // Return error - NO FALLBACK
+        return res.status(503).json({ 
+          error: "Flight search service unavailable",
+          message: "Unable to connect to flight data service. Please check your Amadeus API credentials and try again.",
+          details: error.message
         });
       }
     } catch (error: any) {
       console.error("Flight search error:", error);
-      
-      // If Amadeus API fails, provide helpful error message
-      if (error.message && error.message.includes('Amadeus')) {
-        return res.status(503).json({ 
-          error: "Flight search service temporarily unavailable",
-          message: "Please try again in a moment"
-        });
-      }
-      
       res.status(500).json({ error: "Failed to search flights" });
     }
   });
+
 
   // Create booking and payment intent (from blueprint:javascript_stripe)
   app.post("/api/create-booking", async (req, res) => {
