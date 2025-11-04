@@ -243,9 +243,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Calculate number of stops
           const stops = firstItinerary.segments.length - 1;
           
-          // Fixed price for all flights
-          const originalPrice = 15;
-          const discountedPrice = 15; // Fixed $15 USD
+          // Use real flight prices from Amadeus API
+          const originalPrice = parseFloat(offer.price.grandTotal);
+          const discountedPrice = parseFloat(offer.price.grandTotal);
           
           // Prepare return flight options if round-trip
           let returnFlightOptions: any[] | null = null;
@@ -276,7 +276,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               });
               
               const returnStops = returnItinerary.segments.length - 1;
-              const returnBasePrice = 0; // Return flight included in $15 base price
+              const returnBasePrice = parseFloat(returnOffer.price.grandTotal);
               
               return {
                 id: `${returnAirlineCode}-${returnFirstSegment.number}-${returnDate}`,
@@ -534,7 +534,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               const returnFlightTime = returnFlightTimes[0]; // Take first return time
               
               if (returnFlightTime) {
-                const returnBasePrice = 0; // Return flight included in $15 base price
+                const returnBasePrice = returnRoute.basePrice; // Use real return flight price
                 
                 const returnAirlineObj = ALL_AIRLINES[returnRoute.airline] || {
                   code: returnRoute.airlineCode,
@@ -565,9 +565,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             console.log(`[Return Flights] Generated ${returnFlightOptions.length} return flight options`);
           }
           
-          // Fixed price for all flights
-          const originalPrice = 15;
-          const discountedPrice = 15; // Fixed $15 USD for all flights
+          // Use real flight prices from simulator
+          const originalPrice = route.basePrice;
+          const discountedPrice = route.basePrice;
           
           flights.push({
             id: `${route.airlineCode}-${flightTime.flightNumber}-${departureDate}`,
