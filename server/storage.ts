@@ -25,6 +25,7 @@ export interface IStorage {
   updateBookingPaymentIntent(id: string, paymentIntentId: string): Promise<Booking | undefined>;
   updateBookingPaymentStatus(id: string, status: string): Promise<Booking | undefined>;
   updateBookingStatus(id: string, status: string): Promise<Booking | undefined>;
+  updateBookingWithPNR(id: string, pnrCode: string, amadeusOrderId: string): Promise<Booking | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -195,6 +196,20 @@ export class DatabaseStorage implements IStorage {
       .update(bookings)
       .set({ 
         bookingStatus: status,
+        updatedAt: new Date() 
+      })
+      .where(eq(bookings.id, id))
+      .returning();
+    return updatedBooking || undefined;
+  }
+  
+  async updateBookingWithPNR(id: string, pnrCode: string, amadeusOrderId: string): Promise<Booking | undefined> {
+    const [updatedBooking] = await db
+      .update(bookings)
+      .set({ 
+        pnrCode: pnrCode,
+        amadeusOrderId: amadeusOrderId,
+        bookingStatus: 'confirmed',
         updatedAt: new Date() 
       })
       .where(eq(bookings.id, id))

@@ -597,26 +597,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (bookingId) {
             await storage.updateBookingPaymentStatus(bookingId, 'completed');
             
-            // Send payment confirmation email with PDF links
+            // Create Amadeus reservation and get PNR
             try {
               const booking = await storage.getBooking(bookingId);
               if (booking) {
-                const { sendPaymentConfirmationEmail } = await import('./emailService');
-                const domain = process.env.REPLIT_DEV_DOMAIN || req.get('host');
-                const protocol = req.protocol;
-                const baseUrl = `${protocol}://${domain}`;
+                console.log('[Payment Success] Creating Amadeus reservation for booking:', bookingId);
                 
-                await sendPaymentConfirmationEmail({
-                  booking,
-                  pdfLinks: {
-                    confirmationPdfUrl: `${baseUrl}/api/bookings/${booking.id}/confirmation-pdf`,
-                    receiptPdfUrl: `${baseUrl}/api/bookings/${booking.id}/receipt-pdf?paymentMethod=Card`,
-                  },
+                // Parse flight data
+                const flightData = JSON.parse(booking.selectedFlightData);
+                
+                // Parse passenger data
+                const passengers = [];
+                passengers.push({ 
+                  fullName: booking.fullName, 
+                  dateOfBirth: booking.dateOfBirth 
                 });
+                
+                if (booking.additionalPassengers) {
+                  const additionalPassengers = JSON.parse(booking.additionalPassengers);
+                  passengers.push(...additionalPassengers);
+                }
+                
+                // Convert passengers to Amadeus traveler format
+                const { createFlightOrder } = await import('./amadeus.js');
+                const travelers: any[] = passengers.map((passenger, index) => {
+                  const [firstName, ...lastNameParts] = passenger.fullName.trim().split(' ');
+                  const lastName = lastNameParts.join(' ') || firstName;
+                  
+                  return {
+                    id: (index + 1).toString(),
+                    dateOfBirth: passenger.dateOfBirth,
+                    name: {
+                      firstName: firstName.toUpperCase(),
+                      lastName: lastName.toUpperCase()
+                    },
+                    contact: index === 0 ? {
+                      emailAddress: booking.email,
+                      phones: booking.phone ? [{
+                        deviceType: 'MOBILE',
+                        countryCallingCode: '1',
+                        number: booking.phone.replace(/\D/g, '')
+                      }] : undefined
+                    } : undefined
+                  };
+                });
+                
+                // Create flight order in Amadeus to get PNR
+                const flightOrder = await createFlightOrder(
+                  flightData.amadeusOffer || flightData,
+                  travelers
+                );
+                
+                // Extract PNR from response
+                const pnrCode = flightOrder.associatedRecords?.[0]?.reference;
+                const amadeusOrderId = flightOrder.id;
+                
+                console.log('[Payment Success] Amadeus reservation created successfully');
+                console.log('[Payment Success] PNR:', pnrCode);
+                console.log('[Payment Success] Order ID:', amadeusOrderId);
+                
+                // Update booking with PNR and order ID
+                await storage.updateBookingWithPNR(bookingId, pnrCode, amadeusOrderId);
+                
+                console.log('[Payment Success] Booking updated with PNR:', pnrCode);
               }
-            } catch (emailError) {
-              console.error('[Stripe Webhook] Error sending confirmation email:', emailError);
-              // Don't fail the webhook if email fails
+            } catch (amadeusError: any) {
+              console.error('[Payment Success] Error creating Amadeus reservation:', amadeusError);
+              console.error('[Payment Success] Error details:', amadeusError.message);
+              // Don't fail the webhook if Amadeus fails - payment is complete
+              // PDFs will use fallback confirmation code if PNR is not available
             }
           }
           break;
