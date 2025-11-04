@@ -781,12 +781,11 @@ export default function Checkout() {
               </div>
             </div>
 
-            <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg mb-6 text-left">
-              <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Next Steps</h3>
-              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-2">
-                <li>✓ A confirmation email has been sent to your email address</li>
-                <li>✓ We will purchase your flight tickets within 24-48 hours</li>
-                <li>✓ Your tickets will be emailed to you once purchased</li>
+            <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg mb-6 text-left">
+              <h3 className="font-semibold text-green-900 dark:text-green-100 mb-2">Your Booking is Confirmed</h3>
+              <ul className="text-sm text-green-800 dark:text-green-200 space-y-2">
+                <li>✓ Your ticket has been issued immediately</li>
+                <li>✓ A confirmation email with PDFs has been sent to your email address</li>
                 <li>✓ Please save the PDFs above for your records</li>
               </ul>
             </div>

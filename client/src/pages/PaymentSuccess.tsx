@@ -133,41 +133,33 @@ export default function PaymentSuccess() {
           </div>
 
           {/* Important Information */}
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-5 mb-8">
-            <h3 className="font-semibold text-yellow-900 dark:text-yellow-100 mb-3">
-              {isSpanish ? '📧 Próximos pasos:' : '📧 Next steps:'}
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-5 mb-8">
+            <h3 className="font-semibold text-green-900 dark:text-green-100 mb-3">
+              {isSpanish ? '✅ Tu reserva está confirmada' : '✅ Your booking is confirmed'}
             </h3>
-            <ul className="text-sm text-yellow-800 dark:text-yellow-200 space-y-2">
+            <ul className="text-sm text-green-800 dark:text-green-200 space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-green-600 dark:text-green-400 font-bold mt-0.5">✓</span>
                 <span>
                   {isSpanish 
-                    ? 'Hemos enviado una confirmación a tu correo electrónico' 
-                    : 'We have sent a confirmation to your email'}
+                    ? 'Tu ticket ha sido expedido de inmediato' 
+                    : 'Your ticket has been issued immediately'}
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-green-600 dark:text-green-400 font-bold mt-0.5">✓</span>
                 <span>
                   {isSpanish 
-                    ? 'Compraremos tus boletos de avión en las próximas 24-48 horas' 
-                    : 'We will purchase your flight tickets within 24-48 hours'}
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-green-600 dark:text-green-400 font-bold mt-0.5">✓</span>
-                <span>
-                  {isSpanish 
-                    ? 'Te enviaremos los tickets por correo una vez comprados' 
-                    : 'Tickets will be emailed to you once purchased'}
+                    ? 'Hemos enviado una confirmación con los PDFs a tu correo electrónico' 
+                    : 'We have sent a confirmation with the PDFs to your email'}
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 dark:text-blue-400 font-bold mt-0.5">📥</span>
                 <span>
                   {isSpanish 
-                    ? 'Guarda los PDFs de arriba para tus registros' 
-                    : 'Please save the PDFs above for your records'}
+                    ? 'Descarga los PDFs de arriba para tus registros' 
+                    : 'Download the PDFs above for your records'}
                 </span>
               </li>
             </ul>
