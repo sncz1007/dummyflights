@@ -429,6 +429,7 @@ export default function Checkout() {
     try {
       // Fixed price: Always $15 USD
       const totalPrice = 15;
+      const numberOfPassengers = Number(searchParams.passengers);
       
       const bookingData = {
         fullName: customerInfo.fullName,
@@ -516,6 +517,7 @@ export default function Checkout() {
 
   // Fixed price: Always $15 USD regardless of passengers or route
   const totalPrice = 15;
+  const numberOfPassengers = Number(searchParams.passengers);
 
   return (
     <div className="min-h-screen bg-background py-8">
