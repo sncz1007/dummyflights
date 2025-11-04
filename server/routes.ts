@@ -150,10 +150,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Search flights endpoint - uses Amadeus API for real flight data
   app.post("/api/flights/search", async (req, res) => {
     try {
-      const { fromAirport, toAirport, departureDate, returnDate, passengers, flightClass, tripType } = req.body;
+      const { fromAirport, toAirport, departureDate, returnDate, passengers, tripType } = req.body;
       
-      // Validate required fields
-      if (!fromAirport || !toAirport || !departureDate || !passengers || !flightClass || !tripType) {
+      // Validate required fields (class is now optional, defaults to economy)
+      if (!fromAirport || !toAirport || !departureDate || !passengers || !tripType) {
         return res.status(400).json({ error: "Missing required fields" });
       }
 
@@ -189,15 +189,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         const { searchFlights, getAirlineNameFromCode } = await import('./amadeus.js');
           
-          // Map flight class to Amadeus format
-          const travelClassMap: Record<string, 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST'> = {
-            'economy': 'ECONOMY',
-            'premium_economy': 'PREMIUM_ECONOMY',
-            'business': 'BUSINESS',
-            'first': 'FIRST',
-          };
-          
-          const amadeusClass = travelClassMap[flightClass] || 'ECONOMY';
+          // Always use ECONOMY class for simplicity
+          const amadeusClass = 'ECONOMY';
           
           // Search outbound flights
           const outboundResults = await searchFlights({
@@ -349,7 +342,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             },
             duration: duration,
             stops: stops,
-            class: flightClass,
+            class: 'economy',
             originalPrice: Math.round(originalPrice),
             discountedPrice: Math.round(discountedPrice),
             discount: 0,
@@ -372,7 +365,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
             departureDate,
             returnDate,
             passengers,
-            flightClass,
             tripType,
           },
         });

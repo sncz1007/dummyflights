@@ -216,17 +216,19 @@ export async function searchFlights(params: AmadeusSearchParams): Promise<Amadeu
       max: (params.max || 20).toString(),
     });
     
-    console.log('[Amadeus] Raw response structure:', Object.keys(response));
-    console.log('[Amadeus] Response.data structure:', response.data ? Object.keys(response.data) : 'undefined');
+    console.log('[Amadeus] Response received successfully');
     
-    // Amadeus SDK returns the full response in response.data
-    // response.data contains { data: [], dictionaries: {}, meta: {} }
-    if (!response || !response.data) {
+    // Amadeus SDK structure:
+    // - response.data = array of flight offers (the actual flights)
+    // - response.result = full object { data, dictionaries, meta }
+    if (!response || !response.result) {
       throw new Error('Invalid response structure from Amadeus API');
     }
     
-    // Return the full response.data which is the AmadeusSearchResponse
-    return response.data as AmadeusSearchResponse;
+    console.log(`[Amadeus] Found ${response.data.length} flight offers`);
+    
+    // Return the full result which contains data, dictionaries, and meta
+    return response.result as AmadeusSearchResponse;
   } catch (error: any) {
     console.error('[Amadeus] API error:', {
       message: error.message,

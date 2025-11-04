@@ -19,14 +19,12 @@ export default function HeroSection() {
     departureDate: '',
     returnDate: '',
     passengers: '1',
-    flightClass: 'economy',
     tripType: 'roundtrip'
   });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   // Use refs to store current values (for reliable capture during automated testing)
   const currentPassengers = useRef('1');
-  const currentFlightClass = useRef('economy');
   const currentTripType = useRef('roundtrip');
   const departureDateRef = useRef<HTMLInputElement>(null);
   const returnDateRef = useRef<HTMLInputElement>(null);
@@ -34,11 +32,6 @@ export default function HeroSection() {
   const handlePassengersChange = (value: string) => {
     currentPassengers.current = value;
     setSearchData(prev => ({ ...prev, passengers: value }));
-  };
-
-  const handleClassChange = (value: string) => {
-    currentFlightClass.current = value;
-    setSearchData(prev => ({ ...prev, flightClass: value }));
   };
 
   const handleTripTypeChange = (value: string) => {
@@ -53,7 +46,6 @@ export default function HeroSection() {
       departureDate: departureDateRef.current?.value || searchData.departureDate,
       returnDate: returnDateRef.current?.value || searchData.returnDate,
       passengers: currentPassengers.current,
-      flightClass: currentFlightClass.current,
       tripType: currentTripType.current,
     };
     
@@ -89,7 +81,6 @@ export default function HeroSection() {
       departure: completeData.departureDate,
       ...(completeData.returnDate && { return: completeData.returnDate }),
       passengers: completeData.passengers,
-      class: completeData.flightClass,
       type: completeData.tripType,
     });
     
@@ -197,8 +188,8 @@ export default function HeroSection() {
               </div>
             </div>
             
-            {/* Passengers & Class */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {/* Passengers & Trip Type */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
                 <Label className="block text-sm font-medium text-foreground mb-2" data-testid="label-passengers">
                   {t('search.passengers')}
@@ -213,23 +204,6 @@ export default function HeroSection() {
                     <SelectItem value="3">{t('passengers.3')}</SelectItem>
                     <SelectItem value="4">{t('passengers.4')}</SelectItem>
                     <SelectItem value="5+">{t('passengers.5+')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div>
-                <Label className="block text-sm font-medium text-foreground mb-2" data-testid="label-class">
-                  {t('search.class')}
-                </Label>
-                <Select value={searchData.flightClass} onValueChange={handleClassChange}>
-                  <SelectTrigger data-testid="select-class">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="economy">{t('search.economy')}</SelectItem>
-                    <SelectItem value="premium">{t('search.premium')}</SelectItem>
-                    <SelectItem value="business">{t('search.business')}</SelectItem>
-                    <SelectItem value="first">{t('search.first')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
