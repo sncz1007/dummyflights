@@ -324,6 +324,9 @@ const CustomerInfoForm = ({
                   const flightDataStr = sessionStorage.getItem('selectedFlight');
                   const searchParamsStr = sessionStorage.getItem('searchParams');
                   
+                  console.log('Test button: flightDataStr', flightDataStr);
+                  console.log('Test button: searchParamsStr', searchParamsStr);
+                  
                   if (!flightDataStr || !searchParamsStr) {
                     throw new Error('Missing flight data');
                   }
@@ -331,9 +334,26 @@ const CustomerInfoForm = ({
                   const flightData = JSON.parse(flightDataStr);
                   const searchParams = JSON.parse(searchParamsStr);
                   
-                  // Create booking with correct field names
-                  const originalPrice = flightData.originalPrice || flightData.basePrice || serviceFee;
-                  const discountedPrice = flightData.discountedPrice || flightData.basePrice || serviceFee;
+                  console.log('Test button: flightData', flightData);
+                  console.log('Test button: searchParams', searchParams);
+                  
+                  // Ensure we have prices
+                  let originalPrice = serviceFee;
+                  let discountedPrice = serviceFee;
+                  
+                  if (typeof flightData.originalPrice === 'number') {
+                    originalPrice = flightData.originalPrice;
+                  } else if (typeof flightData.basePrice === 'number') {
+                    originalPrice = flightData.basePrice;
+                  }
+                  
+                  if (typeof flightData.discountedPrice === 'number') {
+                    discountedPrice = flightData.discountedPrice;
+                  } else if (typeof flightData.basePrice === 'number') {
+                    discountedPrice = flightData.basePrice;
+                  }
+                  
+                  console.log('Test button: prices', { originalPrice, discountedPrice });
                   
                   const bookingData = {
                     fullName: customerInfo.fullName,
@@ -358,12 +378,21 @@ const CustomerInfoForm = ({
                     language: localStorage.getItem('preferredLanguage') || 'en'
                   };
                   
+                  console.log('Test button: sending bookingData', bookingData);
+                  
                   const response: any = await apiRequest('POST', '/api/create-booking', bookingData);
                   
+                  console.log('Test button: response', response);
+                  
                   // Save booking ID and redirect to success
-                  sessionStorage.setItem('bookingId', response.id.toString());
-                  window.location.href = '/checkout?payment_success=true&test=true';
+                  if (response && response.booking && response.booking.id) {
+                    sessionStorage.setItem('bookingId', response.booking.id);
+                    window.location.href = '/checkout?payment_success=true&test=true';
+                  } else {
+                    throw new Error('Invalid response from server');
+                  }
                 } catch (error: any) {
+                  console.error('Test button error:', error);
                   toast({
                     title: localStorage.getItem('preferredLanguage') === 'es' ? 'Error' : 'Error',
                     description: error.message || 'Failed to create test booking',
