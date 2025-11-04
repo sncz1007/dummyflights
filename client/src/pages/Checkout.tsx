@@ -77,23 +77,33 @@ interface CustomerInfo {
 
 // Customer Info Form Component (no Stripe hooks)
 const CustomerInfoForm = ({ 
-  onSubmit,
+  onPaymentMethodSelect,
   customerInfo,
   setCustomerInfo,
-  totalPassengers
+  totalPassengers,
+  serviceFee
 }: { 
-  onSubmit: () => Promise<void>;
+  onPaymentMethodSelect: (method: 'paypal' | 'stripe') => Promise<void>;
   customerInfo: CustomerInfo;
   setCustomerInfo: (info: CustomerInfo) => void;
   totalPassengers: number;
+  serviceFee: number;
 }) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [formValid, setFormValid] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Validate form whenever customer info changes
+  useEffect(() => {
+    const isMainPassengerValid = customerInfo.fullName && customerInfo.email && customerInfo.dateOfBirth;
+    const areAdditionalPassengersValid = totalPassengers === 1 || 
+      customerInfo.additionalPassengers.every(p => p.fullName && p.dateOfBirth);
+    
+    setFormValid(!!isMainPassengerValid && areAdditionalPassengersValid);
+  }, [customerInfo, totalPassengers]);
 
+  const handlePaymentMethodClick = async (method: 'paypal' | 'stripe') => {
     if (!customerInfo.fullName || !customerInfo.email || !customerInfo.dateOfBirth) {
       toast({
         title: t('checkout.error'),
@@ -118,14 +128,13 @@ const CustomerInfoForm = ({
 
     setIsProcessing(true);
     try {
-      await onSubmit();
+      await onPaymentMethodSelect(method);
     } catch (err: any) {
       toast({
         title: t('checkout.error'),
         description: err.message || t('checkout.errorMessage'),
         variant: 'destructive',
       });
-    } finally {
       setIsProcessing(false);
     }
   };
@@ -137,7 +146,7 @@ const CustomerInfoForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="space-y-6">
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4" data-testid="text-contact-info">
           {t('checkout.contactInfo')}
@@ -239,31 +248,66 @@ const CustomerInfoForm = ({
         </Card>
       )}
 
-      <Button
-        type="submit"
-        disabled={isProcessing || !customerInfo.fullName || !customerInfo.email || !customerInfo.dateOfBirth}
-        className="w-full"
-        size="lg"
-        data-testid="button-continue-payment"
-      >
-        {isProcessing ? (
-          <>
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            {t('checkout.processing')}
-          </>
-        ) : (
-          'Continue to Payment'
-        )}
-      </Button>
-      
-      <div className="mt-4 text-center text-sm text-muted-foreground">
-        <p>
-          {localStorage.getItem('preferredLanguage') === 'es' 
-            ? 'Posterior al pago recibirás tus tickets o código de reserva directamente en tu correo'
-            : 'After payment, you will receive your tickets or reservation code directly in your email'}
-        </p>
-      </div>
-    </form>
+      {/* Payment Section */}
+      <Card className="p-6 border-2 border-primary/20">
+        <div className="mb-6 text-center">
+          <h3 className="text-xl font-semibold mb-2" data-testid="text-service-payment">
+            {localStorage.getItem('preferredLanguage') === 'es' 
+              ? 'Pago del Servicio' 
+              : 'Service Payment'}
+          </h3>
+          <p className="text-3xl font-bold text-primary mb-1">${serviceFee.toFixed(2)} USD</p>
+          <p className="text-sm text-muted-foreground">
+            {localStorage.getItem('preferredLanguage') === 'es' 
+              ? 'Cargo único por servicio de búsqueda y reserva' 
+              : 'One-time fee for search and booking service'}
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <Button
+            onClick={() => handlePaymentMethodClick('paypal')}
+            disabled={!formValid || isProcessing}
+            className="w-full h-12 text-lg bg-[#0070ba] hover:bg-[#005ea6]"
+            data-testid="button-pay-paypal"
+          >
+            {isProcessing ? (
+              <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Processing...</>
+            ) : (
+              <><SiPaypal className="mr-2 h-5 w-5" />
+              {localStorage.getItem('preferredLanguage') === 'es' 
+                ? 'Pagar con PayPal' 
+                : 'Pay with PayPal'}</>
+            )}
+          </Button>
+
+          <Button
+            onClick={() => handlePaymentMethodClick('stripe')}
+            disabled={!formValid || isProcessing}
+            className="w-full h-12 text-lg"
+            variant="outline"
+            data-testid="button-pay-stripe"
+          >
+            {isProcessing ? (
+              <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Processing...</>
+            ) : (
+              <><CreditCard className="mr-2 h-5 w-5" />
+              {localStorage.getItem('preferredLanguage') === 'es' 
+                ? 'Pagar con Tarjeta' 
+                : 'Pay with Card'}</>
+            )}
+          </Button>
+        </div>
+
+        <div className="mt-4 text-center text-sm text-muted-foreground">
+          <p>
+            {localStorage.getItem('preferredLanguage') === 'es' 
+              ? 'Posterior al pago recibirás tus tickets o código de reserva directamente en tu correo'
+              : 'After payment, you will receive your tickets or reservation code directly in your email'}
+          </p>
+        </div>
+      </Card>
+    </div>
   );
 };
 
@@ -427,9 +471,17 @@ export default function Checkout() {
     }
 
     try {
-      // Fixed price: Always $15 USD
-      const totalPrice = 15;
+      // Service fee is always $15 USD
+      const SERVICE_FEE = 15;
       const numberOfPassengers = Number(searchParams.passengers);
+      
+      // Calculate flight price
+      const flightPrice = flight.discountedPrice || flight.originalPrice;
+      const returnFlightPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
+      const totalFlightPrice = (flightPrice + returnFlightPrice) * numberOfPassengers;
+      
+      // Total to pay = flight price + service fee
+      const totalPrice = totalFlightPrice + SERVICE_FEE;
       
       const bookingData = {
         fullName: customerInfo.fullName,
@@ -447,8 +499,8 @@ export default function Checkout() {
         flightClass: searchParams.flightClass,
         tripType: searchParams.tripType,
         selectedFlightData: JSON.stringify(flight),
-        originalPrice: totalPrice.toString(),
-        discountedPrice: totalPrice.toString(),
+        originalPrice: totalFlightPrice.toString(),
+        discountedPrice: totalFlightPrice.toString(),
         currency: 'USD',
         language: localStorage.getItem('preferredLanguage') || 'en',
       };
@@ -476,8 +528,8 @@ export default function Checkout() {
           customerDOB: customerInfo.dateOfBirth,
           additionalPassengers: customerInfo.additionalPassengers,
           totalPrice: `$${totalPrice.toFixed(2)}`,
-          originalPrice: `$${totalPrice.toFixed(2)}`,
-          discount: '0%',
+          originalPrice: `$${totalFlightPrice.toFixed(2)}`,
+          discount: flight.discount ? `${flight.discount}%` : '0%',
           language: localStorage.getItem('preferredLanguage') || 'en',
         });
         
@@ -515,9 +567,17 @@ export default function Checkout() {
     );
   }
 
-  // Fixed price: Always $15 USD regardless of passengers or route
-  const totalPrice = 15;
+  // Calculate pricing
+  const SERVICE_FEE = 15; // $15 service fee
   const numberOfPassengers = Number(searchParams.passengers);
+  
+  // Calculate flight price per passenger
+  const flightPricePerPassenger = flight.discountedPrice || flight.originalPrice;
+  const returnFlightPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
+  const totalFlightPrice = (flightPricePerPassenger + returnFlightPrice) * numberOfPassengers;
+  
+  // Total to pay = flight price + service fee
+  const totalPrice = totalFlightPrice + SERVICE_FEE;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -602,7 +662,26 @@ export default function Checkout() {
                   </div>
                 )}
                 
-                <div className="flex justify-between items-center pt-2">
+                {/* Flight Price Breakdown */}
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Precio del vuelo' : 'Flight Price'}
+                  </span>
+                  <span data-testid="text-flight-price">
+                    ${totalFlightPrice.toFixed(2)}
+                  </span>
+                </div>
+                
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Cargo por servicio' : 'Service Fee'}
+                  </span>
+                  <span data-testid="text-service-fee">
+                    ${SERVICE_FEE.toFixed(2)}
+                  </span>
+                </div>
+                
+                <div className="flex justify-between items-center pt-2 border-t">
                   <span className="text-lg font-semibold">
                     {t('checkout.totalPrice')}
                   </span>
@@ -616,67 +695,38 @@ export default function Checkout() {
 
           {/* Checkout Form - Right Column */}
           <div className="lg:col-span-2">
-            {!clientSecret && !paymentMethod ? (
+            {!paymentMethod ? (
               <CustomerInfoForm 
-                onSubmit={handleCreateBooking}
+                onPaymentMethodSelect={async (method: 'paypal' | 'stripe') => {
+                  await handleCreateBooking();
+                  setPaymentMethod(method);
+                }}
                 customerInfo={customerInfo}
                 setCustomerInfo={setCustomerInfo}
                 totalPassengers={Number(searchParams.passengers)}
+                serviceFee={SERVICE_FEE}
               />
-            ) : !paymentMethod ? (
-              <Card className="p-6">
-                <h2 className="text-2xl font-semibold mb-6" data-testid="text-payment-method-title">
-                  {localStorage.getItem('preferredLanguage') === 'es' 
-                    ? 'Selecciona método de pago' 
-                    : 'Select Payment Method'}
-                </h2>
-                
-                <div className="space-y-4">
-                  <div className="text-center mb-6">
-                    <p className="text-3xl font-bold text-primary">$15.00 USD</p>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      {localStorage.getItem('preferredLanguage') === 'es' 
-                        ? 'Precio total de tu vuelo' 
-                        : 'Total flight price'}
-                    </p>
-                  </div>
-
-                  <Button
-                    onClick={() => setPaymentMethod('paypal')}
-                    className="w-full h-12 text-lg bg-[#0070ba] hover:bg-[#005ea6]"
-                    data-testid="button-select-paypal"
-                  >
-                    <SiPaypal className="mr-2 h-5 w-5" />
-                    {localStorage.getItem('preferredLanguage') === 'es' 
-                      ? 'Pagar con PayPal' 
-                      : 'Pay with PayPal'}
-                  </Button>
-
-                  <Button
-                    onClick={() => setPaymentMethod('stripe')}
-                    className="w-full h-12 text-lg"
-                    variant="outline"
-                    data-testid="button-select-stripe"
-                  >
-                    <CreditCard className="mr-2 h-5 w-5" />
-                    {localStorage.getItem('preferredLanguage') === 'es' 
-                      ? 'Pagar con Tarjeta' 
-                      : 'Pay with Card'}
-                  </Button>
-                </div>
-              </Card>
             ) : paymentMethod === 'paypal' ? (
               <Card className="p-6">
-                <h2 className="text-2xl font-semibold mb-6">PayPal Payment</h2>
+                <h2 className="text-2xl font-semibold mb-6">
+                  {localStorage.getItem('preferredLanguage') === 'es' 
+                    ? 'Pago con PayPal' 
+                    : 'PayPal Payment'}
+                </h2>
                 <div className="mb-4">
                   <p className="text-center text-lg mb-4">
                     {localStorage.getItem('preferredLanguage') === 'es' 
                       ? 'Total a pagar: ' 
                       : 'Total to pay: '}
-                    <span className="font-bold text-primary">$15.00 USD</span>
+                    <span className="font-bold text-primary">${SERVICE_FEE.toFixed(2)} USD</span>
+                  </p>
+                  <p className="text-center text-sm text-muted-foreground">
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Cargo por servicio de búsqueda y reserva' 
+                      : 'Service fee for search and booking'}
                   </p>
                 </div>
-                <PayPalButton amount="15.00" currency="USD" intent="CAPTURE" />
+                <PayPalButton amount={SERVICE_FEE.toFixed(2)} currency="USD" intent="CAPTURE" />
                 <Button
                   onClick={() => setPaymentMethod(null)}
                   variant="ghost"
@@ -685,8 +735,8 @@ export default function Checkout() {
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   {localStorage.getItem('preferredLanguage') === 'es' 
-                    ? 'Cambiar método de pago' 
-                    : 'Change payment method'}
+                    ? 'Volver al formulario' 
+                    : 'Back to form'}
                 </Button>
               </Card>
             ) : paymentMethod === 'stripe' && stripePromise && clientSecret ? (
@@ -696,6 +746,19 @@ export default function Checkout() {
                     ? 'Pago con Tarjeta' 
                     : 'Card Payment'}
                 </h2>
+                <div className="mb-4">
+                  <p className="text-center text-lg mb-4">
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Total a pagar: ' 
+                      : 'Total to pay: '}
+                    <span className="font-bold text-primary">${SERVICE_FEE.toFixed(2)} USD</span>
+                  </p>
+                  <p className="text-center text-sm text-muted-foreground">
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Cargo por servicio de búsqueda y reserva' 
+                      : 'Service fee for search and booking'}
+                  </p>
+                </div>
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
                   <PaymentForm customerInfo={customerInfo} />
                 </Elements>
@@ -707,8 +770,8 @@ export default function Checkout() {
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   {localStorage.getItem('preferredLanguage') === 'es' 
-                    ? 'Cambiar método de pago' 
-                    : 'Change payment method'}
+                    ? 'Volver al formulario' 
+                    : 'Back to form'}
                 </Button>
               </Card>
             ) : (
@@ -726,7 +789,7 @@ export default function Checkout() {
                       : 'Payment system is being configured. Please contact support.'}
                   </p>
                   <Button onClick={() => setPaymentMethod(null)} data-testid="button-retry-payment">
-                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Intentar de nuevo' : 'Try Again'}
+                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Volver al formulario' : 'Back to form'}
                   </Button>
                 </div>
               </Card>
