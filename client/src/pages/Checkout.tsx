@@ -471,18 +471,18 @@ export default function Checkout() {
     }
 
     try {
-      // Service fee is $15 USD per passenger
+      // Service fee is $15 USD per passenger - THIS IS THE ONLY AMOUNT CHARGED
       const SERVICE_FEE_PER_PASSENGER = 15;
       const numberOfPassengers = Number(searchParams.passengers);
       const totalServiceFee = SERVICE_FEE_PER_PASSENGER * numberOfPassengers;
       
-      // Calculate flight price
+      // Flight prices are informational only (for manual ticket purchase)
       const flightPrice = flight.discountedPrice || flight.originalPrice;
       const returnFlightPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
       const totalFlightPrice = (flightPrice + returnFlightPrice) * numberOfPassengers;
       
-      // Total to pay = flight price + service fee (per passenger)
-      const totalPrice = totalFlightPrice + totalServiceFee;
+      // Total to pay = ONLY the service fee ($15 × passengers)
+      const totalPrice = totalServiceFee;
       
       const bookingData = {
         fullName: customerInfo.fullName,
@@ -573,13 +573,13 @@ export default function Checkout() {
   const numberOfPassengers = Number(searchParams.passengers);
   const totalServiceFee = SERVICE_FEE_PER_PASSENGER * numberOfPassengers;
   
-  // Calculate flight price per passenger
+  // Flight prices are informational only (for manual ticket purchase by business)
   const flightPricePerPassenger = flight.discountedPrice || flight.originalPrice;
   const returnFlightPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
   const totalFlightPrice = (flightPricePerPassenger + returnFlightPrice) * numberOfPassengers;
   
-  // Total to pay = flight price + service fee (per passenger)
-  const totalPrice = totalFlightPrice + totalServiceFee;
+  // Total to pay = ONLY the service fee ($15 × passengers)
+  const totalPrice = totalServiceFee;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -655,40 +655,43 @@ export default function Checkout() {
                 </p>
               </div>
 
-              <div className="border-t pt-4 space-y-2">
-                {numberOfPassengers > 1 && (
-                  <div className="flex justify-between mb-2 pb-2 border-b">
-                    <span className="text-xs text-muted-foreground">
-                      {numberOfPassengers} {numberOfPassengers === 1 ? t('checkout.passenger') : t('checkout.passengers')}
+              <div className="border-t pt-4 space-y-3">
+                {/* Passenger Info */}
+                <div className="flex justify-between mb-2 pb-2 border-b">
+                  <span className="text-sm text-muted-foreground">
+                    {numberOfPassengers} {numberOfPassengers === 1 ? t('checkout.passenger') : t('checkout.passengers')}
+                  </span>
+                </div>
+                
+                {/* Flight Price - Informational Only */}
+                <div className="bg-muted/30 p-3 rounded-md">
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="text-muted-foreground">
+                      {localStorage.getItem('preferredLanguage') === 'es' ? 'Precio del vuelo (referencia)' : 'Flight Price (reference)'}
+                    </span>
+                    <span className="text-muted-foreground" data-testid="text-flight-price">
+                      ${totalFlightPrice.toFixed(2)}
                     </span>
                   </div>
-                )}
-                
-                {/* Flight Price Breakdown */}
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Precio del vuelo' : 'Flight Price'}
-                  </span>
-                  <span data-testid="text-flight-price">
-                    ${totalFlightPrice.toFixed(2)}
-                  </span>
-                </div>
-                
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">
+                  <p className="text-xs text-muted-foreground italic">
                     {localStorage.getItem('preferredLanguage') === 'es' 
-                      ? `Cargo por servicio (${numberOfPassengers} ${numberOfPassengers === 1 ? 'pasajero' : 'pasajeros'} × $${SERVICE_FEE_PER_PASSENGER})` 
-                      : `Service Fee (${numberOfPassengers} ${numberOfPassengers === 1 ? 'passenger' : 'passengers'} × $${SERVICE_FEE_PER_PASSENGER})`}
-                  </span>
-                  <span data-testid="text-service-fee">
-                    ${totalServiceFee.toFixed(2)}
-                  </span>
+                      ? 'Los tickets serán comprados después del pago' 
+                      : 'Tickets will be purchased after payment'}
+                  </p>
                 </div>
                 
+                {/* Service Fee - What Customer Pays */}
                 <div className="flex justify-between items-center pt-2 border-t">
-                  <span className="text-lg font-semibold">
-                    {t('checkout.totalPrice')}
-                  </span>
+                  <div>
+                    <p className="text-lg font-semibold">
+                      {localStorage.getItem('preferredLanguage') === 'es' ? 'Total a pagar' : 'Total to pay'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {localStorage.getItem('preferredLanguage') === 'es' 
+                        ? `${numberOfPassengers} ${numberOfPassengers === 1 ? 'pasajero' : 'pasajeros'} × $${SERVICE_FEE_PER_PASSENGER}` 
+                        : `${numberOfPassengers} ${numberOfPassengers === 1 ? 'passenger' : 'passengers'} × $${SERVICE_FEE_PER_PASSENGER}`}
+                    </p>
+                  </div>
                   <span className="text-2xl font-bold text-primary" data-testid="text-summary-total">
                     ${totalPrice.toFixed(2)}
                   </span>
