@@ -1,6 +1,22 @@
 import PDFDocument from 'pdfkit';
 import type { Booking } from '../shared/schema';
 
+// Download image from URL and return buffer
+async function downloadImage(url: string): Promise<Buffer | null> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.error(`Failed to download image from ${url}: ${response.status}`);
+      return null;
+    }
+    const arrayBuffer = await response.arrayBuffer();
+    return Buffer.from(arrayBuffer);
+  } catch (error) {
+    console.error(`Error downloading image from ${url}:`, error);
+    return null;
+  }
+}
+
 // Generate random confirmation code
 function generateConfirmationCode(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -44,7 +60,7 @@ function formatTime(date: Date): string {
   });
 }
 
-export function generateBookingConfirmationPDF(booking: Booking): InstanceType<typeof PDFDocument> {
+export async function generateBookingConfirmationPDF(booking: Booking): Promise<InstanceType<typeof PDFDocument>> {
   const doc = new PDFDocument({ size: 'A4', margin: 50 });
   
   const flightData = JSON.parse(booking.selectedFlightData);
@@ -60,9 +76,21 @@ export function generateBookingConfirmationPDF(booking: Booking): InstanceType<t
     passengers.push(...additionalPassengers);
   }
   
+  // Download and add airline logo
+  if (flightData.airline.logo) {
+    const logoBuffer = await downloadImage(flightData.airline.logo);
+    if (logoBuffer) {
+      try {
+        doc.image(logoBuffer, 50, 45, { width: 60, height: 60 });
+      } catch (error) {
+        console.error('Error adding logo to PDF:', error);
+      }
+    }
+  }
+  
   // Header with airline branding
   doc.fontSize(24).font('Helvetica-Bold')
-     .text(flightData.airline.name.toUpperCase(), 50, 50);
+     .text(flightData.airline.name.toUpperCase(), 120, 50);
   
   // Confirmation code section
   doc.fontSize(12).font('Helvetica')
@@ -190,7 +218,7 @@ export function generateBookingConfirmationPDF(booking: Booking): InstanceType<t
   return doc;
 }
 
-export function generateReceiptPDF(booking: Booking, paymentMethod: string = 'Card'): InstanceType<typeof PDFDocument> {
+export async function generateReceiptPDF(booking: Booking, paymentMethod: string = 'Card'): Promise<InstanceType<typeof PDFDocument>> {
   const doc = new PDFDocument({ size: 'A4', margin: 50 });
   
   const flightData = JSON.parse(booking.selectedFlightData);
@@ -205,10 +233,22 @@ export function generateReceiptPDF(booking: Booking, paymentMethod: string = 'Ca
     passengers.push(...additionalPassengers);
   }
   
+  // Download and add airline logo
+  if (flightData.airline.logo) {
+    const logoBuffer = await downloadImage(flightData.airline.logo);
+    if (logoBuffer) {
+      try {
+        doc.image(logoBuffer, 50, 45, { width: 60, height: 60 });
+      } catch (error) {
+        console.error('Error adding logo to PDF:', error);
+      }
+    }
+  }
+  
   // Header with airline branding
   doc.fontSize(24).font('Helvetica-Bold')
      .fillColor('#003366')
-     .text(flightData.airline.name.toUpperCase(), 50, 50)
+     .text(flightData.airline.name.toUpperCase(), 120, 50)
      .fillColor('#000000');
   
   // Date of purchase

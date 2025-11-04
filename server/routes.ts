@@ -747,7 +747,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const { generateBookingConfirmationPDF } = await import('./pdfGenerator');
-      const doc = generateBookingConfirmationPDF(booking);
+      const doc = await generateBookingConfirmationPDF(booking);
       
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename=booking-confirmation-${booking.bookingNumber}.pdf`);
@@ -771,7 +771,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const { generateReceiptPDF } = await import('./pdfGenerator');
       const paymentMethod = req.query.paymentMethod as string || 'Card';
-      const doc = generateReceiptPDF(booking, paymentMethod);
+      const doc = await generateReceiptPDF(booking, paymentMethod);
       
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename=receipt-${booking.bookingNumber}.pdf`);
