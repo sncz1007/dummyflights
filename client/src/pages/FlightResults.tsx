@@ -285,12 +285,25 @@ export default function FlightResults() {
           <h1 className="text-3xl font-bold mb-2" data-testid="text-results-title">
             {t('results.title')}
           </h1>
-          <p className="text-muted-foreground" data-testid="text-route-info">
+          <p className="text-muted-foreground mb-2" data-testid="text-route-info">
             {searchParams?.fromAirport} → {searchParams?.toAirport}
           </p>
-          <p className="text-sm text-muted-foreground" data-testid="text-search-details">
-            {searchParams?.departureDate} • {searchParams?.passengers} {searchParams?.passengers === '1' ? t('passengers.1') : t('passengers.2')} • {searchParams?.flightClass}
-          </p>
+          <div className="flex flex-wrap gap-4 text-sm" data-testid="text-search-details">
+            <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-md">
+              <span className="font-semibold">{t('search.departure')}:</span>
+              <span>{searchParams?.departureDate}</span>
+            </div>
+            {searchParams?.returnDate && (
+              <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-md">
+                <span className="font-semibold">{t('search.return')}:</span>
+                <span>{searchParams?.returnDate}</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-md">
+              <span className="font-semibold">{t('search.passengers')}:</span>
+              <span>{searchParams?.passengers}</span>
+            </div>
+          </div>
         </div>
 
         {/* Flight Results */}
