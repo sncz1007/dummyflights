@@ -242,10 +242,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Calculate number of stops
           const stops = firstItinerary.segments.length - 1;
           
-          // Get price
-          const basePrice = parseFloat(offer.price.total);
-          const originalPrice = basePrice;
-          const discountedPrice = basePrice; // No discount applied
+          // Fixed price for all flights
+          const originalPrice = 15;
+          const discountedPrice = 15; // Fixed $15 USD
           
           // Prepare return flight options if round-trip
           let returnFlightOptions: any[] | null = null;
@@ -276,7 +275,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               });
               
               const returnStops = returnItinerary.segments.length - 1;
-              const returnBasePrice = parseFloat(returnOffer.price.total); // No discount applied
+              const returnBasePrice = 0; // Return flight included in $15 base price
               
               return {
                 id: `${returnAirlineCode}-${returnFirstSegment.number}-${returnDate}`,
@@ -534,8 +533,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               const returnFlightTime = returnFlightTimes[0]; // Take first return time
               
               if (returnFlightTime) {
-                let returnBasePrice = applyPriceVariation(returnRoute.basePrice);
-                returnBasePrice = returnBasePrice * (classMultipliers[flightClass] || 1);
+                const returnBasePrice = 0; // Return flight included in $15 base price
                 
                 const returnAirlineObj = ALL_AIRLINES[returnRoute.airline] || {
                   code: returnRoute.airlineCode,
@@ -566,25 +564,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             console.log(`[Return Flights] Generated ${returnFlightOptions.length} return flight options`);
           }
           
-          // Calculate total price
-          let originalPrice: number;
-          let discountedPrice: number;
-          
-          if ((tripType === 'round-trip' || tripType === 'roundtrip') && returnFlightOptions.length > 0) {
-            // Use the cheapest return flight for pricing
-            const cheapestReturn = returnFlightOptions.reduce((min, flight) => 
-              flight.basePrice < min.basePrice ? flight : min
-            );
-            
-            // Sum outbound + return for total price
-            const totalPrice = outboundBasePrice + cheapestReturn.basePrice;
-            originalPrice = totalPrice;
-            discountedPrice = totalPrice; // No discount applied
-          } else {
-            // One-way pricing
-            originalPrice = outboundBasePrice;
-            discountedPrice = outboundBasePrice; // No discount applied
-          }
+          // Fixed price for all flights
+          const originalPrice = 15;
+          const discountedPrice = 15; // Fixed $15 USD for all flights
           
           flights.push({
             id: `${route.airlineCode}-${flightTime.flightNumber}-${departureDate}`,
