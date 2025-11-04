@@ -42,8 +42,11 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 ## External Dependencies
 
 ### Third-Party Services
-- **Stripe**: OPTIONAL - Configured for secure payment processing, including payment intent creation and webhooks. App functions without Stripe (payment gateway can be changed).
-- **EmailJS**: Client-side email service for sending quote requests and automated booking notifications. Two templates configured: one for flight quote requests and one for booking notifications sent immediately when customers proceed to payment.
+- **Stripe**: OPTIONAL - Configured for secure payment processing, including payment intent creation and webhooks. App functions without Stripe (payment gateway can be changed). After successful payment, sends confirmation email with PDF links.
+- **EmailJS**: Email service for sending notifications and confirmations. Three templates configured:
+  - **Quote Template** (`VITE_EMAILJS_TEMPLATE_ID`): For flight quote requests
+  - **Booking Notification Template** (`VITE_EMAILJS_BOOKING_TEMPLATE_ID`): Sent immediately when customers proceed to payment
+  - **Payment Confirmation Template** (`VITE_EMAILJS_PAYMENT_TEMPLATE_ID`): Sent after successful payment with links to download both PDF documents (booking confirmation and payment receipt)
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
@@ -66,6 +69,6 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 
 ### Environment Variables
 - `DATABASE_URL`
-- `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_BOOKING_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
+- `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_BOOKING_TEMPLATE_ID`, `VITE_EMAILJS_PAYMENT_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
 - `VITE_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY` (OPTIONAL - Payment gateway can be changed)
 - `AMADEUS_API_KEY`, `AMADEUS_API_SECRET` (For real flight data integration)
