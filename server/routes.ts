@@ -316,6 +316,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           flights.push({
             id: offer.id, // Use Amadeus unique offer ID
             amadeusOfferId: offer.id, // Store for booking reference
+            amadeusOffer: offer, // Store complete Amadeus offer for creating reservation after payment
             airline: {
               code: airlineCode,
               name: airlineName,

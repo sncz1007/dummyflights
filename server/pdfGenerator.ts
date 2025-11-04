@@ -64,7 +64,8 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   const doc = new PDFDocument({ size: 'A4', margin: 50 });
   
   const flightData = JSON.parse(booking.selectedFlightData);
-  const confirmationCode = generateConfirmationCode();
+  // Use real PNR from Amadeus if available, otherwise use generated code
+  const confirmationCode = booking.pnrCode || generateConfirmationCode();
   const ticketNumber = generateTicketNumber();
   const seatNumber = generateSeatNumber();
   
@@ -222,7 +223,8 @@ export async function generateReceiptPDF(booking: Booking, paymentMethod: string
   const doc = new PDFDocument({ size: 'A4', margin: 50 });
   
   const flightData = JSON.parse(booking.selectedFlightData);
-  const confirmationNumber = generateConfirmationCode();
+  // Use real PNR from Amadeus if available, otherwise use generated code
+  const confirmationNumber = booking.pnrCode || generateConfirmationCode();
   const ticketNumber = generateTicketNumber();
   
   // Parse passenger data
