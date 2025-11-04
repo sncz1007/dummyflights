@@ -332,6 +332,9 @@ const CustomerInfoForm = ({
                   const searchParams = JSON.parse(searchParamsStr);
                   
                   // Create booking with correct field names
+                  const originalPrice = flightData.originalPrice || flightData.basePrice || serviceFee;
+                  const discountedPrice = flightData.discountedPrice || flightData.basePrice || serviceFee;
+                  
                   const bookingData = {
                     fullName: customerInfo.fullName,
                     email: customerInfo.email,
@@ -346,8 +349,8 @@ const CustomerInfoForm = ({
                     flightClass: searchParams.flightClass,
                     tripType: searchParams.tripType,
                     selectedFlightData: JSON.stringify(flightData),
-                    originalPrice: flightData.originalPrice.toString(),
-                    discountedPrice: flightData.discountedPrice.toString(),
+                    originalPrice: originalPrice.toString(),
+                    discountedPrice: discountedPrice.toString(),
                     currency: 'USD',
                     stripePaymentIntentId: 'test_' + Date.now(),
                     paymentStatus: 'completed',
