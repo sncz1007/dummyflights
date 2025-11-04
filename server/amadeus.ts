@@ -85,6 +85,7 @@ export interface AmadeusSearchParams {
   originLocationCode: string;
   destinationLocationCode: string;
   departureDate: string;
+  returnDate?: string; // Optional return date for round-trip searches
   adults: number;
   travelClass?: 'ECONOMY' | 'PREMIUM_ECONOMY' | 'BUSINESS' | 'FIRST';
   nonStop?: boolean;
@@ -205,7 +206,8 @@ export async function searchFlights(params: AmadeusSearchParams): Promise<Amadeu
   try {
     console.log('[Amadeus] Requesting flights with params:', JSON.stringify(params, null, 2));
     
-    const response = await amadeus.shopping.flightOffersSearch.get({
+    // Build request parameters
+    const requestParams: any = {
       originLocationCode: params.originLocationCode,
       destinationLocationCode: params.destinationLocationCode,
       departureDate: params.departureDate,
@@ -214,7 +216,15 @@ export async function searchFlights(params: AmadeusSearchParams): Promise<Amadeu
       nonStop: params.nonStop ? 'true' : 'false',
       currencyCode: params.currencyCode || 'USD',
       max: (params.max || 20).toString(),
-    });
+    };
+    
+    // Add returnDate for round-trip searches
+    if (params.returnDate) {
+      requestParams.returnDate = params.returnDate;
+      console.log('[Amadeus] Round-trip search with return date:', params.returnDate);
+    }
+    
+    const response = await amadeus.shopping.flightOffersSearch.get(requestParams);
     
     console.log('[Amadeus] Response received successfully');
     
