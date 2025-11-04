@@ -259,8 +259,8 @@ const CustomerInfoForm = ({
           <p className="text-3xl font-bold text-primary mb-1">${serviceFee.toFixed(2)} USD</p>
           <p className="text-sm text-muted-foreground">
             {localStorage.getItem('preferredLanguage') === 'es' 
-              ? 'Cargo único por servicio de búsqueda y reserva' 
-              : 'One-time fee for search and booking service'}
+              ? `Cargo por servicio (${totalPassengers} ${totalPassengers === 1 ? 'pasajero' : 'pasajeros'} × $15)` 
+              : `Service fee (${totalPassengers} ${totalPassengers === 1 ? 'passenger' : 'passengers'} × $15)`}
           </p>
         </div>
 
@@ -471,17 +471,18 @@ export default function Checkout() {
     }
 
     try {
-      // Service fee is always $15 USD
-      const SERVICE_FEE = 15;
+      // Service fee is $15 USD per passenger
+      const SERVICE_FEE_PER_PASSENGER = 15;
       const numberOfPassengers = Number(searchParams.passengers);
+      const totalServiceFee = SERVICE_FEE_PER_PASSENGER * numberOfPassengers;
       
       // Calculate flight price
       const flightPrice = flight.discountedPrice || flight.originalPrice;
       const returnFlightPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
       const totalFlightPrice = (flightPrice + returnFlightPrice) * numberOfPassengers;
       
-      // Total to pay = flight price + service fee
-      const totalPrice = totalFlightPrice + SERVICE_FEE;
+      // Total to pay = flight price + service fee (per passenger)
+      const totalPrice = totalFlightPrice + totalServiceFee;
       
       const bookingData = {
         fullName: customerInfo.fullName,
@@ -568,16 +569,17 @@ export default function Checkout() {
   }
 
   // Calculate pricing
-  const SERVICE_FEE = 15; // $15 service fee
+  const SERVICE_FEE_PER_PASSENGER = 15; // $15 service fee per passenger
   const numberOfPassengers = Number(searchParams.passengers);
+  const totalServiceFee = SERVICE_FEE_PER_PASSENGER * numberOfPassengers;
   
   // Calculate flight price per passenger
   const flightPricePerPassenger = flight.discountedPrice || flight.originalPrice;
   const returnFlightPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
   const totalFlightPrice = (flightPricePerPassenger + returnFlightPrice) * numberOfPassengers;
   
-  // Total to pay = flight price + service fee
-  const totalPrice = totalFlightPrice + SERVICE_FEE;
+  // Total to pay = flight price + service fee (per passenger)
+  const totalPrice = totalFlightPrice + totalServiceFee;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -674,10 +676,12 @@ export default function Checkout() {
                 
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">
-                    {localStorage.getItem('preferredLanguage') === 'es' ? 'Cargo por servicio' : 'Service Fee'}
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? `Cargo por servicio (${numberOfPassengers} ${numberOfPassengers === 1 ? 'pasajero' : 'pasajeros'} × $${SERVICE_FEE_PER_PASSENGER})` 
+                      : `Service Fee (${numberOfPassengers} ${numberOfPassengers === 1 ? 'passenger' : 'passengers'} × $${SERVICE_FEE_PER_PASSENGER})`}
                   </span>
                   <span data-testid="text-service-fee">
-                    ${SERVICE_FEE.toFixed(2)}
+                    ${totalServiceFee.toFixed(2)}
                   </span>
                 </div>
                 
@@ -704,7 +708,7 @@ export default function Checkout() {
                 customerInfo={customerInfo}
                 setCustomerInfo={setCustomerInfo}
                 totalPassengers={Number(searchParams.passengers)}
-                serviceFee={SERVICE_FEE}
+                serviceFee={totalServiceFee}
               />
             ) : paymentMethod === 'paypal' ? (
               <Card className="p-6">
@@ -718,15 +722,15 @@ export default function Checkout() {
                     {localStorage.getItem('preferredLanguage') === 'es' 
                       ? 'Total a pagar: ' 
                       : 'Total to pay: '}
-                    <span className="font-bold text-primary">${SERVICE_FEE.toFixed(2)} USD</span>
+                    <span className="font-bold text-primary">${totalServiceFee.toFixed(2)} USD</span>
                   </p>
                   <p className="text-center text-sm text-muted-foreground">
                     {localStorage.getItem('preferredLanguage') === 'es' 
-                      ? 'Cargo por servicio de búsqueda y reserva' 
-                      : 'Service fee for search and booking'}
+                      ? `Cargo por servicio (${numberOfPassengers} ${numberOfPassengers === 1 ? 'pasajero' : 'pasajeros'} × $15)` 
+                      : `Service fee (${numberOfPassengers} ${numberOfPassengers === 1 ? 'passenger' : 'passengers'} × $15)`}
                   </p>
                 </div>
-                <PayPalButton amount={SERVICE_FEE.toFixed(2)} currency="USD" intent="CAPTURE" />
+                <PayPalButton amount={totalServiceFee.toFixed(2)} currency="USD" intent="CAPTURE" />
                 <Button
                   onClick={() => setPaymentMethod(null)}
                   variant="ghost"
@@ -751,12 +755,12 @@ export default function Checkout() {
                     {localStorage.getItem('preferredLanguage') === 'es' 
                       ? 'Total a pagar: ' 
                       : 'Total to pay: '}
-                    <span className="font-bold text-primary">${SERVICE_FEE.toFixed(2)} USD</span>
+                    <span className="font-bold text-primary">${totalServiceFee.toFixed(2)} USD</span>
                   </p>
                   <p className="text-center text-sm text-muted-foreground">
                     {localStorage.getItem('preferredLanguage') === 'es' 
-                      ? 'Cargo por servicio de búsqueda y reserva' 
-                      : 'Service fee for search and booking'}
+                      ? `Cargo por servicio (${numberOfPassengers} ${numberOfPassengers === 1 ? 'pasajero' : 'pasajeros'} × $15)` 
+                      : `Service fee (${numberOfPassengers} ${numberOfPassengers === 1 ? 'passenger' : 'passengers'} × $15)`}
                   </p>
                 </div>
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
