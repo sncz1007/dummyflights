@@ -394,12 +394,21 @@ export default function FlightResults() {
                 {/* Pricing & Book */}
                 <div className="lg:w-64 flex flex-col items-end gap-3">
                   <div className="text-right">
-                    <p className="text-3xl font-bold text-primary" data-testid={`text-price-${flight.id}`}>
-                      $15.00
-                    </p>
-                    <p className="text-xs text-muted-foreground italic" data-testid={`text-per-passenger-${flight.id}`}>
-                      {localStorage.getItem('preferredLanguage') === 'es' ? 'Precio por pasajero' : 'Price per passenger'}
-                    </p>
+                    {(() => {
+                      const returnPrice = flight.returnFlightOptions?.[0]?.basePrice || 0;
+                      const totalPrice = flight.discountedPrice + returnPrice;
+                      
+                      return (
+                        <>
+                          <p className="text-3xl font-bold text-primary" data-testid={`text-price-${flight.id}`}>
+                            ${totalPrice.toFixed(2)}
+                          </p>
+                          <p className="text-xs text-muted-foreground italic" data-testid={`text-per-passenger-${flight.id}`}>
+                            {localStorage.getItem('preferredLanguage') === 'es' ? 'Precio por pasajero' : 'Price per passenger'}
+                          </p>
+                        </>
+                      );
+                    })()}
                   </div>
 
                   <Button 
