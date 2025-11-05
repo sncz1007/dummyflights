@@ -535,27 +535,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
             .map(([code, count]) => `${code}: ${count}`)
             .join(', '));
 
-        // SORT FLIGHTS: Show less common airlines FIRST (unique flights on top, repeated flights at bottom)
-        // This improves UX by showing variety at the top instead of 50+ United/Virgin flights
-        const sortedFlights = flights.sort((a, b) => {
-          const countA = airlineDistribution.get(a.airline.code) || 0;
-          const countB = airlineDistribution.get(b.airline.code) || 0;
-          
-          // Airlines with fewer flights go first (ascending order)
-          if (countA !== countB) {
-            return countA - countB;
-          }
-          
-          // Within same airline, sort by price (cheapest first)
-          return (a.price.base || 0) - (b.price.base || 0);
-        });
-
         // Return deduplicated results with best prices
-        console.log(`[Amadeus] Returning ${sortedFlights.length} unique flight offers to user (deduplicated from ${searchResults.data.length} total offers)`);
-        console.log(`[Amadeus] Sorting: Less common airlines first (unique flights on top, repeated at bottom)`);
+        console.log(`[Amadeus] Returning ${flights.length} unique flight offers to user (deduplicated from ${searchResults.data.length} total offers)`);
         
         return res.json({
-          flights: sortedFlights,
+          flights: flights,
           searchParams: {
             fromAirport,
             toAirport,
