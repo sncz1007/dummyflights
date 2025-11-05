@@ -25,6 +25,33 @@ if (import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
   console.warn('[Payment] Stripe not configured - payment gateway pending configuration');
 }
 
+interface FlightSegment {
+  segmentNumber: number;
+  airline: {
+    code: string;
+    name: string;
+  };
+  flightNumber: string;
+  departure: {
+    airport: string;
+    city: string;
+    terminal?: string;
+    time: string;
+    dateTime: string;
+  };
+  arrival: {
+    airport: string;
+    city: string;
+    terminal?: string;
+    time: string;
+    dateTime: string;
+  };
+  duration: string;
+  aircraft: {
+    code?: string;
+  };
+}
+
 interface FlightData {
   id: string;
   airline: {
@@ -45,6 +72,7 @@ interface FlightData {
   };
   duration: string;
   stops: number;
+  segments?: FlightSegment[];
   class: string;
   originalPrice: number;
   discountedPrice: number;
@@ -750,6 +778,23 @@ export default function Checkout() {
                   {searchParams.departureDate}
                   {searchParams.returnDate && ` - ${searchParams.returnDate}`}
                 </p>
+                
+                {/* Show stops/layovers */}
+                <div className="mt-2">
+                  <p className="text-xs text-muted-foreground">
+                    {flight.stops === 0 ? (
+                      localStorage.getItem('preferredLanguage') === 'es' ? 'Vuelo directo' : 'Direct flight'
+                    ) : (
+                      `${flight.stops} ${flight.stops === 1 ? (localStorage.getItem('preferredLanguage') === 'es' ? 'escala' : 'stop') : (localStorage.getItem('preferredLanguage') === 'es' ? 'escalas' : 'stops')}`
+                    )}
+                  </p>
+                  {flight.stops > 0 && flight.segments && flight.segments.length > 1 && (
+                    <p className="text-xs text-primary font-semibold mt-1">
+                      {localStorage.getItem('preferredLanguage') === 'es' ? 'Vía: ' : 'Via: '}
+                      {flight.segments.slice(0, -1).map((seg, idx) => seg.arrival.city).join(', ')}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="border-t pt-4 space-y-3">
