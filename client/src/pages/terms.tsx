@@ -42,9 +42,6 @@ export default function Terms() {
                 {t('terms.services.p1')}
               </p>
               <p className="mb-4 text-justify">
-                {t('terms.services.p2')}
-              </p>
-              <p className="mb-4 text-justify">
                 {t('terms.services.p3')}
               </p>
             </section>
