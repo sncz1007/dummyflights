@@ -9,8 +9,8 @@ export const translations = {
     
     // Hero Section
     'hero.title': 'Dummy Flight Tickets with Real Flight Data',
-    'hero.subtitle': 'Valid flight reservations with verifiable PNR codes for visa applications, proof of return, passport renewal, and more',
-    'hero.guarantee': 'Verifiable PNR • Real Flight Data • Instant Delivery',
+    'hero.subtitle': 'Valid dummy reservations of real and existing flights for visa applications, proof of return, passport renewal, and more',
+    'hero.guarantee': 'Real Flights • Verifiable Data • Instant Delivery',
     
     // Search Form
     'search.from': 'From',
@@ -154,7 +154,7 @@ export const translations = {
     'faq.q3.question': 'How do I receive my dummy ticket?',
     'faq.q3.answer': 'After completing your payment, our team will generate your dummy ticket with a valid PNR code and real flight information. You will receive your dummy ticket via email in PDF format.||The estimated delivery time is from a few minutes to a maximum of no more than 8 hours, depending on our processing demand, but we will notify you as soon as we receive and verify your payment.',
     'faq.q4.question': 'Can I use this for visa applications?',
-    'faq.q4.answer': 'Yes! Our dummy tickets are specifically designed for visa applications. Many embassies, consulates, and visa application centers (like VFS or BLS) accept dummy tickets as proof of travel intent. The tickets include verifiable PNR codes and real flight information from the Amadeus database.',
+    'faq.q4.answer': 'Yes! Our dummy tickets are specifically designed for visa applications. Many embassies, consulates, and visa application centers (like VFS or BLS) accept dummy tickets as proof of travel intent. The tickets include information from real and existing flights from the Amadeus database.',
     'faq.q5.question': 'What other purposes can I use a dummy ticket for?',
     'faq.q5.answer': 'Dummy tickets can be used for: visa applications, proof of return or onward travel for immigration, speeding up passport renewal processes, submitting to HR departments for leave requests, exit visa processing in GCC countries, and car rental at airports.',
     'faq.q6.question': 'Are these real flight tickets?',
@@ -167,7 +167,7 @@ export const translations = {
     'contact.chat': 'Start Live Chat',
     
     // Footer
-    'footer.tagline': 'Your trusted partner for professional dummy tickets with verifiable PNR codes and real flight data',
+    'footer.tagline': 'Your trusted partner for professional dummy tickets with data from real and existing flights',
     'footer.company': 'Company',
     'footer.about': 'About Us',
     'footer.destinations': 'Popular Destinations',
@@ -295,8 +295,8 @@ export const translations = {
     
     // Hero Section
     'hero.title': 'Tiquetes Ficticios de Vuelos con Datos Reales',
-    'hero.subtitle': 'Reservas de vuelo válidas con códigos PNR verificables para solicitudes de visa, comprobante de regreso, renovación de pasaporte, y más',
-    'hero.guarantee': 'PNR Verificable • Datos de Vuelo Reales • Entrega Inmediata',
+    'hero.subtitle': 'Reservas ficticias válidas de vuelos reales y existentes para solicitudes de visa, comprobante de regreso, renovación de pasaporte, y más',
+    'hero.guarantee': 'Vuelos Reales • Datos Verificables • Entrega Inmediata',
     
     // Search Form
     'search.from': 'Desde',
@@ -440,7 +440,7 @@ export const translations = {
     'faq.q3.question': '¿Cómo recibo mi tiquete ficticio?',
     'faq.q3.answer': 'Después de completar tu pago, nuestro equipo generará tu tiquete ficticio con un código PNR válido e información de vuelo real. Recibirás tu tiquete ficticio por correo electrónico en formato PDF.||El tiempo estimado de entrega es de unos minutos a un tiempo máximo no superior a 8 horas, según nuestra demanda de procesamiento, pero te notificaremos tan pronto recibamos y verifiquemos tu pago.',
     'faq.q4.question': '¿Puedo usar esto para solicitudes de visa?',
-    'faq.q4.answer': '¡Sí! Nuestros tiquetes ficticios están diseñados específicamente para solicitudes de visa. Muchas embajadas, consulados y centros de solicitud de visa (como VFS o BLS) aceptan tiquetes ficticios como comprobante de intención de viaje. Los tiquetes incluyen códigos PNR verificables e información de vuelo real de la base de datos de Amadeus.',
+    'faq.q4.answer': '¡Sí! Nuestros tiquetes ficticios están diseñados específicamente para solicitudes de visa. Muchas embajadas, consulados y centros de solicitud de visa (como VFS o BLS) aceptan tiquetes ficticios como comprobante de intención de viaje. Los tiquetes incluyen información de vuelos reales y existentes de la base de datos de Amadeus.',
     'faq.q5.question': '¿Para qué otros propósitos puedo usar un tiquete ficticio?',
     'faq.q5.answer': 'Los tiquetes ficticios se pueden usar para: solicitudes de visa, comprobante de regreso o continuación de viaje para inmigración, acelerar procesos de renovación de pasaporte, presentar a departamentos de RR.HH. para solicitudes de permiso, procesamiento de visa de salida en países del CCG, y alquiler de coches en aeropuertos.',
     'faq.q6.question': '¿Son estos tiquetes de vuelo reales?',
@@ -453,7 +453,7 @@ export const translations = {
     'contact.chat': 'Chat en Vivo',
     
     // Footer
-    'footer.tagline': 'Tu socio de confianza para tiquetes ficticios profesionales con códigos PNR verificables y datos de vuelo reales',
+    'footer.tagline': 'Tu socio de confianza para tiquetes ficticios profesionales con datos de vuelos reales y existentes',
     'footer.company': 'Empresa',
     'footer.about': 'Sobre Nosotros',
     'footer.destinations': 'Destinos Populares',
