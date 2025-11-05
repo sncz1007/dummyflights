@@ -857,7 +857,19 @@ export default function Checkout() {
                   {flight.stops > 0 && flight.segments && flight.segments.length > 1 && (
                     <p className="text-xs text-primary font-semibold mt-1">
                       {localStorage.getItem('preferredLanguage') === 'es' ? 'Vía: ' : 'Via: '}
-                      {flight.segments.slice(0, -1).map((seg, idx) => seg.arrival.city).join(', ')}
+                      {flight.segments.slice(0, -1).map((seg: FlightSegment) => seg.arrival.city).join(', ')}
+                    </p>
+                  )}
+                  {/* Outbound Flight Numbers - Show all segments */}
+                  {flight.segments && flight.segments.length > 0 && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {localStorage.getItem('preferredLanguage') === 'es' ? 'Vuelos: ' : 'Flights: '}
+                      {flight.segments.map((seg: FlightSegment, idx: number) => (
+                        <span key={idx}>
+                          {idx > 0 && ' → '}
+                          {seg.airline.code}{seg.flightNumber}
+                        </span>
+                      ))}
                     </p>
                   )}
                 </div>
@@ -874,6 +886,23 @@ export default function Checkout() {
                       {searchParams.returnDate}
                     </p>
                     
+                    <div className="flex items-center gap-2 mb-2">
+                      <img 
+                        src={flight.returnFlightOptions[0].airline.logo} 
+                        alt={flight.returnFlightOptions[0].airline.name}
+                        className="h-6 w-6 object-contain"
+                        data-testid="img-return-airline-logo"
+                      />
+                      <div>
+                        <p className="text-xs font-semibold" data-testid="text-return-airline-name">
+                          {flight.returnFlightOptions[0].airline.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground" data-testid="text-return-flight-number">
+                          {flight.returnFlightOptions[0].flightNumber}
+                        </p>
+                      </div>
+                    </div>
+                    
                     <div>
                       <p className="text-xs font-medium text-muted-foreground mb-1">
                         {localStorage.getItem('preferredLanguage') === 'es' ? '🛬 Vuelo de Regreso' : '🛬 Return Flight'}
@@ -888,7 +917,19 @@ export default function Checkout() {
                       {flight.returnFlightOptions[0].stops > 0 && flight.returnFlightOptions[0].segments && flight.returnFlightOptions[0].segments.length > 1 && (
                         <p className="text-xs text-primary font-semibold mt-1">
                           {localStorage.getItem('preferredLanguage') === 'es' ? 'Vía: ' : 'Via: '}
-                          {flight.returnFlightOptions[0].segments.slice(0, -1).map((seg) => seg.arrival.city).join(', ')}
+                          {flight.returnFlightOptions[0].segments.slice(0, -1).map((seg: FlightSegment) => seg.arrival.city).join(', ')}
+                        </p>
+                      )}
+                      {/* Return Flight Numbers - Show all segments */}
+                      {flight.returnFlightOptions[0].segments && flight.returnFlightOptions[0].segments.length > 0 && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {localStorage.getItem('preferredLanguage') === 'es' ? 'Vuelos: ' : 'Flights: '}
+                          {flight.returnFlightOptions[0].segments.map((seg: FlightSegment, idx: number) => (
+                            <span key={idx}>
+                              {idx > 0 && ' → '}
+                              {seg.airline.code}{seg.flightNumber}
+                            </span>
+                          ))}
                         </p>
                       )}
                     </div>

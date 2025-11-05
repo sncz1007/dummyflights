@@ -368,13 +368,45 @@ export default function FlightResults() {
                       </p>
                     </div>
                   </div>
+                  
+                  {/* Outbound Flight Segments - Show all flight numbers for connections */}
+                  {flight.segments && flight.segments.length > 0 && (
+                    <div className="mb-2">
+                      <p className="text-xs text-muted-foreground">
+                        {flight.segments.map((seg, idx) => (
+                          <span key={idx}>
+                            {idx > 0 && ' → '}
+                            {seg.airline.code}{seg.flightNumber}
+                          </span>
+                        ))}
+                      </p>
+                    </div>
+                  )}
 
                   {/* Return Flight - Round Trip */}
                   {flight.returnFlightOptions && flight.returnFlightOptions.length > 0 && flight.returnFlightOptions[0] && (
                     <div className="mt-4 pt-4 border-t-2 border-primary">
-                      <p className="text-sm font-bold text-primary mb-3 uppercase">
-                        ✈ Vuelo de Regreso
-                      </p>
+                      <div className="flex items-center gap-3 mb-3">
+                        <p className="text-sm font-bold text-primary uppercase">
+                          ✈ Vuelo de Regreso
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <img 
+                            src={flight.returnFlightOptions[0].airline.logo} 
+                            alt={flight.returnFlightOptions[0].airline.name}
+                            className="h-8 w-8 object-contain"
+                            data-testid={`img-return-airline-logo-${flight.id}`}
+                          />
+                          <div>
+                            <p className="text-xs font-semibold" data-testid={`text-return-airline-${flight.id}`}>
+                              {flight.returnFlightOptions[0].airline.name}
+                            </p>
+                            <p className="text-xs text-muted-foreground" data-testid={`text-return-flight-number-${flight.id}`}>
+                              {flight.returnFlightOptions[0].flightNumber}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     <div className="flex items-center gap-4">
                       <div className="text-center">
                         <p className="text-2xl font-bold" data-testid={`text-return-departure-time-${flight.id}`}>
@@ -411,6 +443,20 @@ export default function FlightResults() {
                         </p>
                       </div>
                     </div>
+                    
+                    {/* Return Flight Segments - Show all flight numbers for connections */}
+                    {flight.returnFlightOptions[0].segments && flight.returnFlightOptions[0].segments.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-xs text-muted-foreground">
+                          {flight.returnFlightOptions[0].segments.map((seg: FlightSegment, idx: number) => (
+                            <span key={idx}>
+                              {idx > 0 && ' → '}
+                              {seg.airline.code}{seg.flightNumber}
+                            </span>
+                          ))}
+                        </p>
+                      </div>
+                    )}
                     </div>
                   )}
 
