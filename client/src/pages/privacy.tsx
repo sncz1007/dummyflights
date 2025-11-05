@@ -38,13 +38,6 @@ export default function Privacy() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">{t('privacy.use.title')}</h2>
-              <p className="mb-4 text-justify">
-                {t('privacy.use.text')}
-              </p>
-            </section>
-
-            <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('privacy.sharing.title')}</h2>
               <p className="mb-4 text-justify">
                 {t('privacy.sharing.text')}
