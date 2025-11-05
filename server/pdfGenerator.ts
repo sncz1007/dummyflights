@@ -26,6 +26,7 @@ const AIRLINE_ACCOUNTING_CODES: Record<string, string> = {
   'F9': '422', // Frontier Airlines
   'G4': '794', // Allegiant Air
   'MX': '348', // Breeze Airways
+  'PD': '451', // Porter Airlines
   
   // ========================================
   // LATIN AMERICA & CARIBBEAN
