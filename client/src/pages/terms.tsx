@@ -11,7 +11,6 @@ export default function Terms() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       <main className="py-16 lg:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
@@ -84,13 +83,12 @@ export default function Terms() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('terms.contact.title')}</h2>
               <p className="mb-4 text-justify">
-                {t('terms.contact.text')} <a href="mailto:info@skybudgetfly.vip" className="text-primary hover:underline">info@skybudgetfly.vip</a>
+                {t('terms.contact.text')} <a href="mailto:info@skybudgetfly.vip" className="text-primary hover:underline">info@flightsdummy.com</a>
               </p>
             </section>
           </div>
         </div>
       </main>
-      
       <Footer />
     </div>
   );

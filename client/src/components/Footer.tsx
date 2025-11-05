@@ -47,7 +47,7 @@ export default function Footer() {
                   href="mailto:info@skybudgetfly.vip" 
                   className="hover:text-white transition-colors"
                   data-testid="link-footer-email"
-                >flightsdummy.com</a>
+                >info@flightsdummy.com</a>
               </div>
             </div>
           </div>
