@@ -187,7 +187,7 @@ export const translations = {
     // Terms of Service
     'terms.title': 'Terms of Service',
     'terms.lastUpdated': 'Last updated: November 2025',
-    'terms.intro': 'By using Flights Dummy\'s dummy ticket services, you accept these terms and conditions.',
+    'terms.intro': 'By using Flights Dummys\' dummy ticket services, you accept these terms and conditions.',
     'terms.services.title': 'Our Services',
     'terms.services.p1': 'Flights Dummy provides dummy flight tickets (also known as flight reservations or itineraries) with real flight data from actual airline databases. Our dummy tickets include booking codes and ticket numbers from real existing flights. Is it safe to buy with us? Purchasing with us is completely safe, as we process all payments with the highest security standards. Once you select your flight details, provide all required information, and make the secure payment, your dummy ticket will be automatically generated with booking codes and ticket numbers. As well as a purchase receipt that you can download immediately in PDF format.',
     'terms.services.p2': 'The estimated delivery time is from a few minutes to a maximum of 8 hours, depending on our processing demand, but we will notify you as soon as we receive and verify your payment to guarantee that we are already working on your dummy ticket.',
@@ -472,7 +472,7 @@ export const translations = {
     // Terms of Service
     'terms.title': 'Términos de Servicio',
     'terms.lastUpdated': 'Última actualización: Noviembre 2025',
-    'terms.intro': 'Al usar los servicios de tiquetes ficticios de Flights Dummy, aceptas estos términos y condiciones.',
+    'terms.intro': 'Al usar los servicios de tiquetes ficticios de Flights Dummys, aceptas estos términos y condiciones.',
     'terms.services.title': 'Nuestros Servicios',
     'terms.services.p1': 'Flights Dummy proporciona tiquetes ficticios de vuelo (también conocidos como reservas de vuelo o itinerarios) con datos de vuelo reales de bases de datos reales de aerolíneas. Nuestros tiquetes ficticios incluyen códigos de reserva y números de ticket de vuelos reales existentes. ¿Es seguro comprar con nosotros? Comprar con nosotros es completamente seguro, ya que procesamos todos los pagos, con los más altos estándares de seguridad. Una vez selecciones los detalles de tu vuelo, proporciones toda la información requerida y realices el pago seguro, automáticamente se generará tu tiquete ficticio con códigos de reserva y números de ticket. Asi como una factura de compra que podrás descargar de inmediato en formato PDF.',
     'terms.services.p2': 'El tiempo estimado de entrega es de unos minutos a un tiempo máximo no superior a 8 horas, según la demanda de procesamiento, pero te notificaremos tan pronto recibamos y verifiquemos tu pago para garantizar que ya estamos trabajando en tu tiquete ficticio.',
