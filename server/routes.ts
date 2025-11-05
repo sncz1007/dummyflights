@@ -218,10 +218,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
           throw new Error('No flights available from Amadeus');
         }
 
-        // Transform ALL Amadeus flight offers to our format with complete information
-        const flights: any[] = [];
+        // DEDUPLICATION: Map to store unique itineraries (key = itinerary signature, value = best offer)
+        // Amadeus returns multiple pricing variants for the same physical flight
+        // We only want to show each unique flight once, with the best (lowest) price
+        const uniqueFlightsMap = new Map<string, any>();
         
         for (const offer of searchResults.data) {
+          // Generate unique itinerary signature based on flight numbers and timestamps
+          const outboundItinerary = offer.itineraries[0];
+          const returnItinerary = isRoundTrip ? offer.itineraries[1] : null;
+          
+          // Create signature from outbound segments
+          const outboundSignature = outboundItinerary.segments
+            .map((seg: any) => `${seg.carrierCode}${seg.number}-${seg.departure.at}-${seg.arrival.at}`)
+            .join('|');
+          
+          // Add return signature if round-trip
+          const returnSignature = returnItinerary 
+            ? '|RETURN|' + returnItinerary.segments
+                .map((seg: any) => `${seg.carrierCode}${seg.number}-${seg.departure.at}-${seg.arrival.at}`)
+                .join('|')
+            : '';
+          
+          const itineraryKey = outboundSignature + returnSignature;
+          
+          // Check if we already have this itinerary
+          const existingOffer = uniqueFlightsMap.get(itineraryKey);
+          const currentPrice = parseFloat(offer.price.grandTotal);
+          
+          if (!existingOffer || currentPrice < parseFloat(existingOffer.price.grandTotal)) {
+            // This is a new itinerary OR a better price for existing itinerary
+            uniqueFlightsMap.set(itineraryKey, offer);
+            console.log(`[Amadeus Dedupe] ${itineraryKey.substring(0, 50)}... -> $${currentPrice} ${existingOffer ? '(better price)' : '(new)'}`);
+          } else {
+            console.log(`[Amadeus Dedupe] Skipping duplicate: ${itineraryKey.substring(0, 50)}... -> $${currentPrice} (worse than $${parseFloat(existingOffer.price.grandTotal)})`);
+          }
+        }
+        
+        console.log(`[Amadeus] Deduplication: ${searchResults.data.length} offers -> ${uniqueFlightsMap.size} unique flights`);
+
+        // Transform deduplicated Amadeus flight offers to our format with complete information
+        const flights: any[] = [];
+        
+        for (const offer of uniqueFlightsMap.values()) {
           // For round-trip, itineraries[0] = outbound, itineraries[1] = return
           // For one-way, only itineraries[0] exists
           const outboundItinerary = offer.itineraries[0];
@@ -478,7 +517,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
         
-        console.log(`[Amadeus] Transformed ${flights.length} flight offers with complete data`);
+        console.log(`[Amadeus] Transformed ${flights.length} unique flight offers with complete data`);
 
         // Count airlines for logging
         const airlineDistribution = new Map<string, number>();
@@ -493,8 +532,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             .map(([code, count]) => `${code}: ${count}`)
             .join(', '));
 
-        // Return ALL Amadeus results - NO FILTERING, NO DIVERSIFICATION
-        console.log(`[Amadeus] Returning ALL ${flights.length} flight offers to user`);
+        // Return deduplicated results with best prices
+        console.log(`[Amadeus] Returning ${flights.length} unique flight offers to user (deduplicated from ${searchResults.data.length} total offers)`);
         
         return res.json({
           flights: flights,
