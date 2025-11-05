@@ -143,14 +143,6 @@ export default function PaymentSuccess() {
                 </span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-green-600 dark:text-green-400 font-bold mt-0.5">✓</span>
-                <span>
-                  {isSpanish 
-                    ? 'Hemos enviado una confirmación con los PDFs a tu correo electrónico' 
-                    : 'We have sent a confirmation with the PDFs to your email'}
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
                 <span className="text-blue-600 dark:text-blue-400 font-bold mt-0.5">📥</span>
                 <span>
                   {isSpanish 
