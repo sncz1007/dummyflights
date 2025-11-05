@@ -258,6 +258,13 @@ export default function HeroSection() {
               <Plane className="h-5 w-5" />
               <span>{t('search.button')}</span>
             </Button>
+            
+            {/* Ticket Price Information */}
+            <p className="text-xs text-center text-muted-foreground mt-3" data-testid="text-ticket-price">
+              {t('search.ticketPrice')}{' '}
+              <span className="text-red-600 dark:text-red-500 font-semibold">15 USD</span>{' '}
+              {t('search.ticketPriceDetails')}
+            </p>
           </div>
         </div>
       </div>

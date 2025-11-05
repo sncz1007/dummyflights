@@ -35,6 +35,8 @@ export const translations = {
     'search.termsLink': 'Terms and Conditions',
     'search.termsAnd': 'and',
     'search.privacyLink': 'Privacy Policy',
+    'search.ticketPrice': 'Ticket Price:',
+    'search.ticketPriceDetails': 'per passenger, for both one-way and round-trip flights.',
     
     // Trust Indicators
     'trust.airlines': 'Airlines Worldwide',
@@ -320,6 +322,8 @@ export const translations = {
     'search.termsLink': 'Términos y Condiciones',
     'search.termsAnd': 'y la',
     'search.privacyLink': 'Política de Privacidad',
+    'search.ticketPrice': 'Valor del Tiquete:',
+    'search.ticketPriceDetails': 'por pasajero, tanto para vuelos de solo ida, como ida y vuelta.',
     
     // Trust Indicators
     'trust.airlines': 'Aerolíneas Globales',
