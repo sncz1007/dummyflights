@@ -712,7 +712,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Test endpoint to generate sample booking for PDF preview (DEVELOPMENT ONLY)
+  // Test endpoint to generate booking with form data for PDF preview (DEVELOPMENT ONLY)
   app.post("/api/test/generate-booking", async (req, res) => {
     // Restrict to development environment only
     if (process.env.NODE_ENV === 'production') {
@@ -720,101 +720,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     try {
-      // Create a test booking with sample data
+      const { customerInfo, flightData, searchParams } = req.body;
+      
+      // Use form data to create test booking
       const testBooking = {
         bookingNumber: `TEST${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-        customerInfo: {
-          fullName: "Juan Pérez García",
-          email: "test@example.com",
-          phone: "+1 555-0123",
-          dateOfBirth: "1985-05-15",
-          additionalPassengers: [
-            {
-              fullName: "María Pérez López",
-              dateOfBirth: "1987-08-22"
-            }
-          ]
-        },
-        flightData: {
-          id: "test-flight-1",
-          airline: {
-            code: "AA",
-            name: "American Airlines",
-            logo: "https://images.kiwi.com/airlines/64/AA.png"
-          },
-          flightNumber: "AA1234",
-          departure: {
-            airport: "NEW YORK (JFK)",
-            time: "10:30",
-            date: "2025-12-15"
-          },
-          arrival: {
-            airport: "MADRID (MAD)",
-            time: "23:45",
-            date: "2025-12-16"
-          },
-          duration: "7h 15m",
-          stops: 1,
-          segments: [
-            {
-              segmentNumber: 1,
-              airline: { code: "AA", name: "American Airlines" },
-              flightNumber: "AA1234",
-              departure: {
-                airport: "JFK",
-                city: "New York",
-                terminal: "8",
-                time: "10:30",
-                dateTime: "2025-12-15T10:30:00"
-              },
-              arrival: {
-                airport: "LHR",
-                city: "London",
-                terminal: "3",
-                time: "22:45",
-                dateTime: "2025-12-15T22:45:00"
-              },
-              duration: "7h 15m",
-              aircraft: { code: "789" }
-            },
-            {
-              segmentNumber: 2,
-              airline: { code: "BA", name: "British Airways" },
-              flightNumber: "BA458",
-              departure: {
-                airport: "LHR",
-                city: "London",
-                terminal: "5",
-                time: "08:15",
-                dateTime: "2025-12-16T08:15:00"
-              },
-              arrival: {
-                airport: "MAD",
-                city: "Madrid",
-                terminal: "4",
-                time: "11:30",
-                dateTime: "2025-12-16T11:30:00"
-              },
-              duration: "2h 15m",
-              aircraft: { code: "320" }
-            }
-          ],
-          class: "economy",
-          originalPrice: 850.00,
-          discountedPrice: 850.00,
-          discount: 0
-        },
-        searchParams: {
-          fromAirport: "NEW YORK (JFK)",
-          toAirport: "MADRID (MAD)",
-          departureDate: "2025-12-15",
-          returnDate: "2025-12-30",
-          passengers: "2",
-          flightClass: "economy",
-          tripType: "roundtrip"
-        },
-        totalPrice: 30.00,
-        totalFlightPrice: 1700.00,
+        customerInfo,
+        flightData,
+        searchParams,
+        totalPrice: (parseInt(searchParams.passengers) || 1) * 15,
+        totalFlightPrice: flightData.originalPrice * (parseInt(searchParams.passengers) || 1),
         status: "completed",
         paymentIntentId: "test_payment_intent",
         createdAt: new Date().toISOString()

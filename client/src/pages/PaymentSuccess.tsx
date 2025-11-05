@@ -2,14 +2,12 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { CheckCircle2, Download, FileText, Receipt, Home, TestTube } from 'lucide-react';
-import { apiRequest } from '@/lib/queryClient';
+import { CheckCircle2, Download, FileText, Receipt, Home } from 'lucide-react';
 
 export default function PaymentSuccess() {
   const [, setLocation] = useLocation();
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [language, setLanguage] = useState('en');
-  const [isGeneratingTest, setIsGeneratingTest] = useState(false);
 
   useEffect(() => {
     const id = sessionStorage.getItem('bookingId');
@@ -17,9 +15,10 @@ export default function PaymentSuccess() {
     setBookingId(id);
     setLanguage(lang);
 
-    // Allow access without booking ID for test purposes (development)
-    // In production, you may want to remove this or add environment checks
-  }, []);
+    if (!id) {
+      setLocation('/');
+    }
+  }, [setLocation]);
 
   const handleGoHome = () => {
     sessionStorage.removeItem('selectedFlight');
@@ -28,73 +27,10 @@ export default function PaymentSuccess() {
     setLocation('/');
   };
 
-  const handleGenerateTestPDFs = async () => {
-    setIsGeneratingTest(true);
-    try {
-      const response = await apiRequest('POST', '/api/test/generate-booking');
-      const data = await response.json();
-      
-      if (data.bookingId) {
-        // Update the booking ID to show the test PDFs
-        setBookingId(data.bookingId);
-        sessionStorage.setItem('bookingId', data.bookingId);
-      }
-    } catch (error) {
-      console.error('Error generating test booking:', error);
-      alert('Error generando booking de prueba. Ver consola para detalles.');
-    } finally {
-      setIsGeneratingTest(false);
-    }
-  };
-
   const isSpanish = language === 'es';
 
-  // Allow access to this page even without booking ID for test purposes
   if (!bookingId) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4">
-        <div className="max-w-2xl mx-auto">
-          <Card className="p-8 md:p-12 shadow-2xl text-center">
-            <TestTube className="w-16 h-16 mx-auto mb-4 text-blue-600" />
-            <h2 className="text-2xl font-bold mb-4">
-              {isSpanish ? 'Prueba de PDFs' : 'PDF Testing'}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              {isSpanish 
-                ? 'Genera un booking de prueba para revisar los PDFs' 
-                : 'Generate a test booking to review PDFs'}
-            </p>
-            <Button
-              onClick={handleGenerateTestPDFs}
-              disabled={isGeneratingTest}
-              size="lg"
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              {isGeneratingTest ? (
-                <>
-                  <span className="animate-spin mr-2">⏳</span>
-                  {isSpanish ? 'Generando...' : 'Generating...'}
-                </>
-              ) : (
-                <>
-                  <TestTube className="w-5 h-5 mr-2" />
-                  {isSpanish ? 'Generar PDFs de Prueba' : 'Generate Test PDFs'}
-                </>
-              )}
-            </Button>
-            <div className="mt-6">
-              <Button
-                onClick={handleGoHome}
-                variant="outline"
-              >
-                <Home className="w-4 h-4 mr-2" />
-                {isSpanish ? 'Volver al Inicio' : 'Back to Home'}
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (

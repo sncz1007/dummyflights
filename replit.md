@@ -30,6 +30,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
   - **Payment Receipt PDF**: Detailed receipt showing service fee breakdown, payment method, and important notes about the ticket delivery process. Clearly distinguishes between the service fee charged ($15/passenger) and the flight ticket price (informational).
   - Both PDFs use real flight data, customer information, and randomly generated booking codes for authenticity.
   - PDFs are available for immediate download on the payment success page via dedicated download buttons.
+  - **Development Testing**: A "Generate Test PDFs" button is available on the Checkout page (below payment buttons) that creates test bookings using actual form data for PDF preview and formatting validation. This endpoint (`/api/test/generate-booking`) is protected and only works in development environment (NODE_ENV !== 'production').
 - **Internationalization (i18n)**: Full support for English and Spanish, with language preference stored in localStorage. All content, including legal pages, is bilingual.
 - **Homepage Structure**: Includes a Hero Section with flight search, Trust Badges, Video Strip, Popular Destinations, "About Us" section, "Why Choose Us" benefits, Customer Testimonials, FAQ, and a comprehensive Footer.
 - **Legal Pages**: Dedicated, bilingual Terms of Service and Privacy Policy pages, requiring acceptance during flight search.
