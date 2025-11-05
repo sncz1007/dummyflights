@@ -10,7 +10,7 @@ export const translations = {
     // Hero Section
     'hero.title': 'Dummy Flight Tickets with Real Flight Data',
     'hero.subtitle': 'Valid dummy reservations of real and existing flights for visa applications, proof of return, passport renewal, and more',
-    'hero.guarantee': 'Real Flights • Booking Code • Ticket Number • Receipt • Instant Delivery',
+    'hero.guarantee': 'Real Flights • Booking Code • Ticket Number • Receipt • Instant Download',
     
     // Search Form
     'search.from': 'From',
@@ -297,7 +297,7 @@ export const translations = {
     // Hero Section
     'hero.title': 'Tiquetes Ficticios de Vuelos con Datos Reales',
     'hero.subtitle': 'Reservas ficticias válidas de vuelos reales y existentes para solicitudes de visa, comprobante de regreso, renovación de pasaporte, y más',
-    'hero.guarantee': 'Vuelos Reales • Codigo de Reserva • N° de Ticket • Factura • Entrega Inmediata',
+    'hero.guarantee': 'Vuelos Reales • Codigo de Reserva • N° de Ticket • Factura • Descarga Inmediata',
     
     // Search Form
     'search.from': 'Desde',
