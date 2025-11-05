@@ -1,7 +1,7 @@
 # SkyBudgetFly - Dummy Flight Ticket Platform
 
 ## Overview
-SkyBudgetFly is a web application that provides professional dummy flight tickets (also known as flight reservations or itineraries) with real flight data from the Amadeus global database. The platform offers a bilingual (English/Spanish) interface for flight search, secure payments, and instant delivery of dummy tickets via email. Dummy tickets include valid 6-digit alphanumeric PNR codes that can be verified on airline websites, making them perfect for visa applications, proof of return travel, passport renewal, HR documentation, and other official purposes. **Important**: Dummy tickets are NOT actual flight tickets and cannot be used to board a plane - they are for documentation purposes only.
+SkyBudgetFly is a web application that provides professional dummy flight tickets (also known as flight reservations or itineraries) with real flight data from actual airline databases. The platform offers a bilingual (English/Spanish) interface for flight search, secure payments, and instant delivery of dummy tickets via email. Dummy tickets include booking codes and ticket numbers from real existing flights, making them perfect for visa applications, proof of return travel, passport renewal, HR documentation, and other official purposes. **Important**: Dummy tickets are NOT actual flight tickets and cannot be used to board a plane - they are for documentation purposes only.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -23,7 +23,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
   - **Cache Lifecycle**: New search → Fetch fresh → Cache results → Book flight → Checkout → Back button → Use cached results (same prices)
   - **Cache Keys**: `cachedFlightResults` (search params + flight data), `returningFromCheckout` (navigation flag)
   - **Cache Invalidation**: Cleared on new homepage searches; flag removed after use to prevent stale hits
-- **Booking and Payment**: Integrates both Stripe and PayPal as payment options for maximum flexibility. Flight prices from Amadeus API or simulator are displayed for reference only (informational). The platform charges ONLY $15 USD per passenger for the search and booking service (e.g., 1 passenger = $15, 2 passengers = $30, 3 passengers = $45). After payment, tickets are manually purchased by the business and delivered to customers. Payment buttons appear directly below the contact form for immediate checkout.
+- **Booking and Payment**: Integrates both Stripe and PayPal as payment options for maximum flexibility. Flight prices from real airline data are displayed for reference only (informational). The platform charges ONLY $15 USD per passenger for the search and booking service (e.g., 1 passenger = $15, 2 passengers = $30, 3 passengers = $45). After payment, tickets are manually purchased by the business and delivered to customers. Payment buttons appear directly below the contact form for immediate checkout.
 - **Booking Notifications**: Automated email notifications are sent via EmailJS when customers click "Continue to Payment" after filling out their contact information. These notifications include complete flight details, customer info, all passengers, and pricing breakdown, enabling manual ticket purchase before payment completion.
 - **PDF Document Generation**: After successful payment, the system automatically generates two professional PDF documents for each booking:
   - **Booking Confirmation PDF**: Flight itinerary with airline branding, confirmation codes, flight details, passenger information, and seat assignments. Mimics real airline booking confirmations with realistic formatting.
@@ -50,11 +50,12 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
-- **Amadeus Flight API**: Used ONLY for real-time flight search and pricing data using Amadeus Production environment.
+- **Amadeus Flight API** (Backend Only): Used ONLY for real-time flight search and pricing data using Amadeus Production environment. **NOT mentioned in frontend messaging**.
   - **Environment**: Production environment (api.amadeus.com) for accurate real-world flight data
   - **Airport Search**: Location Search API provides access to worldwide airport database (199+ airports)
   - **Flight Search**: Flight Offers Search API displays up to 250 real flight offers per search with exact pricing and schedules
   - **Usage**: Search flights → Display real prices and schedules → Customer pays service fee
+  - **Frontend Messaging**: All references to "Amadeus" have been replaced with generic "real airline databases" or "actual airline databases" for honest, non-proprietary messaging
   - **Limitations**: PNR generation NOT implemented - requires consolidator/agent certification from Amadeus
   - **Important**: Amadeus TEST environment cannot reliably generate verifiable PNRs (error 34651 "SEGMENT SELL FAILURE" is expected for most carriers)
 - **Airport Data API**: Accessible via `/api/airports/search` for 199 international airports loaded from CSV.
