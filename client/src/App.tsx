@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/hooks/useLanguage";
+import ScrollToTop from "@/components/ScrollToTop";
 import Home from "@/pages/home";
 import FlightResults from "@/pages/FlightResults";
 import Checkout from "@/pages/Checkout";
@@ -31,6 +32,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <TooltipProvider>
+          <ScrollToTop />
           <Toaster />
           <Router />
         </TooltipProvider>
