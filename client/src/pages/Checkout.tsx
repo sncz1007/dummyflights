@@ -298,12 +298,12 @@ const CustomerInfoForm = ({
             )}
           </Button>
 
-          {/* TEST BUTTON - Remove in production */}
+          {/* TEST BUTTON - Generates REAL Amadeus PNR (Development only) */}
           <div className="mt-4 pt-4 border-t">
             <p className="text-xs text-center text-yellow-600 dark:text-yellow-500 mb-2 font-semibold">
               ⚠️ {localStorage.getItem('preferredLanguage') === 'es' 
-                ? 'BOTÓN DE PRUEBA - Solo para desarrollo' 
-                : 'TEST BUTTON - Development only'}
+                ? 'BOTÓN DE PRUEBA - Genera PNR REAL de Amadeus' 
+                : 'TEST BUTTON - Generates REAL Amadeus PNR'}
             </p>
             <Button
               onClick={async () => {
@@ -324,18 +324,12 @@ const CustomerInfoForm = ({
                   const flightDataStr = sessionStorage.getItem('selectedFlight');
                   const searchParamsStr = sessionStorage.getItem('searchParams');
                   
-                  console.log('Test button: flightDataStr', flightDataStr);
-                  console.log('Test button: searchParamsStr', searchParamsStr);
-                  
                   if (!flightDataStr || !searchParamsStr) {
                     throw new Error('Missing flight data');
                   }
                   
                   const flightData = JSON.parse(flightDataStr);
                   const searchParams = JSON.parse(searchParamsStr);
-                  
-                  console.log('Test button: flightData', flightData);
-                  console.log('Test button: searchParams', searchParams);
                   
                   // Ensure we have prices
                   let originalPrice = serviceFee;
@@ -353,8 +347,7 @@ const CustomerInfoForm = ({
                     discountedPrice = flightData.basePrice;
                   }
                   
-                  console.log('Test button: prices', { originalPrice, discountedPrice });
-                  
+                  // Step 1: Create the booking (payment status = pending)
                   const bookingData = {
                     fullName: customerInfo.fullName,
                     email: customerInfo.email,
@@ -372,43 +365,65 @@ const CustomerInfoForm = ({
                     originalPrice: originalPrice.toString(),
                     discountedPrice: discountedPrice.toString(),
                     currency: 'USD',
-                    stripePaymentIntentId: 'test_' + Date.now(),
-                    paymentStatus: 'completed',
-                    bookingStatus: 'confirmed',
+                    stripePaymentIntentId: 'test_dev_' + Date.now(),
+                    paymentStatus: 'pending',
+                    bookingStatus: 'pending',
                     language: localStorage.getItem('preferredLanguage') || 'en'
                   };
                   
-                  console.log('Test button: sending bookingData', bookingData);
+                  console.log('[Test Payment] Creating booking...');
+                  const createRes = await apiRequest('POST', '/api/create-booking', bookingData);
+                  const createResponse: any = await createRes.json();
                   
-                  const res = await apiRequest('POST', '/api/create-booking', bookingData);
-                  const response: any = await res.json();
-                  
-                  console.log('Test button: response', response);
-                  
-                  // Save booking ID and send confirmation email
-                  if (response && response.booking && response.booking.id) {
-                    sessionStorage.setItem('bookingId', response.booking.id);
-                    
-                    // Send confirmation email with PDF links
-                    try {
-                      await apiRequest('POST', `/api/bookings/${response.booking.id}/send-confirmation-email`, {
-                        paymentMethod: 'Card'
-                      });
-                      console.log('Test button: Confirmation email sent');
-                    } catch (emailError) {
-                      console.error('Test button: Error sending confirmation email:', emailError);
-                      // Don't fail the booking if email fails
-                    }
-                    
-                    window.location.href = '/success';
-                  } else {
-                    throw new Error('Invalid response from server');
+                  if (!createResponse?.booking?.id) {
+                    throw new Error('Failed to create booking');
                   }
+                  
+                  const bookingId = createResponse.booking.id;
+                  console.log('[Test Payment] Booking created:', bookingId);
+                  
+                  // Step 2: Simulate payment success and create REAL Amadeus PNR
+                  console.log('[Test Payment] Creating REAL Amadeus PNR...');
+                  toast({
+                    title: localStorage.getItem('preferredLanguage') === 'es' ? 'Creando PNR...' : 'Creating PNR...',
+                    description: localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Generando código de reserva real en Amadeus' 
+                      : 'Generating real reservation code in Amadeus',
+                  });
+                  
+                  const testPaymentRes = await apiRequest('POST', `/api/bookings/${bookingId}/test-payment`, {});
+                  const testPaymentResponse: any = await testPaymentRes.json();
+                  
+                  if (!testPaymentResponse.success) {
+                    throw new Error(testPaymentResponse.message || 'Failed to create Amadeus PNR');
+                  }
+                  
+                  console.log('[Test Payment] PNR generated:', testPaymentResponse.pnrCode);
+                  
+                  toast({
+                    title: '✅ ' + (localStorage.getItem('preferredLanguage') === 'es' ? 'PNR Real Generado' : 'Real PNR Generated'),
+                    description: `PNR: ${testPaymentResponse.pnrCode || 'N/A'}`,
+                  });
+                  
+                  // Step 3: Save booking ID and send confirmation email
+                  sessionStorage.setItem('bookingId', bookingId);
+                  
+                  try {
+                    await apiRequest('POST', `/api/bookings/${bookingId}/send-confirmation-email`, {
+                      paymentMethod: 'Test Payment'
+                    });
+                    console.log('[Test Payment] Confirmation email sent');
+                  } catch (emailError) {
+                    console.error('[Test Payment] Error sending confirmation email:', emailError);
+                  }
+                  
+                  // Redirect to success page
+                  window.location.href = '/success';
                 } catch (error: any) {
-                  console.error('Test button error:', error);
+                  console.error('[Test Payment] Error:', error);
                   toast({
                     title: localStorage.getItem('preferredLanguage') === 'es' ? 'Error' : 'Error',
-                    description: error.message || 'Failed to create test booking',
+                    description: error.message || 'Failed to create test booking with real PNR',
                     variant: 'destructive',
                   });
                   setIsProcessing(false);
@@ -420,11 +435,11 @@ const CustomerInfoForm = ({
             >
               {isProcessing ? (
                 <><Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                {localStorage.getItem('preferredLanguage') === 'es' ? 'Procesando...' : 'Processing...'}</>
+                {localStorage.getItem('preferredLanguage') === 'es' ? 'Creando PNR Real...' : 'Creating Real PNR...'}</>
               ) : (
                 <>🧪 {localStorage.getItem('preferredLanguage') === 'es' 
-                  ? 'Simular Pago Exitoso (Ver PDFs)' 
-                  : 'Simulate Successful Payment (View PDFs)'}</>
+                  ? 'Test: Generar PNR Real de Amadeus' 
+                  : 'Test: Generate Real Amadeus PNR'}</>
               )}
             </Button>
           </div>

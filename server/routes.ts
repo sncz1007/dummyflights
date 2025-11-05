@@ -780,6 +780,106 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // TEST PAYMENT ENDPOINT - Simulates successful payment and creates real Amadeus PNR (Development only)
+  app.post("/api/bookings/:id/test-payment", async (req, res) => {
+    try {
+      const bookingId = req.params.id;
+      const booking = await storage.getBooking(bookingId);
+      
+      if (!booking) {
+        return res.status(404).json({ error: "Booking not found" });
+      }
+      
+      console.log('[Test Payment] Simulating successful payment for booking:', bookingId);
+      
+      // Update payment status to completed
+      await storage.updateBookingPaymentStatus(bookingId, 'completed');
+      
+      // Create Amadeus reservation and get PNR (same logic as Stripe webhook)
+      try {
+        console.log('[Test Payment] Creating Amadeus reservation...');
+        
+        // Parse flight data
+        const flightData = JSON.parse(booking.selectedFlightData);
+        
+        // Parse passenger data
+        const passengers = [];
+        passengers.push({ 
+          fullName: booking.fullName, 
+          dateOfBirth: booking.dateOfBirth 
+        });
+        
+        if (booking.additionalPassengers) {
+          const additionalPassengers = JSON.parse(booking.additionalPassengers);
+          passengers.push(...additionalPassengers);
+        }
+        
+        // Convert passengers to Amadeus traveler format
+        const { createFlightOrder } = await import('./amadeus.js');
+        const travelers: any[] = passengers.map((passenger, index) => {
+          const [firstName, ...lastNameParts] = passenger.fullName.trim().split(' ');
+          const lastName = lastNameParts.join(' ') || firstName;
+          
+          return {
+            id: (index + 1).toString(),
+            dateOfBirth: passenger.dateOfBirth,
+            name: {
+              firstName: firstName.toUpperCase(),
+              lastName: lastName.toUpperCase()
+            },
+            contact: index === 0 ? {
+              emailAddress: booking.email,
+              phones: booking.phone ? [{
+                deviceType: 'MOBILE',
+                countryCallingCode: '1',
+                number: booking.phone.replace(/\D/g, '')
+              }] : undefined
+            } : undefined
+          };
+        });
+        
+        // Create flight order in Amadeus to get PNR
+        const flightOrder = await createFlightOrder(
+          flightData.amadeusOffer || flightData,
+          travelers
+        );
+        
+        // Extract PNR from response
+        const pnrCode = flightOrder.associatedRecords?.[0]?.reference;
+        const amadeusOrderId = flightOrder.id;
+        
+        console.log('[Test Payment] Amadeus reservation created successfully');
+        console.log('[Test Payment] PNR:', pnrCode);
+        console.log('[Test Payment] Order ID:', amadeusOrderId);
+        
+        // Update booking with PNR and order ID
+        await storage.updateBookingWithPNR(bookingId, pnrCode, amadeusOrderId);
+        
+        console.log('[Test Payment] Booking updated with PNR:', pnrCode);
+        
+        res.json({ 
+          success: true, 
+          message: "Test payment successful - Real PNR generated",
+          pnrCode,
+          amadeusOrderId,
+          bookingId 
+        });
+      } catch (amadeusError: any) {
+        console.error('[Test Payment] Error creating Amadeus reservation:', amadeusError);
+        console.error('[Test Payment] Error details:', amadeusError.message);
+        
+        res.status(500).json({ 
+          error: "Failed to create Amadeus reservation",
+          message: amadeusError.message,
+          details: amadeusError.description || amadeusError.response?.data || 'Unknown error'
+        });
+      }
+    } catch (error: any) {
+      console.error("[Test Payment] Error:", error);
+      res.status(500).json({ error: "Test payment failed", message: error.message });
+    }
+  });
+
   // PayPal integration routes (from blueprint:javascript_paypal)
   app.get("/paypal/setup", async (req, res) => {
     await loadPaypalDefault(req, res);
