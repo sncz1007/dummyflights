@@ -20,7 +20,7 @@ export default function Header() {
               <img 
                 src={logoImage} 
                 alt="SkyBudgetFly Logo" 
-                className="h-16 w-auto"
+                className="h-20 w-auto"
               />
               <span className="text-xl font-display font-bold text-red-600">Flights Dummy</span>
             </div>
