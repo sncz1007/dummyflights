@@ -109,7 +109,7 @@ export default function Footer() {
         
         <div className="border-t border-gray-700 pt-8 text-center text-sm text-gray-400">
           <p data-testid="text-footer-copyright">
-            &copy; 2025 SkyBudgetFly. {t('footer.copyright')}
+            &copy; 2025 Flights Dummys. {t('footer.copyright')}
           </p>
         </div>
       </div>
