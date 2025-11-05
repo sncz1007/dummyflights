@@ -14,7 +14,7 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 ### Technical Implementations
 - **Frontend**: React 18, TypeScript, Wouter for routing, TanStack React Query for server state, React Context for i18n, React Hook Form with Zod for form management, and Vite as the build tool.
 - **Backend**: Node.js with Express.js and TypeScript (ESM modules) providing RESTful APIs for airports and quotes.
-- **Flight Data**: A realistic flight simulator based on actual American Airlines 2025 routes and pricing, featuring intelligent regional airline filtering. It provides simulated flight availability, schedules, and realistic market prices.
+- **Flight Data**: Real-time flight search powered by Amadeus Production API with intelligent deduplication. The backend receives multiple pricing variants from Amadeus for the same physical flight and automatically deduplicates them, showing each unique flight only once with the best (lowest) price. **Flight numbers (e.g., CM406, AA123) are 100% authentic from Amadeus** - they represent real operating flights with actual schedules and routes.
 - **Database**: PostgreSQL (Neon serverless) managed by Drizzle ORM, with tables for users, airports, quotes, and bookings.
 
 ### Feature Specifications
@@ -55,7 +55,9 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
   - **Environment**: Production environment (api.amadeus.com) for accurate real-world flight data
   - **Airport Search**: Location Search API provides access to worldwide airport database (199+ airports)
   - **Flight Search**: Flight Offers Search API displays up to 250 real flight offers per search with exact pricing and schedules
-  - **Usage**: Search flights → Display real prices and schedules → Customer pays service fee
+  - **Intelligent Deduplication**: Amadeus returns multiple pricing variants for the same physical flight (different fare classes, booking codes, etc.). The backend automatically deduplicates by creating unique itinerary signatures (flight numbers + departure/arrival timestamps for all segments) and keeps only the best (lowest) price for each unique flight. This ensures users see each flight only once.
+  - **Flight Number Authenticity**: All flight numbers (e.g., CM406, AA123, EK203) are 100% real from Amadeus Production API - they represent actual operating flights with verified schedules, routes, and airline data.
+  - **Usage**: Search flights → Deduplicate offers → Display real prices and schedules → Customer pays service fee
   - **Frontend Messaging**: All references to "Amadeus" have been replaced with generic "real airline databases" or "actual airline databases" for honest, non-proprietary messaging
   - **Limitations**: PNR generation NOT implemented - requires consolidator/agent certification from Amadeus
   - **Important**: Amadeus TEST environment cannot reliably generate verifiable PNRs (error 34651 "SEGMENT SELL FAILURE" is expected for most carriers)
