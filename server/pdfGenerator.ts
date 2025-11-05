@@ -116,9 +116,10 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   doc.fontSize(11).font('Helvetica-Bold')
      .text(`Date of Purchase: ${formatDateShort(new Date())}`, 50, 50);
   
-  // Title
-  doc.fontSize(18).font('Helvetica-Bold')
-     .text(`Flight Receipt for ${booking.fromAirport} to ${booking.toAirport}`, 50, 80);
+  // Title - Include airline name, smaller size, don't cover logo
+  const airlineName = flightData.airline.name || 'Flight';
+  doc.fontSize(14).font('Helvetica-Bold')
+     .text(`${airlineName} Flight Receipt for ${booking.fromAirport} to ${booking.toAirport}`, 50, 80, { width: 420 });
   
   // PASSENGER INFORMATION Section
   doc.fontSize(12).font('Helvetica-Bold')
