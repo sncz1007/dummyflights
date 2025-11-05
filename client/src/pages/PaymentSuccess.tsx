@@ -133,9 +133,6 @@ export default function PaymentSuccess() {
 
           {/* Important Information */}
           <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-5 mb-8">
-            <h3 className="font-semibold text-green-900 dark:text-green-100 mb-3">
-              {isSpanish ? '✅ Tu reserva está confirmada' : '✅ Your booking is confirmed'}
-            </h3>
             <ul className="text-sm text-green-800 dark:text-green-200 space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-green-600 dark:text-green-400 font-bold mt-0.5">✓</span>
