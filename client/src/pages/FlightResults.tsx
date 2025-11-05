@@ -34,6 +34,7 @@ interface FlightLeg {
   };
   duration: string;
   stops: number;
+  segments?: FlightSegment[];
   basePrice?: number;
 }
 
@@ -394,6 +395,11 @@ export default function FlightResults() {
                         <p className="text-xs text-muted-foreground mt-1">
                           {flight.returnFlightOptions[0].stops === 0 ? t('results.direct') : `${flight.returnFlightOptions[0].stops} ${flight.returnFlightOptions[0].stops === 1 ? t('results.stop') : t('results.stops')}`}
                         </p>
+                        {flight.returnFlightOptions[0].stops > 0 && flight.returnFlightOptions[0].segments && flight.returnFlightOptions[0].segments.length > 1 && (
+                          <p className="text-xs text-primary font-semibold mt-1">
+                            {flight.returnFlightOptions[0].segments.slice(0, -1).map((seg: FlightSegment) => seg.arrival.city).join(', ')}
+                          </p>
+                        )}
                       </div>
 
                       <div className="text-center">

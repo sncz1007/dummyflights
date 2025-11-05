@@ -842,8 +842,11 @@ export default function Checkout() {
                   {searchParams.returnDate && ` - ${searchParams.returnDate}`}
                 </p>
                 
-                {/* Show stops/layovers */}
+                {/* Show stops/layovers - Outbound Flight */}
                 <div className="mt-2">
+                  <p className="text-xs font-medium text-muted-foreground mb-1">
+                    {localStorage.getItem('preferredLanguage') === 'es' ? '🛫 Vuelo de Ida' : '🛫 Outbound Flight'}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {flight.stops === 0 ? (
                       localStorage.getItem('preferredLanguage') === 'es' ? 'Vuelo directo' : 'Direct flight'
@@ -858,6 +861,39 @@ export default function Checkout() {
                     </p>
                   )}
                 </div>
+
+                {/* Return Flight Section */}
+                {flight.returnFlightOptions && flight.returnFlightOptions.length > 0 && flight.returnFlightOptions[0] && (
+                  <div className="mt-3 pt-3 border-t">
+                    <div className="flex justify-between items-center mb-2">
+                      <p className="text-sm font-medium">{searchParams.toAirport}</p>
+                      <Plane className="h-4 w-4 text-muted-foreground rotate-180" />
+                      <p className="text-sm font-medium">{searchParams.fromAirport}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      {searchParams.returnDate}
+                    </p>
+                    
+                    <div>
+                      <p className="text-xs font-medium text-muted-foreground mb-1">
+                        {localStorage.getItem('preferredLanguage') === 'es' ? '🛬 Vuelo de Regreso' : '🛬 Return Flight'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {flight.returnFlightOptions[0].stops === 0 ? (
+                          localStorage.getItem('preferredLanguage') === 'es' ? 'Vuelo directo' : 'Direct flight'
+                        ) : (
+                          `${flight.returnFlightOptions[0].stops} ${flight.returnFlightOptions[0].stops === 1 ? (localStorage.getItem('preferredLanguage') === 'es' ? 'escala' : 'stop') : (localStorage.getItem('preferredLanguage') === 'es' ? 'escalas' : 'stops')}`
+                        )}
+                      </p>
+                      {flight.returnFlightOptions[0].stops > 0 && flight.returnFlightOptions[0].segments && flight.returnFlightOptions[0].segments.length > 1 && (
+                        <p className="text-xs text-primary font-semibold mt-1">
+                          {localStorage.getItem('preferredLanguage') === 'es' ? 'Vía: ' : 'Via: '}
+                          {flight.returnFlightOptions[0].segments.slice(0, -1).map((seg) => seg.arrival.city).join(', ')}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="border-t pt-4 space-y-3">
