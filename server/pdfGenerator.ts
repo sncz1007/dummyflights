@@ -38,7 +38,7 @@ function generateTicketNumber(): string {
 
 // Generate consecutive seat numbers for multiple passengers
 function generateConsecutiveSeats(count: number): string[] {
-  const baseRow = Math.floor(Math.random() * 20 + 10); // Rows 10-29 (avoid front rows)
+  const baseRow = Math.floor(Math.random() * 10 + 1); // Rows 1-10 (more realistic range)
   const seats = ['A', 'B', 'C', 'D', 'E', 'F'];
   
   const consecutiveSeats: string[] = [];
@@ -269,14 +269,23 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   // Flight price (from Amadeus data)
   const flightPricePerPerson = flightData.originalPrice || flightData.discountedPrice || 0;
   const returnFlightPrice = flightData.returnFlightOptions?.[0]?.basePrice || 0;
-  const totalFlightPrice = (flightPricePerPerson + returnFlightPrice) * passengers.length;
+  const baseFarePerPassenger = flightPricePerPerson + returnFlightPrice;
+  const totalFlightPrice = baseFarePerPassenger * passengers.length;
   
-  // Display base fare
+  // Display base fare per passenger
   doc.fontSize(10).font('Helvetica')
-     .text('Base Fare', 50, currentY)
-     .text(`$${totalFlightPrice.toFixed(2)} USD`, 450, currentY);
+     .text('Base fare per passenger', 50, currentY)
+     .text(`$${baseFarePerPassenger.toFixed(2)} USD`, 450, currentY);
   
   currentY += 20;
+  
+  // Show total base fare if multiple passengers
+  if (passengers.length > 1) {
+    doc.fontSize(10).font('Helvetica')
+       .text(`Total Base Fare (${passengers.length} passengers)`, 50, currentY)
+       .text(`$${totalFlightPrice.toFixed(2)} USD`, 450, currentY);
+    currentY += 20;
+  }
   
   // Taxes and fees (if available from Amadeus)
   let taxesTotal = 0;
