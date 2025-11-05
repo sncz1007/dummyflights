@@ -187,9 +187,9 @@ export const translations = {
     // Terms of Service
     'terms.title': 'Terms of Service',
     'terms.lastUpdated': 'Last updated: November 2025',
-    'terms.intro': 'By using SkyBudgetFly\'s dummy ticket services, you accept these terms and conditions.',
+    'terms.intro': 'By using Flights Dummy\'s dummy ticket services, you accept these terms and conditions.',
     'terms.services.title': 'Our Services',
-    'terms.services.p1': 'SkyBudgetFly provides dummy flight tickets (also known as flight reservations or itineraries) with real flight data from actual airline databases. Our dummy tickets include booking codes and ticket numbers from real existing flights. Is it safe to buy with us? Purchasing with us is completely safe, as we process all payments through Stripe, an internationally verified platform that protects your money with the highest security standards. Once you select your flight details, provide all required information, and make the secure payment through Stripe, our team will generate your dummy ticket with booking codes and ticket numbers. We will then send the dummy ticket in PDF format to your email.',
+    'terms.services.p1': 'Flights Dummy provides dummy flight tickets (also known as flight reservations or itineraries) with real flight data from actual airline databases. Our dummy tickets include booking codes and ticket numbers from real existing flights. Is it safe to buy with us? Purchasing with us is completely safe, as we process all payments through Stripe, an internationally verified platform that protects your money with the highest security standards. Once you select your flight details, provide all required information, and make the secure payment through Stripe, our team will generate your dummy ticket with booking codes and ticket numbers. We will then send the dummy ticket in PDF format to your email.',
     'terms.services.p2': 'The estimated delivery time is from a few minutes to a maximum of 8 hours, depending on our processing demand, but we will notify you as soon as we receive and verify your payment to guarantee that we are already working on your dummy ticket.',
     'terms.services.p3': 'Additionally, we respect your privacy and are available to answer any questions you may have during the process, either by email or through our integrated website chat. Your purchase is protected and backed by trusted technology. What payment methods do we accept? We accept credit or debit card payments and through our secure Stripe platform. All payments are secure.',
     'terms.quotes.title': 'What is a Dummy Ticket?',
@@ -200,7 +200,7 @@ export const translations = {
     'terms.cancellation.p1': 'Due to the nature of dummy tickets as instant digital products, all sales are final. Once your dummy ticket has been generated and delivered via email, we cannot process refunds.',
     'terms.cancellation.p2': 'We recommend ensuring that all flight details (dates, destinations, passenger names) are correct before completing your purchase. If you notice an error in your dummy ticket immediately after receiving it, please contact our support team within 24 hours and we will review your case. Contact us for more information.',
     'terms.liability.title': 'Limitation of Liability',
-    'terms.liability.text': 'SkyBudget is not responsible for delays, cancellations, or flight changes made by airlines.',
+    'terms.liability.text': 'Flights Dummy is not responsible for delays, cancellations, or flight changes made by airlines.',
     'terms.changes.title': 'Changes to Terms',
     'terms.changes.text': 'We reserve the right to modify these terms at any time. Changes will be posted on this page.',
     'terms.contact.title': 'Contact',
@@ -208,7 +208,7 @@ export const translations = {
     
     // Privacy Policy
     'privacy.title': 'Privacy Policy',
-    'privacy.intro': 'At SkyBudget, we respect your privacy and are committed to protecting your personal information.',
+    'privacy.intro': 'At Flights Dummy, we respect your privacy and are committed to protecting your personal information.',
     'privacy.collection.title': 'Information Collection',
     'privacy.collection.text': 'We collect information you provide when requesting flight quotes, including name, email, phone number, and travel preferences. With the sole purpose of using the data to make your flight reservations.',
     'privacy.use.title': 'Use of Information',
@@ -472,9 +472,9 @@ export const translations = {
     // Terms of Service
     'terms.title': 'Términos de Servicio',
     'terms.lastUpdated': 'Última actualización: Noviembre 2025',
-    'terms.intro': 'Al usar los servicios de tiquetes ficticios de SkyBudgetFly, aceptas estos términos y condiciones.',
+    'terms.intro': 'Al usar los servicios de tiquetes ficticios de Flights Dummy, aceptas estos términos y condiciones.',
     'terms.services.title': 'Nuestros Servicios',
-    'terms.services.p1': 'SkyBudgetFly proporciona tiquetes ficticios de vuelo (también conocidos como reservas de vuelo o itinerarios) con datos de vuelo reales de bases de datos reales de aerolíneas. Nuestros tiquetes ficticios incluyen códigos de reserva y números de ticket de vuelos reales existentes. ¿Es seguro comprar con nosotros? Comprar con nosotros es completamente seguro, ya que procesamos todos los pagos a través de Stripe, una plataforma verificada internacionalmente que protege tu dinero con los más altos estándares de seguridad. Una vez selecciones los detalles de tu vuelo, proporciones toda la información requerida y realices el pago seguro mediante Stripe, nuestro equipo generará tu tiquete ficticio con códigos de reserva y números de ticket. Luego enviaremos el tiquete ficticio en formato PDF a tu correo electrónico.',
+    'terms.services.p1': 'Flights Dummy proporciona tiquetes ficticios de vuelo (también conocidos como reservas de vuelo o itinerarios) con datos de vuelo reales de bases de datos reales de aerolíneas. Nuestros tiquetes ficticios incluyen códigos de reserva y números de ticket de vuelos reales existentes. ¿Es seguro comprar con nosotros? Comprar con nosotros es completamente seguro, ya que procesamos todos los pagos a través de Stripe, una plataforma verificada internacionalmente que protege tu dinero con los más altos estándares de seguridad. Una vez selecciones los detalles de tu vuelo, proporciones toda la información requerida y realices el pago seguro mediante Stripe, nuestro equipo generará tu tiquete ficticio con códigos de reserva y números de ticket. Luego enviaremos el tiquete ficticio en formato PDF a tu correo electrónico.',
     'terms.services.p2': 'El tiempo estimado de entrega es de unos minutos a un tiempo máximo no superior a 8 horas, según la demanda de procesamiento, pero te notificaremos tan pronto recibamos y verifiquemos tu pago para garantizar que ya estamos trabajando en tu tiquete ficticio.',
     'terms.services.p3': 'Además, respetamos tu privacidad y estamos disponibles para responder cualquier pregunta que puedas tener durante el proceso, ya sea por correo o por nuestro chat integrado en el sitio web. Tu compra está protegida y respaldada por tecnología confiable. ¿Qué métodos de pago aceptamos? Aceptamos pagos con tarjeta de crédito o débito y a través de nuestra plataforma segura Stripe. Todos los pagos son seguros.',
     'terms.quotes.title': '¿Qué es un Tiquete Ficticio?',
@@ -485,7 +485,7 @@ export const translations = {
     'terms.cancellation.p1': 'Debido a la naturaleza de los tiquetes ficticios como productos digitales instantáneos, todas las ventas son finales. Una vez que tu tiquete ficticio haya sido generado y entregado por correo electrónico, no podemos procesar reembolsos.',
     'terms.cancellation.p2': 'Recomendamos asegurarte de que todos los detalles del vuelo (fechas, destinos, nombres de pasajeros) sean correctos antes de completar tu compra. Si notas un error en tu tiquete ficticio inmediatamente después de recibirlo, contacta a nuestro equipo de soporte dentro de las 24 horas y revisaremos tu caso. Contáctanos para más información.',
     'terms.liability.title': 'Limitación de Responsabilidad',
-    'terms.liability.text': 'SkyBudget no es responsable por retrasos, cancelaciones o cambios de vuelo realizados por las aerolíneas.',
+    'terms.liability.text': 'Flights Dummy no es responsable por retrasos, cancelaciones o cambios de vuelo realizados por las aerolíneas.',
     'terms.changes.title': 'Cambios a los Términos',
     'terms.changes.text': 'Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios se publicarán en esta página.',
     'terms.contact.title': 'Contacto',
@@ -493,7 +493,7 @@ export const translations = {
     
     // Privacy Policy
     'privacy.title': 'Política de Privacidad',
-    'privacy.intro': 'En SkyBudget, respetamos tu privacidad y estamos comprometidos a proteger tu información personal.',
+    'privacy.intro': 'En Flights Dummy, respetamos tu privacidad y estamos comprometidos a proteger tu información personal.',
     'privacy.collection.title': 'Recopilación de Información',
     'privacy.collection.text': 'Recopilamos información que proporcionas al solicitar cotizaciones de vuelos, incluyendo nombre, correo electrónico, número de teléfono y preferencias de viaje. Con el único propósito de usar los datos para realizar la reserva de tus vuelos.',
     'privacy.use.title': 'Uso de la Información',
