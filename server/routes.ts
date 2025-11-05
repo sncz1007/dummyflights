@@ -224,19 +224,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const uniqueFlightsMap = new Map<string, any>();
         
         for (const offer of searchResults.data) {
-          // Generate unique itinerary signature based on flight numbers and timestamps
+          // Generate unique itinerary signature based on flight numbers and ROUTES (not timestamps)
+          // This ensures same physical flight is recognized regardless of fare class/booking code
           const outboundItinerary = offer.itineraries[0];
           const returnItinerary = isRoundTrip ? offer.itineraries[1] : null;
           
-          // Create signature from outbound segments
+          // Create signature from outbound segments: flight number + departure airport + arrival airport
+          // We DO NOT use timestamps because Amadeus may return slightly different times for same flight
           const outboundSignature = outboundItinerary.segments
-            .map((seg: any) => `${seg.carrierCode}${seg.number}-${seg.departure.at}-${seg.arrival.at}`)
+            .map((seg: any) => `${seg.carrierCode}${seg.number}-${seg.departure.iataCode}-${seg.arrival.iataCode}`)
             .join('|');
           
-          // Add return signature if round-trip
+          // Add return signature if round-trip: flight number + airports (not timestamps)
           const returnSignature = returnItinerary 
             ? '|RETURN|' + returnItinerary.segments
-                .map((seg: any) => `${seg.carrierCode}${seg.number}-${seg.departure.at}-${seg.arrival.at}`)
+                .map((seg: any) => `${seg.carrierCode}${seg.number}-${seg.departure.iataCode}-${seg.arrival.iataCode}`)
                 .join('|')
             : '';
           
@@ -246,12 +248,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const existingOffer = uniqueFlightsMap.get(itineraryKey);
           const currentPrice = parseFloat(offer.price.grandTotal);
           
+          // Debug: Log full signature for first few offers
+          if (uniqueFlightsMap.size < 5) {
+            console.log(`[Amadeus Dedupe DEBUG] Full signature: ${itineraryKey}`);
+            console.log(`[Amadeus Dedupe DEBUG] Price: $${currentPrice}, Existing: ${existingOffer ? '$' + parseFloat(existingOffer.price.grandTotal) : 'none'}`);
+          }
+          
           if (!existingOffer || currentPrice < parseFloat(existingOffer.price.grandTotal)) {
             // This is a new itinerary OR a better price for existing itinerary
             uniqueFlightsMap.set(itineraryKey, offer);
-            console.log(`[Amadeus Dedupe] ${itineraryKey.substring(0, 50)}... -> $${currentPrice} ${existingOffer ? '(better price)' : '(new)'}`);
           } else {
-            console.log(`[Amadeus Dedupe] Skipping duplicate: ${itineraryKey.substring(0, 50)}... -> $${currentPrice} (worse than $${parseFloat(existingOffer.price.grandTotal)})`);
+            console.log(`[Amadeus Dedupe] SKIPPED duplicate: $${currentPrice} (existing: $${parseFloat(existingOffer.price.grandTotal)})`);
           }
         }
         
