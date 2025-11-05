@@ -393,8 +393,8 @@ const CustomerInfoForm = ({
         <div className="mt-4 text-center text-sm text-muted-foreground">
           <p>
             {localStorage.getItem('preferredLanguage') === 'es' 
-              ? 'Posterior al pago recibirás tus tickets o código de reserva directamente en tu correo'
-              : 'After payment, you will receive your tickets or reservation code directly in your email'}
+              ? 'Después del pago, podrás descargar instantáneamente tu tiquete de vuelo y factura de compra.'
+              : 'After payment, you will be able to instantly download your flight ticket and purchase invoice.'}
           </p>
         </div>
       </Card>
