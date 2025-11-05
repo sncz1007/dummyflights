@@ -31,6 +31,9 @@ const AIRLINE_ACCOUNTING_CODES: Record<string, string> = {
   'WY': '910', // Oman Air
   'FJ': '260', // Fiji Airways
   
+  // Major Middle East carriers
+  'EK': '176', // Emirates
+  
   // Star Alliance carriers
   'LH': '020', // Lufthansa
   'AC': '014', // Air Canada
