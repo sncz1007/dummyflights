@@ -70,7 +70,7 @@ export const translations = {
     'about.stat.bookings': 'Dummy Tickets Issued',
     'about.stat.discount': 'Satisfaction Rate',
     'about.stat.realFlights': 'Real Flights',
-    'about.stat.alliance': 'Real Flight Data',
+    'about.stat.alliance': 'Real Database',
     
     // Why Choose Us
     'whyChoose.title': 'What is a Dummy Ticket Used For?',
@@ -357,7 +357,7 @@ export const translations = {
     'about.stat.bookings': 'Tiquetes Ficticios Emitidos',
     'about.stat.discount': 'Tasa de Satisfacción',
     'about.stat.realFlights': 'Vuelos Reales',
-    'about.stat.alliance': 'Datos de Vuelo Reales',
+    'about.stat.alliance': 'Base de Datos Real',
     
     // Why Choose Us
     'whyChoose.title': '¿Para Qué se Utiliza un Tiquete Ficticio?',
