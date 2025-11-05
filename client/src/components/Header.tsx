@@ -4,7 +4,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ChevronDown } from 'lucide-react';
-import logoImage from '@assets/IMG_9390_1760553283513.jpeg';
+import logoImage from '@assets/generated_images/Red_airplane_logo_icon_7c53381d.png';
 
 export default function Header() {
   const { t } = useTranslation();

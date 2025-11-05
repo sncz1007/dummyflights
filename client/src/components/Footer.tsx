@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Mail, MessageCircle } from 'lucide-react';
-import logoImage from '@assets/skybudget-logo.png';
+import logoImage from '@assets/generated_images/Red_airplane_logo_icon_7c53381d.png';
 
 export default function Footer() {
   const { t } = useTranslation();
