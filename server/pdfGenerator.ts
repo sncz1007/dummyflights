@@ -449,10 +449,18 @@ export async function generateReceiptPDF(booking: Booking, paymentMethod: string
   doc.fontSize(12).font('Helvetica-Bold')
      .text(`$${totalServiceFee}.00 USD`, 450, 535);
   
-  // Payment method
-  const lastFourDigits = Math.floor(Math.random() * 9000 + 1000);
+  // Payment method - use REAL payment method (no random numbers for PayPal)
+  let paymentMethodText = '';
+  if (paymentMethod.toLowerCase().includes('paypal')) {
+    paymentMethodText = 'PayPal';
+  } else {
+    // For card payments (Stripe, etc.), show masked card number
+    const lastFourDigits = Math.floor(Math.random() * 9000 + 1000);
+    paymentMethodText = `${paymentMethod} ************${lastFourDigits}`;
+  }
+  
   doc.fontSize(10).font('Helvetica')
-     .text(`Payment Method: ${paymentMethod} ${paymentMethod !== 'PayPal' ? '************' : ''}${lastFourDigits}`, 50, 565);
+     .text(`Payment Method: ${paymentMethodText}`, 50, 565);
   
   // Important note
   doc.fontSize(9).font('Helvetica')
