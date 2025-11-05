@@ -191,16 +191,18 @@ const CustomerInfoForm = ({
 
     setIsGeneratingTest(true);
     try {
-      const response: any = await apiRequest('POST', '/api/test/generate-booking', {
+      const response = await apiRequest('POST', '/api/test/generate-booking', {
         customerInfo,
         flightData,
         searchParams
       });
 
-      if (response?.success && response?.bookingId) {
+      const data = await response.json();
+
+      if (data?.success && data?.bookingId) {
         // Store booking ID and navigate to success page
-        sessionStorage.setItem('bookingId', response.bookingId);
-        setLocation(`/success?bookingId=${response.bookingId}`);
+        sessionStorage.setItem('bookingId', data.bookingId);
+        setLocation(`/success?bookingId=${data.bookingId}`);
       }
     } catch (err: any) {
       toast({
