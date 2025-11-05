@@ -301,20 +301,13 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
        .text(`$${taxesTotal.toFixed(2)} USD`, 450, currentY);
   }
   
-  // Total
+  // Total - Only show USD price from Amadeus, no miles
   currentY += 30;
-  doc.fontSize(11).font('Helvetica-Bold')
-     .text(`Total (${passengers.length} Passenger${passengers.length > 1 ? 's' : ''}):`, 50, currentY);
-  
   const grandTotal = totalFlightPrice + taxesTotal;
-  doc.fontSize(11).font('Helvetica-Bold')
-     .text(passengers.length > 1 ? `${passengers.length * 31800} Miles` : '31,800Miles', 450, currentY - 15);
   
   doc.fontSize(11).font('Helvetica-Bold')
-     .text(`+`, 500, currentY);
-  
-  doc.fontSize(11).font('Helvetica-Bold')
-     .text(`$${grandTotal.toFixed(2)}USD`, 450, currentY + 2);
+     .text(`Total (${passengers.length} Passenger${passengers.length > 1 ? 's' : ''}):`, 50, currentY)
+     .text(`$${grandTotal.toFixed(2)} USD`, 450, currentY);
   
   // Payment method
   currentY += 30;
