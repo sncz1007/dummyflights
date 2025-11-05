@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Mail, MessageCircle } from 'lucide-react';
-import logoImage from '@assets/generated_images/Circular_airplane_ticket_badge_logo_26fd3fe4.png';
+import logoImage from '@assets/generated_images/White_on_red_circular_logo_d0fa86e5.png';
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -30,7 +30,7 @@ export default function Footer() {
               <img 
                 src={logoImage} 
                 alt="SkyBudgetFly Logo" 
-                className="h-10 w-auto"
+                className="h-12 w-auto"
               />
             </div>
             <p className="text-gray-400 text-sm mb-4" data-testid="text-footer-tagline">
