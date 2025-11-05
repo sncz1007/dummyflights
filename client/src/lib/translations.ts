@@ -208,7 +208,7 @@ export const translations = {
     
     // Privacy Policy
     'privacy.title': 'Privacy Policy',
-    'privacy.intro': 'At Flights Dummy, we respect your privacy and are committed to protecting your personal information.',
+    'privacy.intro': 'At Flights Dummys, we respect your privacy and are committed to protecting your personal information.',
     'privacy.collection.title': 'Information Collection',
     'privacy.collection.text': 'We collect information you provide when requesting flight quotes, including name, email, phone number, and travel preferences. With the sole purpose of using the data to generate dummy tickets for real flight reservations.',
     'privacy.use.title': 'Use of Information',
@@ -493,7 +493,7 @@ export const translations = {
     
     // Privacy Policy
     'privacy.title': 'Política de Privacidad',
-    'privacy.intro': 'En Flights Dummy, respetamos tu privacidad y estamos comprometidos a proteger tu información personal.',
+    'privacy.intro': 'En Flights Dummys, respetamos tu privacidad y estamos comprometidos a proteger tu información personal.',
     'privacy.collection.title': 'Recopilación de Información',
     'privacy.collection.text': 'Recopilamos información que proporcionas al solicitar cotizaciones de vuelos, incluyendo nombre, correo electrónico, número de teléfono y preferencias de viaje. Con el único propósito de usar los datos para generar los tickets ficticios de reservas de vuelos reales.',
     'privacy.use.title': 'Uso de la Información',
