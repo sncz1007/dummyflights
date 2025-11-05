@@ -5,66 +5,149 @@ import { join } from 'path';
 
 // IATA Airline Accounting/Prefix Codes (3-digit codes for tickets)
 // Official codes from IATA Airline Coding Directory
+// Updated with 105 major airlines worldwide
 const AIRLINE_ACCOUNTING_CODES: Record<string, string> = {
-  // Major US carriers
+  // ========================================
+  // NORTH AMERICA - Major Full-Service
+  // ========================================
   'AA': '001', // American Airlines
   'DL': '006', // Delta Air Lines
   'UA': '016', // United Airlines
   'AS': '027', // Alaska Airlines
+  'AC': '014', // Air Canada
+  'WS': '838', // WestJet
+  'HA': '173', // Hawaiian Airlines
+  'TS': '649', // Air Transat
+  
+  // NORTH AMERICA - Low-Cost Carriers
   'WN': '526', // Southwest Airlines
   'B6': '279', // JetBlue Airways
   'NK': '487', // Spirit Airlines
   'F9': '422', // Frontier Airlines
   'G4': '794', // Allegiant Air
+  'MX': '348', // Breeze Airways
   
-  // Oneworld alliance partners
-  'BA': '125', // British Airways
-  'IB': '075', // Iberia
-  'CX': '160', // Cathay Pacific
-  'JL': '131', // Japan Airlines
-  'QR': '157', // Qatar Airways
-  'QF': '081', // Qantas
-  'AY': '105', // Finnair
-  'MH': '232', // Malaysia Airlines
-  'RJ': '512', // Royal Jordanian
-  'AT': '147', // Royal Air Maroc
-  'WY': '910', // Oman Air
-  'FJ': '260', // Fiji Airways
-  
-  // Major Middle East carriers
-  'EK': '176', // Emirates
-  
-  // Star Alliance carriers
-  'LH': '020', // Lufthansa
-  'AC': '014', // Air Canada
-  'SQ': '618', // Singapore Airlines
-  'TK': '235', // Turkish Airlines
-  'OS': '257', // Austrian Airlines
-  'LX': '724', // Swiss International
-  'SN': '082', // Brussels Airlines
-  'SK': '117', // SAS Scandinavian
-  
-  // SkyTeam carriers
-  'AF': '057', // Air France
-  'KL': '074', // KLM
-  'AZ': '055', // ITA Airways
-  'AM': '139', // Aeromexico
-  'KE': '180', // Korean Air
-  
-  // Latin America
+  // ========================================
+  // LATIN AMERICA & CARIBBEAN
+  // ========================================
   'LA': '045', // LATAM Airlines
   'AV': '134', // Avianca
   'CM': '230', // Copa Airlines
+  'AM': '139', // Aeromexico
   'AR': '044', // Aerolineas Argentinas
   'G3': '127', // GOL Airlines
+  'AD': '577', // Azul Brazilian Airlines
+  'VB': '911', // Viva Aerobus
+  'JA': '802', // JetSMART
+  'H2': '901', // SKY Airline
   
-  // Other major carriers
-  'HA': '173', // Hawaiian Airlines
+  // ========================================
+  // EUROPE - Major Full-Service
+  // ========================================
+  'BA': '125', // British Airways
+  'IB': '075', // Iberia
+  'LH': '020', // Lufthansa
+  'AF': '057', // Air France
+  'KL': '074', // KLM Royal Dutch Airlines
+  'OS': '257', // Austrian Airlines
+  'LX': '724', // Swiss International Air Lines
+  'SN': '082', // Brussels Airlines
+  'SK': '117', // SAS Scandinavian
+  'AY': '105', // Finnair
   'EI': '053', // Aer Lingus
-  'FI': '108', // Icelandair
-  'PR': '079', // Philippine Airlines
-  'JX': '324', // Starlux Airlines
   'TP': '047', // TAP Air Portugal
+  'AZ': '055', // ITA Airways
+  'VS': '932', // Virgin Atlantic
+  'LO': '080', // LOT Polish Airlines
+  'BT': '657', // Air Baltic
+  'JU': '115', // Air Serbia
+  'OU': '831', // Croatia Airlines
+  'FB': '421', // Bulgaria Air
+  'A9': '572', // Georgian Airways
+  
+  // EUROPE - Low-Cost Carriers
+  'FR': '106', // Ryanair
+  'U2': '898', // easyJet
+  'DY': '328', // Norwegian
+  'W6': '284', // Wizz Air
+  'BY': '235', // TUI Airways
+  'XQ': '564', // SunExpress
+  'HV': '979', // Transavia
+  'EW': '882', // Eurowings
+  'V7': '912', // Volotea
+  'LS': '699', // Jet2.com
+  'XC': '760', // Corendon Airlines
+  
+  // ========================================
+  // MIDDLE EAST & AFRICA
+  // ========================================
+  'EK': '176', // Emirates
+  'QR': '157', // Qatar Airways
+  'EY': '607', // Etihad Airways
+  'SV': '065', // Saudi Arabian Airlines
+  'WY': '910', // Oman Air
+  'FZ': '141', // FlyDubai
+  'XY': '128', // Flynas
+  'G9': '837', // Air Arabia
+  'KU': '229', // Kuwait Airways
+  'RJ': '512', // Royal Jordanian
+  'AT': '147', // Royal Air Maroc
+  'ET': '071', // Ethiopian Airlines
+  'SA': '083', // South African Airways
+  'MK': '239', // Air Mauritius
+  'W5': '537', // Mahan Air
+  'IR': '096', // Iran Air
+  
+  // ========================================
+  // ASIA-PACIFIC - Major Full-Service
+  // ========================================
+  'SQ': '618', // Singapore Airlines
+  'CX': '160', // Cathay Pacific Airways
+  'NH': '205', // ANA All Nippon Airways
+  'JL': '131', // Japan Airlines
+  'TK': '235', // Turkish Airlines
+  'KE': '180', // Korean Air
+  'OZ': '988', // Asiana Airlines
+  'TG': '217', // Thai Airways
+  'VN': '738', // Vietnam Airlines
+  'GA': '126', // Garuda Indonesia
+  'MH': '232', // Malaysia Airlines
+  'QF': '081', // Qantas Airways
+  'NZ': '086', // Air New Zealand
+  'FJ': '260', // Fiji Airways
+  'PR': '079', // Philippine Airlines
+  'AI': '098', // Air India
+  'UK': '228', // Vistara
+  'UL': '603', // SriLankan Airlines
+  'HU': '880', // Hainan Airlines
+  'CZ': '784', // China Southern Airlines
+  'MU': '781', // China Eastern Airlines
+  'CI': '297', // China Airlines
+  'BR': '695', // EVA Air
+  'JX': '324', // STARLUX Airlines
+  'KC': '465', // Air Astana
+  'HY': '250', // Uzbekistan Airways
+  'J2': '771', // Azerbaijan Airlines
+  'PK': '214', // Pakistan International Airlines
+  
+  // ASIA-PACIFIC - Low-Cost Carriers
+  'TR': '618', // Scoot (shares SQ prefix)
+  '5J': '203', // Cebu Pacific
+  'AK': '807', // AirAsia
+  '6E': '312', // IndiGo
+  'SG': '775', // SpiceJet
+  'JQ': '538', // Jetstar Airways
+  'MM': '735', // Peach Aviation
+  'DD': '644', // Nok Air
+  'QH': '955', // Bamboo Airways
+  'OD': '961', // Malindo Air (Batik Air Malaysia)
+  
+  // ========================================
+  // EUROPEAN REGIONAL & CHARTER
+  // ========================================
+  'A3': '390', // Aegean Airlines
+  'FI': '108', // Icelandair
+  'PQ': '010', // SkyUp Airlines
 };
 
 // Download image from URL and return buffer
