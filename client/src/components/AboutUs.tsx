@@ -13,19 +13,19 @@ export default function AboutUs() {
     },
     {
       icon: Users,
-      value: '3,000+',
+      value: '9,000+',
       label: t('about.stat.bookings'),
       testId: 'stat-bookings'
     },
     {
       icon: TrendingDown,
-      value: '40%',
+      value: '95%',
       label: t('about.stat.discount'),
       testId: 'stat-discount'
     },
     {
       icon: Plane,
-      value: 'Oneworld',
+      value: t('about.stat.realFlights'),
       label: t('about.stat.alliance'),
       testId: 'stat-alliance'
     }

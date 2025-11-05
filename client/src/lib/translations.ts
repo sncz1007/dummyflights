@@ -69,6 +69,7 @@ export const translations = {
     'about.stat.experience': 'Years of Experience',
     'about.stat.bookings': 'Dummy Tickets Issued',
     'about.stat.discount': 'Satisfaction Rate',
+    'about.stat.realFlights': 'Real Flights',
     'about.stat.alliance': 'Real Flight Data',
     
     // Why Choose Us
@@ -355,6 +356,7 @@ export const translations = {
     'about.stat.experience': 'Años de Experiencia',
     'about.stat.bookings': 'Tiquetes Ficticios Emitidos',
     'about.stat.discount': 'Tasa de Satisfacción',
+    'about.stat.realFlights': 'Vuelos Reales',
     'about.stat.alliance': 'Datos de Vuelo Reales',
     
     // Why Choose Us
