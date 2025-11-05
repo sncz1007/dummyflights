@@ -258,10 +258,6 @@ export default function HeroSection() {
               <Plane className="h-5 w-5" />
               <span>{t('search.button')}</span>
             </Button>
-            
-            <p className="text-xs text-center mt-3 text-muted-foreground opacity-80">
-              ℹ️ {t('search.usaOnly')}
-            </p>
           </div>
         </div>
       </div>
