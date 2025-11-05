@@ -48,7 +48,7 @@ export const translations = {
     'trust.securePayment': 'Secure Payments',
     'trust.securePaymentDesc': 'All payments processed securely via Stripe',
     'trust.support247': 'Instant Delivery',
-    'trust.support247Desc': 'Receive your dummy ticket via email within 8 hours',
+    'trust.support247Desc': 'Download your dummy ticket and receipt instantly',
     
     // Destinations
     'destinations.title': 'Popular Destinations',
@@ -334,7 +334,7 @@ export const translations = {
     'trust.securePayment': 'Pagos Seguros',
     'trust.securePaymentDesc': 'Todos los pagos procesados de forma segura via Stripe',
     'trust.support247': 'Entrega inmediata',
-    'trust.support247Desc': 'Recibe tu tiquete ficticio por email en máximo 8 horas',
+    'trust.support247Desc': 'Descarga tu tiquete ficticio y factura al instante',
     
     // Destinations
     'destinations.title': 'Destinos Populares',
