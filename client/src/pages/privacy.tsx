@@ -61,7 +61,7 @@ export default function Privacy() {
             <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('privacy.contact.title')}</h2>
               <p className="mb-4 text-justify">
-                {t('privacy.contact.text')} <a href="mailto:info@skybudgetfly.vip" className="text-primary hover:underline">info@flightsdummy.com</a>
+                {t('privacy.contact.text')} <a href="mailto:info@skybudgetfly.vip" className="text-primary hover:underline">info@flightsdummys.com</a>
               </p>
             </section>
           </div>
