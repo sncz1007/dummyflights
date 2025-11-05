@@ -260,7 +260,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Transform deduplicated Amadeus flight offers to our format with complete information
         const flights: any[] = [];
         
-        for (const offer of uniqueFlightsMap.values()) {
+        for (const offer of Array.from(uniqueFlightsMap.values())) {
           // For round-trip, itineraries[0] = outbound, itineraries[1] = return
           // For one-way, only itineraries[0] exists
           const outboundItinerary = offer.itineraries[0];
