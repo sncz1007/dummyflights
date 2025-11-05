@@ -219,7 +219,6 @@ export default function HeroSection() {
                   <SelectContent>
                     <SelectItem value="roundtrip">{t('search.roundtrip')}</SelectItem>
                     <SelectItem value="oneway">{t('search.oneway')}</SelectItem>
-                    <SelectItem value="multicity">{t('search.multicity')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
