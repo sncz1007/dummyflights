@@ -248,12 +248,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const existingOffer = uniqueFlightsMap.get(itineraryKey);
           const currentPrice = parseFloat(offer.price.grandTotal);
           
-          // Debug: Log ALL signatures to find duplicates
-          console.log(`[Amadeus Dedupe] Offer ${searchResults.data.indexOf(offer) + 1}/${searchResults.data.length}: ${itineraryKey.substring(0, 80)}... | Price: $${currentPrice} | Existing: ${existingOffer ? 'YES ($' + parseFloat(existingOffer.price.grandTotal) + ')' : 'NO'}`);
-          
-          if (uniqueFlightsMap.size < 3) {
-            console.log(`[Amadeus Dedupe DEBUG] FULL signature: ${itineraryKey}`);
-          }
+          // Skip logging for performance (only log when debugging)
           
           if (!existingOffer || currentPrice < parseFloat(existingOffer.price.grandTotal)) {
             // This is a new itinerary OR a better price for existing itinerary
@@ -540,11 +535,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
             .map(([code, count]) => `${code}: ${count}`)
             .join(', '));
 
+        // SORT FLIGHTS: Show less common airlines FIRST (unique flights on top, repeated flights at bottom)
+        // This improves UX by showing variety at the top instead of 50+ United/Virgin flights
+        const sortedFlights = flights.sort((a, b) => {
+          const countA = airlineDistribution.get(a.airline.code) || 0;
+          const countB = airlineDistribution.get(b.airline.code) || 0;
+          
+          // Airlines with fewer flights go first (ascending order)
+          if (countA !== countB) {
+            return countA - countB;
+          }
+          
+          // Within same airline, sort by price (cheapest first)
+          return (a.price.base || 0) - (b.price.base || 0);
+        });
+
         // Return deduplicated results with best prices
-        console.log(`[Amadeus] Returning ${flights.length} unique flight offers to user (deduplicated from ${searchResults.data.length} total offers)`);
+        console.log(`[Amadeus] Returning ${sortedFlights.length} unique flight offers to user (deduplicated from ${searchResults.data.length} total offers)`);
+        console.log(`[Amadeus] Sorting: Less common airlines first (unique flights on top, repeated at bottom)`);
         
         return res.json({
-          flights: flights,
+          flights: sortedFlights,
           searchParams: {
             fromAirport,
             toAirport,
