@@ -248,10 +248,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const existingOffer = uniqueFlightsMap.get(itineraryKey);
           const currentPrice = parseFloat(offer.price.grandTotal);
           
-          // Debug: Log full signature for first few offers
-          if (uniqueFlightsMap.size < 5) {
-            console.log(`[Amadeus Dedupe DEBUG] Full signature: ${itineraryKey}`);
-            console.log(`[Amadeus Dedupe DEBUG] Price: $${currentPrice}, Existing: ${existingOffer ? '$' + parseFloat(existingOffer.price.grandTotal) : 'none'}`);
+          // Debug: Log ALL signatures to find duplicates
+          console.log(`[Amadeus Dedupe] Offer ${searchResults.data.indexOf(offer) + 1}/${searchResults.data.length}: ${itineraryKey.substring(0, 80)}... | Price: $${currentPrice} | Existing: ${existingOffer ? 'YES ($' + parseFloat(existingOffer.price.grandTotal) + ')' : 'NO'}`);
+          
+          if (uniqueFlightsMap.size < 3) {
+            console.log(`[Amadeus Dedupe DEBUG] FULL signature: ${itineraryKey}`);
           }
           
           if (!existingOffer || currentPrice < parseFloat(existingOffer.price.grandTotal)) {
