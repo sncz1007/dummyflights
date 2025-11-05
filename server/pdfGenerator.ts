@@ -194,10 +194,15 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   // Show layovers/stops if any
   if (flightData.stops > 0 && flightData.segments && flightData.segments.length > 1) {
     currentY += rowHeight;
-    const layoverCities = flightData.segments.slice(0, -1).map((seg: any) => seg.arrival.city).join(', ');
+    // Show airport codes or city names with airport codes
+    const layoverInfo = flightData.segments.slice(0, -1).map((seg: any) => {
+      const city = seg.arrival.city || '';
+      const iataCode = seg.arrival.iataCode || '';
+      return iataCode ? `${city} (${iataCode})` : city;
+    }).join(', ');
     doc.fontSize(9).font('Helvetica')
        .fillColor('#666666')
-       .text(`Via: ${layoverCities} (${flightData.stops} stop${flightData.stops > 1 ? 's' : ''})`, 50, currentY)
+       .text(`Via: ${layoverInfo} (${flightData.stops} stop${flightData.stops > 1 ? 's' : ''})`, 50, currentY)
        .fillColor('#000000');
     currentY += 30; // Add spacing after layover info
   } else {
@@ -231,10 +236,15 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
     // Show return layovers/stops if any
     if (returnFlight.stops > 0 && returnFlight.segments && returnFlight.segments.length > 1) {
       currentY += returnRowHeight;
-      const returnLayoverCities = returnFlight.segments.slice(0, -1).map((seg: any) => seg.arrival.city).join(', ');
+      // Show airport codes or city names with airport codes
+      const returnLayoverInfo = returnFlight.segments.slice(0, -1).map((seg: any) => {
+        const city = seg.arrival.city || '';
+        const iataCode = seg.arrival.iataCode || '';
+        return iataCode ? `${city} (${iataCode})` : city;
+      }).join(', ');
       doc.fontSize(9).font('Helvetica')
          .fillColor('#666666')
-         .text(`Via: ${returnLayoverCities} (${returnFlight.stops} stop${returnFlight.stops > 1 ? 's' : ''})`, 50, currentY)
+         .text(`Via: ${returnLayoverInfo} (${returnFlight.stops} stop${returnFlight.stops > 1 ? 's' : ''})`, 50, currentY)
          .fillColor('#000000');
       currentY += 30; // Add spacing after return layover info
     } else {
