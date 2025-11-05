@@ -14,7 +14,6 @@ export default function FAQ() {
     { id: 'q1', question: t('faq.q1.question'), answer: t('faq.q1.answer') },
     { id: 'q2', question: t('faq.q2.question'), answer: t('faq.q2.answer') },
     { id: 'q3', question: t('faq.q3.question'), answer: t('faq.q3.answer') },
-    { id: 'q4', question: t('faq.q4.question'), answer: t('faq.q4.answer') },
     { id: 'q5', question: t('faq.q5.question'), answer: t('faq.q5.answer') },
     { id: 'q6', question: t('faq.q6.question'), answer: t('faq.q6.answer') },
   ];
