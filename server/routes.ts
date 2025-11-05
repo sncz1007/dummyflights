@@ -722,21 +722,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { customerInfo, flightData, searchParams } = req.body;
       
-      // Use form data to create test booking
-      const testBooking = {
-        bookingNumber: `TEST${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-        customerInfo,
-        flightData,
-        searchParams,
-        totalPrice: (parseInt(searchParams.passengers) || 1) * 15,
-        totalFlightPrice: flightData.originalPrice * (parseInt(searchParams.passengers) || 1),
-        status: "completed",
-        paymentIntentId: "test_payment_intent",
-        createdAt: new Date().toISOString()
+      // Calculate pricing
+      const numberOfPassengers = parseInt(searchParams.passengers) || 1;
+      const serviceFee = numberOfPassengers * 15;
+      
+      // Format data to match insertBookingSchema
+      const bookingData = {
+        fullName: customerInfo.fullName,
+        email: customerInfo.email,
+        phone: customerInfo.phone || '',
+        dateOfBirth: customerInfo.dateOfBirth,
+        additionalPassengers: customerInfo.additionalPassengers?.length > 0 
+          ? JSON.stringify(customerInfo.additionalPassengers) 
+          : undefined,
+        fromAirport: searchParams.fromAirport,
+        toAirport: searchParams.toAirport,
+        departureDate: searchParams.departureDate, // Will be converted to Date by validation
+        returnDate: searchParams.returnDate || undefined,
+        passengers: numberOfPassengers,
+        flightClass: searchParams.flightClass || 'economy',
+        tripType: searchParams.tripType || 'oneway',
+        selectedFlightData: JSON.stringify(flightData),
+        originalPrice: flightData.originalPrice.toString(),
+        discountedPrice: serviceFee.toString(), // Service fee is what customer pays
+        currency: 'USD',
+        status: 'completed',
+        paymentMethod: 'test',
+        paymentIntentId: 'test_payment_intent'
       };
 
+      // Validate with schema
+      const validationResult = insertBookingSchema.safeParse(bookingData);
+      
+      if (!validationResult.success) {
+        console.error("Test booking validation error:", validationResult.error.errors);
+        return res.status(400).json({
+          error: "Invalid booking data",
+          details: validationResult.error.errors
+        });
+      }
+
       // Save the test booking
-      const savedBooking = await storage.createBooking(testBooking as any);
+      const savedBooking = await storage.createBooking(validationResult.data);
       
       res.json({ 
         success: true, 
