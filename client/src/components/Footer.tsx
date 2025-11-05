@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Mail, MessageCircle } from 'lucide-react';
-import logoImage from '@assets/generated_images/Tight_cropped_airplane_ticket_icon_cf9431f2.png';
+import logoImage from '@assets/Tight_cropped_airplane_ticket_icon_cf9431f2_1762310950193.png';
 
 export default function Footer() {
   const { t } = useTranslation();
