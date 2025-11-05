@@ -4,7 +4,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ChevronDown } from 'lucide-react';
-import logoImage from '@assets/generated_images/Simple_airplane_ticket_icon_2cd7a3e5.png';
+import logoImage from '@assets/generated_images/Tight_cropped_airplane_ticket_icon_cf9431f2.png';
 
 export default function Header() {
   const { t } = useTranslation();
@@ -13,7 +13,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border shadow-sm">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/">
             <div className="flex items-center space-x-3 cursor-pointer" data-testid="link-logo">
