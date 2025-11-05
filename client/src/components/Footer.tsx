@@ -51,10 +51,6 @@ export default function Footer() {
                   info@skybudgetfly.vip
                 </a>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-400">
-                <MessageCircle className="h-4 w-4 text-primary" />
-                <span data-testid="text-footer-support">{t('footer.support')}</span>
-              </div>
             </div>
           </div>
           
