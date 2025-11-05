@@ -46,7 +46,7 @@ export const translations = {
     'trust.secureBooking': 'Real Flights',
     'trust.secureBookingDesc': 'Booking codes and ticket numbers from real existing flights',
     'trust.securePayment': 'Secure Payments',
-    'trust.securePaymentDesc': 'All payments processed securely via Stripe',
+    'trust.securePaymentDesc': 'All payments processed securely',
     'trust.support247': 'Instant Delivery',
     'trust.support247Desc': 'Download your dummy ticket and receipt instantly',
     
@@ -332,7 +332,7 @@ export const translations = {
     'trust.secureBooking': 'Vuelos Reales',
     'trust.secureBookingDesc': 'Códigos de reserva y números de ticket de vuelos reales existentes',
     'trust.securePayment': 'Pagos Seguros',
-    'trust.securePaymentDesc': 'Todos los pagos procesados de forma segura via Stripe',
+    'trust.securePaymentDesc': 'Todos los pagos procesados de forma segura',
     'trust.support247': 'Entrega inmediata',
     'trust.support247Desc': 'Descarga tu tiquete ficticio y factura al instante',
     
