@@ -1,4 +1,4 @@
-import { Shield, CreditCard, Headphones } from 'lucide-react';
+import { Plane, CreditCard, Ticket } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export default function TrustBadges() {
@@ -6,7 +6,7 @@ export default function TrustBadges() {
 
   const badges = [
     {
-      icon: Shield,
+      icon: Plane,
       title: t('trust.secureBooking'),
       description: t('trust.secureBookingDesc'),
       testId: 'badge-secure-booking'
@@ -18,7 +18,7 @@ export default function TrustBadges() {
       testId: 'badge-secure-payment'
     },
     {
-      icon: Headphones,
+      icon: Ticket,
       title: t('trust.support247'),
       description: t('trust.support247Desc'),
       testId: 'badge-support-247'
