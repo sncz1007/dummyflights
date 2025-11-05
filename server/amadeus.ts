@@ -2,11 +2,11 @@
 import Amadeus from 'amadeus';
 
 // Initialize Amadeus client
-// Use 'test' for test environment (free PNR generation without consolidator)
+// Using PRODUCTION environment for real flight search and pricing data
 const amadeus = new Amadeus({
   clientId: process.env.AMADEUS_API_KEY || '',
   clientSecret: process.env.AMADEUS_API_SECRET || '',
-  hostname: 'test', // Using test environment for free PNR generation
+  hostname: 'production', // Using production for real-time flight data
 });
 
 export interface AmadeusFlightOffer {
@@ -407,84 +407,8 @@ export interface AmadeusFlightOrder {
   }>;
 }
 
-// Price flight offer to confirm availability and price before booking
-export async function priceFlightOffer(flightOffer: AmadeusFlightOffer): Promise<any> {
-  try {
-    console.log('[Amadeus] Pricing flight offer:', flightOffer.id);
-    
-    const response = await amadeus.shopping.flightOffers.pricing.post(
-      JSON.stringify({
-        data: {
-          type: 'flight-offers-pricing',
-          flightOffers: [flightOffer]
-        }
-      })
-    );
-    
-    console.log('[Amadeus] Flight offer priced successfully');
-    return response.data;
-  } catch (error: any) {
-    console.error('[Amadeus] Pricing error:', {
-      message: error.message,
-      code: error.code,
-      description: error.description
-    });
-    
-    if (error.response) {
-      console.error('[Amadeus] Error response:', JSON.stringify(error.response, null, 2));
-    }
-    
-    throw new Error(`Failed to price flight offer: ${error.message || 'Unknown error'}`);
-  }
-}
-
-// Create flight order and get PNR
-export async function createFlightOrder(
-  flightOffer: AmadeusFlightOffer,
-  travelers: AmadeusTraveler[]
-): Promise<AmadeusFlightOrder> {
-  try {
-    console.log('[Amadeus] Creating flight order with', travelers.length, 'travelers');
-    
-    // Step 1: Price the offer first to confirm availability
-    const pricedOffer = await priceFlightOffer(flightOffer);
-    
-    // Step 2: Create the order
-    const response = await amadeus.booking.flightOrders.post(
-      JSON.stringify({
-        data: {
-          type: 'flight-order',
-          flightOffers: [pricedOffer.flightOffers[0]],
-          travelers: travelers
-        }
-      })
-    );
-    
-    if (!response || !response.data) {
-      throw new Error('Invalid response from Amadeus Flight Create Orders API');
-    }
-    
-    const order = response.data as AmadeusFlightOrder;
-    const pnr = order.associatedRecords?.[0]?.reference;
-    
-    console.log('[Amadeus] Flight order created successfully');
-    console.log('[Amadeus] PNR Code:', pnr);
-    console.log('[Amadeus] Order ID:', order.id);
-    
-    return order;
-  } catch (error: any) {
-    console.error('[Amadeus] Flight order creation error:', {
-      message: error.message,
-      code: error.code,
-      description: error.description
-    });
-    
-    if (error.response) {
-      console.error('[Amadeus] Error response:', JSON.stringify(error.response, null, 2));
-    }
-    
-    throw new Error(`Failed to create flight order: ${error.message || 'Unknown error'}`);
-  }
-}
+// Note: PNR creation functions removed - Amadeus Production requires 
+// consolidator/agent certification for booking. This app uses Amadeus only 
+// for flight search and pricing data.
 
 export default amadeus;

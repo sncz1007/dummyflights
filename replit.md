@@ -50,16 +50,13 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 - **Neon Database**: Serverless PostgreSQL hosting.
 
 ### API Integrations
-- **Amadeus Flight API**: Primary flight search and booking system using Amadeus Test API for real flight data with realistic pricing and availability. Supports one-way and round-trip searches across all airline partners and destinations.
-  - **Environment**: Test environment (test.api.amadeus.com) for FREE PNR generation without consolidator requirements
-  - **Flight Search**: Flight Offers Search API displays up to 250 real flight offers per search with exact pricing
-  - **PNR Generation**: Flight Create Orders API creates real reservations after successful payment, generating verifiable 6-character PNR codes (e.g., "RXGMKL")
-  - **Workflow**: Search flights → Customer pays → System creates Amadeus reservation → Extract PNR → Include in PDFs → PNRs valid for 72 hours
-  - **Storage**: Complete Amadeus offer stored in `amadeusOffer` field for post-payment reservation creation
-  - **Limitations**: Test environment PNRs expire after 4 days, no low-cost carriers, limited to test inventory
-- **Flight Simulator (Fallback)**: Provides comprehensive flight simulation for 150+ realistic routes when Amadeus is unavailable, based on 2025 airline operations and realistic market pricing.
-  - **Russia (Moscow)**: Alaska Airlines operates bidirectional flights to/from Moscow Sheremetyevo (SVO) from both East Coast (JFK, BOS, PHL, MIA) and West Coast (LAX, SFO, SEA) origins.
-  - **Asia (Japan & South Korea)**: American Airlines and Hawaiian Airlines operate flights to Tokyo (NRT, HND) and Seoul (ICN) from both East Coast (JFK) and West Coast (LAX) origins.
+- **Amadeus Flight API**: Used ONLY for real-time flight search and pricing data using Amadeus Production environment.
+  - **Environment**: Production environment (api.amadeus.com) for accurate real-world flight data
+  - **Airport Search**: Location Search API provides access to worldwide airport database (199+ airports)
+  - **Flight Search**: Flight Offers Search API displays up to 250 real flight offers per search with exact pricing and schedules
+  - **Usage**: Search flights → Display real prices and schedules → Customer pays service fee
+  - **Limitations**: PNR generation NOT implemented - requires consolidator/agent certification from Amadeus
+  - **Important**: Amadeus TEST environment cannot reliably generate verifiable PNRs (error 34651 "SEGMENT SELL FAILURE" is expected for most carriers)
 - **Airport Data API**: Accessible via `/api/airports/search` for 199 international airports loaded from CSV.
 
 ### External Libraries
