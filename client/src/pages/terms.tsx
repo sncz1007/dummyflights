@@ -64,13 +64,6 @@ export default function Terms() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">{t('terms.liability.title')}</h2>
-              <p className="mb-4 text-justify">
-                {t('terms.liability.text')}
-              </p>
-            </section>
-
-            <section className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">{t('terms.changes.title')}</h2>
               <p className="mb-4 text-justify">
                 {t('terms.changes.text')}
