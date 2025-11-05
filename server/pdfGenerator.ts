@@ -3,6 +3,67 @@ import type { Booking } from '../shared/schema';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+// IATA Airline Accounting/Prefix Codes (3-digit codes for tickets)
+// Official codes from IATA Airline Coding Directory
+const AIRLINE_ACCOUNTING_CODES: Record<string, string> = {
+  // Major US carriers
+  'AA': '001', // American Airlines
+  'DL': '006', // Delta Air Lines
+  'UA': '016', // United Airlines
+  'AS': '027', // Alaska Airlines
+  'WN': '526', // Southwest Airlines
+  'B6': '279', // JetBlue Airways
+  'NK': '487', // Spirit Airlines
+  'F9': '422', // Frontier Airlines
+  'G4': '794', // Allegiant Air
+  
+  // Oneworld alliance partners
+  'BA': '125', // British Airways
+  'IB': '075', // Iberia
+  'CX': '160', // Cathay Pacific
+  'JL': '131', // Japan Airlines
+  'QR': '157', // Qatar Airways
+  'QF': '081', // Qantas
+  'AY': '105', // Finnair
+  'MH': '232', // Malaysia Airlines
+  'RJ': '512', // Royal Jordanian
+  'AT': '147', // Royal Air Maroc
+  'WY': '910', // Oman Air
+  'FJ': '260', // Fiji Airways
+  
+  // Star Alliance carriers
+  'LH': '020', // Lufthansa
+  'AC': '014', // Air Canada
+  'SQ': '618', // Singapore Airlines
+  'TK': '235', // Turkish Airlines
+  'OS': '257', // Austrian Airlines
+  'LX': '724', // Swiss International
+  'SN': '082', // Brussels Airlines
+  'SK': '117', // SAS Scandinavian
+  
+  // SkyTeam carriers
+  'AF': '057', // Air France
+  'KL': '074', // KLM
+  'AZ': '055', // ITA Airways
+  'AM': '139', // Aeromexico
+  'KE': '180', // Korean Air
+  
+  // Latin America
+  'LA': '045', // LATAM Airlines
+  'AV': '134', // Avianca
+  'CM': '230', // Copa Airlines
+  'AR': '044', // Aerolineas Argentinas
+  'G3': '127', // GOL Airlines
+  
+  // Other major carriers
+  'HA': '173', // Hawaiian Airlines
+  'EI': '053', // Aer Lingus
+  'FI': '108', // Icelandair
+  'PR': '079', // Philippine Airlines
+  'JX': '324', // Starlux Airlines
+  'TP': '047', // TAP Air Portugal
+};
+
 // Download image from URL and return buffer
 async function downloadImage(url: string): Promise<Buffer | null> {
   try {
@@ -19,9 +80,10 @@ async function downloadImage(url: string): Promise<Buffer | null> {
   }
 }
 
-// Generate random confirmation code
+// Generate Amadeus-style PNR/Confirmation code (6 characters, NO 0 or 1)
 function generateConfirmationCode(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  // Amadeus PNR excludes 0 and 1 to avoid confusion with O and I
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789';
   let code = '';
   for (let i = 0; i < 6; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -29,11 +91,16 @@ function generateConfirmationCode(): string {
   return code;
 }
 
-// Generate random ticket number
-function generateTicketNumber(): string {
-  const prefix = Math.floor(Math.random() * 900 + 100); // 3 digits
-  const middle = Math.floor(Math.random() * 90000000000 + 10000000000); // 11 digits
-  return `${prefix}${middle}`;
+// Generate realistic ticket number (ETKT) using real airline accounting code
+function generateTicketNumber(airlineCode: string): string {
+  // Get the official 3-digit airline accounting code
+  const accountingCode = AIRLINE_ACCOUNTING_CODES[airlineCode] || '999'; // 999 for unknown airlines
+  
+  // Generate 10-digit sequential ticket number
+  const sequentialNumber = Math.floor(Math.random() * 9000000000 + 1000000000);
+  
+  // Format: XXX-YYYYYYYYYY (e.g., 001-1234567890 for American Airlines)
+  return `${accountingCode}-${sequentialNumber}`;
 }
 
 // Generate consecutive seat numbers for multiple passengers
@@ -125,13 +192,17 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   doc.fontSize(12).font('Helvetica-Bold')
      .text('PASSENGER INFORMATION', 50, 130);
   
-  // Generate unique ticket numbers for all passengers
-  const baseTicketNumber = generateTicketNumber();
+  // Generate unique ticket numbers for all passengers using real airline code
+  const airlineCode = flightData.airline.code || 'AA'; // Default to AA if not available
+  const baseTicketNumber = generateTicketNumber(airlineCode);
   
   // Display all passengers with their ticket numbers and seats
   let passengerY = 155;
   passengers.forEach((passenger, index) => {
-    const passengerTicketNumber = `${baseTicketNumber.substring(0, 11)}${index}`;
+    // Each passenger gets a unique ticket number (incrementing the last digit)
+    const ticketParts = baseTicketNumber.split('-');
+    const sequentialNumber = parseInt(ticketParts[1]) + index;
+    const passengerTicketNumber = `${ticketParts[0]}-${sequentialNumber}`;
     
     doc.fontSize(11).font('Helvetica')
        .text(passenger.fullName.toUpperCase(), 50, passengerY);
