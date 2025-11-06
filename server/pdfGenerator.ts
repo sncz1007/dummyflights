@@ -324,8 +324,11 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   
   // Title - Include airline name, smaller size, don't cover logo
   const airlineName = flightData.airline.name || 'Flight';
+  // Clean airport codes - remove any special characters
+  const cleanFromAirport = booking.fromAirport.replace(/[^A-Z0-9\s\(\)]/g, '');
+  const cleanToAirport = booking.toAirport.replace(/[^A-Z0-9\s\(\)]/g, '');
   doc.fontSize(14).font('Helvetica-Bold')
-     .text(`${airlineName} Flight Receipt for ${booking.fromAirport} to ${booking.toAirport}`, 50, 80, { width: 420 });
+     .text(`${airlineName} Flight Receipt for ${cleanFromAirport} to ${cleanToAirport}`, 50, 80, { width: 420 });
   
   // PASSENGER INFORMATION Section
   doc.fontSize(12).font('Helvetica-Bold')
@@ -375,7 +378,7 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   // Main route header
   doc.fontSize(11).font('Helvetica-Bold')
      .fillColor('#E53E3E')
-     .text(`${booking.fromAirport} → ${booking.toAirport}`, 50, currentY)
+     .text(`${cleanFromAirport} → ${cleanToAirport}`, 50, currentY)
      .fillColor('#000000');
   
   doc.fontSize(9).font('Helvetica')
@@ -457,7 +460,7 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
     // Main route header for return
     doc.fontSize(11).font('Helvetica-Bold')
        .fillColor('#E53E3E')
-       .text(`${booking.toAirport} → ${booking.fromAirport}`, 50, currentY)
+       .text(`${cleanToAirport} → ${cleanFromAirport}`, 50, currentY)
        .fillColor('#000000');
     
     doc.fontSize(9).font('Helvetica')
@@ -561,51 +564,55 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   
   // Taxes and fees (if available from Amadeus)
   let taxesTotal = 0;
+  let hasValidFees = false;
   
   // Try to get real tax data from Amadeus price.fees
   const amadeusFees = flightData.amadeusOffer?.price?.fees;
   
+  // First pass: collect valid fees and check if any have value > 0
+  const validFees: Array<{ name: string; amount: number }> = [];
+  
   if (amadeusFees && amadeusFees.length > 0) {
-    currentY += 5;
-    doc.fontSize(10).font('Helvetica-Bold')
-       .text('Taxes, Fees and Charges', 50, currentY);
-    currentY += 20;
-    
-    // Show individual fees/taxes from Amadeus with safe parsing
     amadeusFees.forEach((fee: any) => {
       const feeAmount = parseFloat(fee.amount);
-      // Skip invalid fee amounts to prevent NaN totals
-      if (isNaN(feeAmount) || feeAmount < 0) return;
+      // Skip invalid or zero amounts
+      if (isNaN(feeAmount) || feeAmount <= 0) return;
       
+      hasValidFees = true;
       taxesTotal += feeAmount;
-      const feeName = fee.type || 'Fee';
-      
-      doc.fontSize(9).font('Helvetica')
-         .text(feeName, 50, currentY)
-         .text(`$${feeAmount.toFixed(2)} USD`, 450, currentY);
-      currentY += 15;
+      validFees.push({
+        name: fee.type || 'Fee',
+        amount: feeAmount
+      });
     });
-    
-    currentY += 5;
-    doc.fontSize(10).font('Helvetica')
-       .text('Total Taxes, Fees & Charges', 50, currentY)
-       .text(`$${taxesTotal.toFixed(2)} USD`, 450, currentY);
   } else if (flightData.pricingDetails && flightData.pricingDetails.taxes) {
     // Fallback to legacy pricing details if available
+    Object.entries(flightData.pricingDetails.taxes).forEach(([taxName, amount]: [string, any]) => {
+      const parsedAmount = parseFloat(amount);
+      // Skip invalid or zero amounts
+      if (isNaN(parsedAmount) || parsedAmount <= 0) return;
+      
+      hasValidFees = true;
+      taxesTotal += parsedAmount;
+      validFees.push({
+        name: taxName,
+        amount: parsedAmount
+      });
+    });
+  }
+  
+  // Only display fees section if there are valid fees with value > 0
+  if (hasValidFees && validFees.length > 0) {
     currentY += 5;
     doc.fontSize(10).font('Helvetica-Bold')
        .text('Taxes, Fees and Charges', 50, currentY);
     currentY += 20;
     
-    Object.entries(flightData.pricingDetails.taxes).forEach(([taxName, amount]: [string, any]) => {
-      const parsedAmount = parseFloat(amount);
-      // Skip invalid amounts
-      if (isNaN(parsedAmount) || parsedAmount < 0) return;
-      
-      taxesTotal += parsedAmount;
+    // Show individual fees/taxes
+    validFees.forEach((fee) => {
       doc.fontSize(9).font('Helvetica')
-         .text(taxName, 50, currentY)
-         .text(`$${parsedAmount.toFixed(2)} USD`, 450, currentY);
+         .text(fee.name, 50, currentY)
+         .text(`$${fee.amount.toFixed(2)} USD`, 450, currentY);
       currentY += 15;
     });
     
@@ -635,7 +642,8 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
      .lineTo(545, currentY)
      .stroke();
   
-  // Add a new page for KEY OF TERMS to prevent text splitting
+  // Force page break for KEY OF TERMS to keep it on page 2
+  // This prevents text from splitting across multiple pages
   doc.addPage();
   
   // KEY OF TERMS Section - Now on page 2
@@ -648,7 +656,7 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
      .lineTo(545, currentY + 18)
      .stroke();
   
-  // Terms in two columns
+  // Terms in two columns - using controlled positioning to prevent page overflow
   const col1X = 50;
   const col2X = 300;
   let termY = currentY + 28;
@@ -666,8 +674,9 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   
   doc.fontSize(8).font('Helvetica');
   terms.forEach(([term1, term2]) => {
-    doc.text(term1, col1X, termY)
-       .text(term2, col2X, termY);
+    // Use continuous text rendering without width constraints to prevent unwanted breaks
+    doc.text(term1, col1X, termY, { width: 240, lineBreak: false })
+       .text(term2, col2X, termY, { width: 240, lineBreak: false });
     termY += 12;
   });
   
@@ -726,9 +735,13 @@ export async function generateReceiptPDF(booking: Booking, paymentMethod: string
   doc.fontSize(12).font('Helvetica-Bold')
      .text('FLIGHT RESERVATION DETAILS', 50, 310);
   
+  // Clean airport codes in receipt too
+  const cleanFromAirport = booking.fromAirport.replace(/[^A-Z0-9\s\(\)]/g, '');
+  const cleanToAirport = booking.toAirport.replace(/[^A-Z0-9\s\(\)]/g, '');
+  
   const departureDate = new Date(booking.departureDate);
   doc.fontSize(10).font('Helvetica')
-     .text(`Route: ${booking.fromAirport} → ${booking.toAirport}`, 50, 335)
+     .text(`Route: ${cleanFromAirport} → ${cleanToAirport}`, 50, 335)
      .text(`Departure: ${formatDate(departureDate)}`, 50, 350)
      .text(`Passengers: ${passengers.length}`, 50, 365)
      .text(`Class: ${booking.flightClass.charAt(0).toUpperCase() + booking.flightClass.slice(1)}`, 50, 380);
