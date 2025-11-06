@@ -237,6 +237,58 @@ function formatDateShort(date: Date): string {
   });
 }
 
+// Format duration from ISO 8601 format (e.g., "PT2H30M" -> "2h 30m")
+function formatDuration(isoDuration: string): string {
+  const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+  if (!match) return isoDuration;
+  
+  const hours = match[1] || '0';
+  const minutes = match[2] || '0';
+  
+  if (hours === '0') return `${minutes}m`;
+  if (minutes === '0') return `${hours}h`;
+  return `${hours}h ${minutes}m`;
+}
+
+// Calculate layover time between two segments
+function calculateLayoverTime(seg1: any, seg2: any): string {
+  try {
+    // Defensive guards for missing timestamps
+    const arrivalTimeStr = seg1?.arrival?.dateTime || seg1?.arrival?.at;
+    const departureTimeStr = seg2?.departure?.dateTime || seg2?.departure?.at;
+    
+    if (!arrivalTimeStr || !departureTimeStr) {
+      return 'N/A';
+    }
+    
+    const arrivalTime = new Date(arrivalTimeStr);
+    const departureTime = new Date(departureTimeStr);
+    
+    // Check for invalid dates
+    if (isNaN(arrivalTime.getTime()) || isNaN(departureTime.getTime())) {
+      return 'N/A';
+    }
+    
+    const diffMs = departureTime.getTime() - arrivalTime.getTime();
+    
+    // Guard against negative or invalid time differences
+    if (diffMs < 0 || isNaN(diffMs)) {
+      return 'N/A';
+    }
+    
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMins / 60);
+    const mins = diffMins % 60;
+    
+    if (hours === 0) return `${mins}m`;
+    if (mins === 0) return `${hours}h`;
+    return `${hours}h ${mins}m`;
+  } catch (error) {
+    // Fallback for any unexpected errors
+    return 'N/A';
+  }
+}
+
 export async function generateBookingConfirmationPDF(booking: Booking): Promise<InstanceType<typeof PDFDocument>> {
   const doc = new PDFDocument({ size: 'A4', margin: 50 });
   
@@ -312,103 +364,165 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   doc.fontSize(12).font('Helvetica-Bold')
      .text('FLIGHT INFORMATION', 50, currentY);
   
-  // Table header
-  currentY += 30;
-  doc.fontSize(10).font('Helvetica-Bold')
-     .text('Date and Flight', 50, currentY)
-     .text('Status', 280, currentY)
-     .text('Class', 340, currentY)
-     .text('Seat/Cabin', 420, currentY);
-  
-  // Draw horizontal line
-  doc.moveTo(50, currentY + 15)
-     .lineTo(545, currentY + 15)
-     .stroke();
-  
-  // Outbound flight
   currentY += 25;
-  const departureDate = new Date(booking.departureDate);
-  
-  doc.fontSize(10).font('Helvetica-Bold')
-     .text(`${booking.fromAirport}-${booking.toAirport}`, 50, currentY);
-  doc.fontSize(9).font('Helvetica')
-     .text(`${formatDate(departureDate).replace(',', '')} ${flightData.flightNumber}`, 50, currentY + 12);
   
   // Display all seats - join them all with commas
   const seatDisplay = seatNumbers.join(', ');
   
-  doc.fontSize(10).font('Helvetica')
-     .text('ARPT', 280, currentY)
-     .text(booking.flightClass.charAt(0).toUpperCase(), 340, currentY);
+  // OUTBOUND FLIGHT - Detailed segment information
+  const departureDate = new Date(booking.departureDate);
   
-  // Use smaller font and text wrapping for seats if needed
-  doc.fontSize(8).font('Helvetica')
-     .text(seatDisplay, 420, currentY, { width: 125, align: 'left' });
+  // Main route header
+  doc.fontSize(11).font('Helvetica-Bold')
+     .fillColor('#E53E3E')
+     .text(`${booking.fromAirport} → ${booking.toAirport}`, 50, currentY)
+     .fillColor('#000000');
   
-  // Calculate height of seat text to adjust currentY properly
-  const seatTextHeight = doc.heightOfString(seatDisplay, { width: 125 });
-  const rowHeight = Math.max(30, seatTextHeight + 10); // At least 30, or seat height + padding
+  doc.fontSize(9).font('Helvetica')
+     .fillColor('#666666')
+     .text(`${formatDate(departureDate)} • ${flightData.stops === 0 ? 'Nonstop' : `${flightData.stops} stop${flightData.stops > 1 ? 's' : ''}`} • ${formatDuration(flightData.duration)}`, 50, currentY + 15)
+     .fillColor('#000000');
   
-  // Show layovers/stops if any
-  if (flightData.stops > 0 && flightData.segments && flightData.segments.length > 1) {
-    currentY += rowHeight;
-    // Show airport codes or city names with airport codes
-    const layoverInfo = flightData.segments.slice(0, -1).map((seg: any) => {
-      const city = seg.arrival.city || '';
-      const iataCode = seg.arrival.iataCode || '';
-      return iataCode ? `${city} (${iataCode})` : city;
-    }).join(', ');
-    doc.fontSize(9).font('Helvetica')
-       .fillColor('#666666')
-       .text(`Via: ${layoverInfo} (${flightData.stops} stop${flightData.stops > 1 ? 's' : ''})`, 50, currentY)
-       .fillColor('#000000');
-    currentY += 30; // Add spacing after layover info
-  } else {
-    // No layovers, just add the row height
-    currentY += rowHeight;
+  currentY += 40;
+  
+  // Show all segments with details
+  if (flightData.segments && flightData.segments.length > 0) {
+    flightData.segments.forEach((segment: any, idx: number) => {
+      // Defensive guards for missing data
+      const airlineName = segment.airline?.name || 'Unknown Airline';
+      const flightNumber = segment.flightNumber || 'N/A';
+      const depAirport = segment.departure?.airport || 'N/A';
+      const arrAirport = segment.arrival?.airport || 'N/A';
+      const duration = segment.duration || 'N/A';
+      
+      // Airline and flight number
+      doc.fontSize(10).font('Helvetica-Bold')
+         .text(`${airlineName}`, 50, currentY);
+      
+      doc.fontSize(9).font('Helvetica')
+         .fillColor('#666666')
+         .text(`Flight ${flightNumber}`, 50, currentY + 12)
+         .fillColor('#000000');
+      
+      // Times and airports with safe date parsing
+      try {
+        const depTime = new Date(segment.departure?.dateTime || segment.departure?.at);
+        const arrTime = new Date(segment.arrival?.dateTime || segment.arrival?.at);
+        
+        doc.fontSize(9).font('Helvetica')
+           .text(`${formatTime(depTime)} ${depAirport}`, 200, currentY)
+           .text(`→`, 300, currentY)
+           .text(`${formatTime(arrTime)} ${arrAirport}`, 320, currentY);
+      } catch (e) {
+        // Fallback if date parsing fails
+        doc.fontSize(9).font('Helvetica')
+           .text(`${depAirport} → ${arrAirport}`, 200, currentY);
+      }
+      
+      // Duration
+      doc.fontSize(8).font('Helvetica')
+         .fillColor('#666666')
+         .text(`Duration: ${formatDuration(duration)}`, 200, currentY + 12)
+         .fillColor('#000000');
+      
+      currentY += 30;
+      
+      // Show layover if there's another segment
+      if (idx < flightData.segments.length - 1) {
+        const layoverTime = calculateLayoverTime(segment, flightData.segments[idx + 1]);
+        const layoverCity = segment.arrival?.city || 'Unknown';
+        doc.fontSize(8).font('Helvetica-Oblique')
+           .fillColor('#666666')
+           .text(`Layover in ${layoverCity} (${arrAirport}): ${layoverTime}`, 50, currentY)
+           .fillColor('#000000');
+        currentY += 20;
+      }
+    });
   }
+  
+  currentY += 10;
   
   // Return flight (if exists)
   if (booking.tripType === 'roundtrip' && booking.returnDate && flightData.returnFlightOptions) {
-    currentY += 10; // Small additional spacing before return flight
     const returnFlight = flightData.returnFlightOptions[0];
     const returnDate = new Date(booking.returnDate);
     
-    doc.fontSize(10).font('Helvetica-Bold')
-       .text(`${booking.toAirport}-${booking.fromAirport}`, 50, currentY);
+    // Draw separator line
+    doc.moveTo(50, currentY)
+       .lineTo(545, currentY)
+       .stroke();
+    
+    currentY += 20;
+    
+    // Main route header for return
+    doc.fontSize(11).font('Helvetica-Bold')
+       .fillColor('#E53E3E')
+       .text(`${booking.toAirport} → ${booking.fromAirport}`, 50, currentY)
+       .fillColor('#000000');
+    
     doc.fontSize(9).font('Helvetica')
-       .text(`${formatDate(returnDate).replace(',', '')} ${returnFlight.flightNumber}`, 50, currentY + 12);
+       .fillColor('#666666')
+       .text(`${formatDate(returnDate)} • ${returnFlight.stops === 0 ? 'Nonstop' : `${returnFlight.stops} stop${returnFlight.stops > 1 ? 's' : ''}`} • ${formatDuration(returnFlight.duration)}`, 50, currentY + 15)
+       .fillColor('#000000');
     
-    doc.fontSize(10).font('Helvetica')
-       .text('ARPT', 280, currentY)
-       .text(booking.flightClass.charAt(0).toUpperCase(), 340, currentY);
+    currentY += 40;
     
-    // Use smaller font and text wrapping for seats if needed
-    doc.fontSize(8).font('Helvetica')
-       .text(seatDisplay, 420, currentY, { width: 125, align: 'left' });
-    
-    // Calculate height of return seat text to adjust currentY properly
-    const returnSeatTextHeight = doc.heightOfString(seatDisplay, { width: 125 });
-    const returnRowHeight = Math.max(30, returnSeatTextHeight + 10);
-    
-    // Show return layovers/stops if any
-    if (returnFlight.stops > 0 && returnFlight.segments && returnFlight.segments.length > 1) {
-      currentY += returnRowHeight;
-      // Show airport codes or city names with airport codes
-      const returnLayoverInfo = returnFlight.segments.slice(0, -1).map((seg: any) => {
-        const city = seg.arrival.city || '';
-        const iataCode = seg.arrival.iataCode || '';
-        return iataCode ? `${city} (${iataCode})` : city;
-      }).join(', ');
-      doc.fontSize(9).font('Helvetica')
-         .fillColor('#666666')
-         .text(`Via: ${returnLayoverInfo} (${returnFlight.stops} stop${returnFlight.stops > 1 ? 's' : ''})`, 50, currentY)
-         .fillColor('#000000');
-      currentY += 30; // Add spacing after return layover info
-    } else {
-      // No layovers, just add the row height
-      currentY += returnRowHeight;
+    // Show all return segments with details
+    if (returnFlight.segments && returnFlight.segments.length > 0) {
+      returnFlight.segments.forEach((segment: any, idx: number) => {
+        // Defensive guards for missing data
+        const airlineName = segment.airline?.name || 'Unknown Airline';
+        const flightNumber = segment.flightNumber || 'N/A';
+        const depAirport = segment.departure?.airport || 'N/A';
+        const arrAirport = segment.arrival?.airport || 'N/A';
+        const duration = segment.duration || 'N/A';
+        
+        // Airline and flight number
+        doc.fontSize(10).font('Helvetica-Bold')
+           .text(`${airlineName}`, 50, currentY);
+        
+        doc.fontSize(9).font('Helvetica')
+           .fillColor('#666666')
+           .text(`Flight ${flightNumber}`, 50, currentY + 12)
+           .fillColor('#000000');
+        
+        // Times and airports with safe date parsing
+        try {
+          const depTime = new Date(segment.departure?.dateTime || segment.departure?.at);
+          const arrTime = new Date(segment.arrival?.dateTime || segment.arrival?.at);
+          
+          doc.fontSize(9).font('Helvetica')
+             .text(`${formatTime(depTime)} ${depAirport}`, 200, currentY)
+             .text(`→`, 300, currentY)
+             .text(`${formatTime(arrTime)} ${arrAirport}`, 320, currentY);
+        } catch (e) {
+          // Fallback if date parsing fails
+          doc.fontSize(9).font('Helvetica')
+             .text(`${depAirport} → ${arrAirport}`, 200, currentY);
+        }
+        
+        // Duration
+        doc.fontSize(8).font('Helvetica')
+           .fillColor('#666666')
+           .text(`Duration: ${formatDuration(duration)}`, 200, currentY + 12)
+           .fillColor('#000000');
+        
+        currentY += 30;
+        
+        // Show layover if there's another segment
+        if (idx < returnFlight.segments.length - 1) {
+          const layoverTime = calculateLayoverTime(segment, returnFlight.segments[idx + 1]);
+          const layoverCity = segment.arrival?.city || 'Unknown';
+          doc.fontSize(8).font('Helvetica-Oblique')
+             .fillColor('#666666')
+             .text(`Layover in ${layoverCity} (${arrAirport}): ${layoverTime}`, 50, currentY)
+             .fillColor('#000000');
+          currentY += 20;
+        }
+      });
     }
+    
+    currentY += 10;
   }
   
   // Draw horizontal line after flights
@@ -447,18 +561,51 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   
   // Taxes and fees (if available from Amadeus)
   let taxesTotal = 0;
-  if (flightData.pricingDetails && flightData.pricingDetails.taxes) {
+  
+  // Try to get real tax data from Amadeus price.fees
+  const amadeusFees = flightData.amadeusOffer?.price?.fees;
+  
+  if (amadeusFees && amadeusFees.length > 0) {
     currentY += 5;
     doc.fontSize(10).font('Helvetica-Bold')
        .text('Taxes, Fees and Charges', 50, currentY);
     currentY += 20;
     
-    // Show individual tax breakdown if available
+    // Show individual fees/taxes from Amadeus with safe parsing
+    amadeusFees.forEach((fee: any) => {
+      const feeAmount = parseFloat(fee.amount);
+      // Skip invalid fee amounts to prevent NaN totals
+      if (isNaN(feeAmount) || feeAmount < 0) return;
+      
+      taxesTotal += feeAmount;
+      const feeName = fee.type || 'Fee';
+      
+      doc.fontSize(9).font('Helvetica')
+         .text(feeName, 50, currentY)
+         .text(`$${feeAmount.toFixed(2)} USD`, 450, currentY);
+      currentY += 15;
+    });
+    
+    currentY += 5;
+    doc.fontSize(10).font('Helvetica')
+       .text('Total Taxes, Fees & Charges', 50, currentY)
+       .text(`$${taxesTotal.toFixed(2)} USD`, 450, currentY);
+  } else if (flightData.pricingDetails && flightData.pricingDetails.taxes) {
+    // Fallback to legacy pricing details if available
+    currentY += 5;
+    doc.fontSize(10).font('Helvetica-Bold')
+       .text('Taxes, Fees and Charges', 50, currentY);
+    currentY += 20;
+    
     Object.entries(flightData.pricingDetails.taxes).forEach(([taxName, amount]: [string, any]) => {
-      taxesTotal += parseFloat(amount);
+      const parsedAmount = parseFloat(amount);
+      // Skip invalid amounts
+      if (isNaN(parsedAmount) || parsedAmount < 0) return;
+      
+      taxesTotal += parsedAmount;
       doc.fontSize(9).font('Helvetica')
          .text(taxName, 50, currentY)
-         .text(`$${parseFloat(amount).toFixed(2)} USD`, 450, currentY);
+         .text(`$${parsedAmount.toFixed(2)} USD`, 450, currentY);
       currentY += 15;
     });
     
@@ -482,14 +629,17 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   doc.fontSize(10).font('Helvetica')
      .text(`Paid with Visa ************${lastFourDigits}`, 50, currentY);
   
-  // Draw horizontal line
+  // Draw horizontal line before moving to page 2
   currentY += 25;
   doc.moveTo(50, currentY)
      .lineTo(545, currentY)
      .stroke();
   
-  // KEY OF TERMS Section
-  currentY += 20;
+  // Add a new page for KEY OF TERMS to prevent text splitting
+  doc.addPage();
+  
+  // KEY OF TERMS Section - Now on page 2
+  currentY = 50; // Reset Y position for new page
   doc.fontSize(12).font('Helvetica-Bold')
      .text('KEY OF TERMS', 50, currentY);
   
