@@ -125,7 +125,6 @@ const CustomerInfoForm = ({
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isGeneratingTest, setIsGeneratingTest] = useState(false);
   const [formValid, setFormValid] = useState(false);
 
   // Validate form whenever customer info changes
@@ -177,42 +176,6 @@ const CustomerInfoForm = ({
     const updatedPassengers = [...customerInfo.additionalPassengers];
     updatedPassengers[index] = { ...updatedPassengers[index], [field]: value };
     setCustomerInfo({ ...customerInfo, additionalPassengers: updatedPassengers });
-  };
-
-  const handleGenerateTestPDFs = async () => {
-    if (!formValid || !flightData || !searchParams) {
-      toast({
-        title: t('checkout.error'),
-        description: 'Please fill in all required fields',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsGeneratingTest(true);
-    try {
-      const response = await apiRequest('POST', '/api/test/generate-booking', {
-        customerInfo,
-        flightData,
-        searchParams
-      });
-
-      const data = await response.json();
-
-      if (data?.success && data?.bookingId) {
-        // Store booking ID and navigate to success page
-        sessionStorage.setItem('bookingId', data.bookingId);
-        setLocation(`/success?bookingId=${data.bookingId}`);
-      }
-    } catch (err: any) {
-      toast({
-        title: t('checkout.error'),
-        description: err.message || 'Failed to generate test PDFs',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsGeneratingTest(false);
-    }
   };
 
   return (
@@ -365,27 +328,6 @@ const CustomerInfoForm = ({
               {localStorage.getItem('preferredLanguage') === 'es' 
                 ? 'Pagar con Tarjeta' 
                 : 'Pay with Card'}</>
-            )}
-          </Button>
-
-          {/* Test PDF Generation Button - Development Only */}
-          <Button
-            onClick={handleGenerateTestPDFs}
-            disabled={!formValid || isGeneratingTest}
-            className="w-full h-12 text-lg"
-            variant="secondary"
-            data-testid="button-test-pdfs"
-          >
-            {isGeneratingTest ? (
-              <><Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              {localStorage.getItem('preferredLanguage') === 'es' 
-                ? 'Generando...' 
-                : 'Generating...'}</>
-            ) : (
-              <>
-              {localStorage.getItem('preferredLanguage') === 'es' 
-                ? 'Generar PDFs de Prueba' 
-                : 'Generate Test PDFs'}</>
             )}
           </Button>
         </div>
