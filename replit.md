@@ -3,6 +3,8 @@
 ## Overview
 SkyBudgetFly is a web application that provides professional dummy flight tickets (also known as flight reservations or itineraries) with real flight data from actual airline databases. The platform offers a bilingual (English/Spanish) interface for flight search, secure payments, and instant delivery of dummy tickets via email. Dummy tickets include booking codes and ticket numbers from real existing flights, making them perfect for visa applications, proof of return travel, passport renewal, HR documentation, and other official purposes. **Important**: Dummy tickets are NOT actual flight tickets and cannot be used to board a plane - they are for documentation purposes only.
 
+**Deployment Status:** Production-ready and fully portable. Can be deployed on Replit or any external server (Heroku, DigitalOcean, AWS, VPS, etc.). See `DEPLOYMENT_EXTERNO.md` for deployment instructions outside Replit.
+
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 
