@@ -394,8 +394,11 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
       // Defensive guards for missing data
       const airlineName = segment.airline?.name || 'Unknown Airline';
       const flightNumber = segment.flightNumber || 'N/A';
-      const depAirport = segment.departure?.airport || 'N/A';
-      const arrAirport = segment.arrival?.airport || 'N/A';
+      // Clean airport codes to remove special characters
+      const rawDepAirport = segment.departure?.airport || 'N/A';
+      const rawArrAirport = segment.arrival?.airport || 'N/A';
+      const depAirport = rawDepAirport.replace(/[^A-Za-z0-9\s\(\)]/g, '');
+      const arrAirport = rawArrAirport.replace(/[^A-Za-z0-9\s\(\)]/g, '');
       const duration = segment.duration || 'N/A';
       
       // Airline and flight number
@@ -476,8 +479,11 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
         // Defensive guards for missing data
         const airlineName = segment.airline?.name || 'Unknown Airline';
         const flightNumber = segment.flightNumber || 'N/A';
-        const depAirport = segment.departure?.airport || 'N/A';
-        const arrAirport = segment.arrival?.airport || 'N/A';
+        // Clean airport codes to remove special characters
+        const rawDepAirport = segment.departure?.airport || 'N/A';
+        const rawArrAirport = segment.arrival?.airport || 'N/A';
+        const depAirport = rawDepAirport.replace(/[^A-Za-z0-9\s\(\)]/g, '');
+        const arrAirport = rawArrAirport.replace(/[^A-Za-z0-9\s\(\)]/g, '');
         const duration = segment.duration || 'N/A';
         
         // Airline and flight number
@@ -534,8 +540,17 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
      .lineTo(545, currentY)
      .stroke();
   
+  // Check if FARE DETAILS section fits on current page
+  // If currentY is too close to bottom (> 650), move entire section to new page
+  const fareDetailsEstimatedHeight = 150; // Estimated space needed for FARE DETAILS
+  if (currentY + fareDetailsEstimatedHeight > 750) {
+    doc.addPage();
+    currentY = 50; // Reset to top of new page
+  } else {
+    currentY += 30;
+  }
+  
   // FARE DETAILS Section
-  currentY += 30;
   doc.fontSize(12).font('Helvetica-Bold')
      .text('FARE DETAILS', 50, currentY);
   
@@ -636,18 +651,23 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   doc.fontSize(10).font('Helvetica')
      .text(`Paid with Visa ************${lastFourDigits}`, 50, currentY);
   
-  // Draw horizontal line before moving to page 2
+  // Draw horizontal line before KEY OF TERMS
   currentY += 25;
   doc.moveTo(50, currentY)
      .lineTo(545, currentY)
      .stroke();
   
-  // Force page break for KEY OF TERMS to keep it on page 2
-  // This prevents text from splitting across multiple pages
-  doc.addPage();
+  // Check if KEY OF TERMS section fits on current page
+  // If not enough space, move to new page to keep section complete
+  const keyOfTermsEstimatedHeight = 150; // Estimated space needed
+  if (currentY + keyOfTermsEstimatedHeight > 750) {
+    doc.addPage();
+    currentY = 50; // Reset to top of new page
+  } else {
+    currentY += 30;
+  }
   
-  // KEY OF TERMS Section - Now on page 2
-  currentY = 50; // Reset Y position for new page
+  // KEY OF TERMS Section
   doc.fontSize(12).font('Helvetica-Bold')
      .text('KEY OF TERMS', 50, currentY);
   
@@ -656,7 +676,7 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
      .lineTo(545, currentY + 18)
      .stroke();
   
-  // Terms in two columns - using controlled positioning to prevent page overflow
+  // Terms in two columns - render all terms on same page
   const col1X = 50;
   const col2X = 300;
   let termY = currentY + 28;
@@ -672,11 +692,11 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
     ['D - Dinner', 'V - Snacks for sale']
   ];
   
+  // Render all terms in compact format without automatic page breaks
   doc.fontSize(8).font('Helvetica');
   terms.forEach(([term1, term2]) => {
-    // Use continuous text rendering without width constraints to prevent unwanted breaks
-    doc.text(term1, col1X, termY, { width: 240, lineBreak: false })
-       .text(term2, col2X, termY, { width: 240, lineBreak: false });
+    doc.text(term1, col1X, termY, { continued: false, lineBreak: false })
+       .text(term2, col2X, termY, { continued: false, lineBreak: false });
     termY += 12;
   });
   

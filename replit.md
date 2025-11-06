@@ -44,8 +44,9 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
     - **Detailed Segment Information**: Shows airline name, flight number, departure/arrival times, and duration for every segment (including all layovers/connections)
     - **Layover Duration Calculation**: Automatically calculates and displays layover time between connecting flights
     - **Smart Tax Display**: Only shows "Taxes, Fees and Charges" section when real fees > $0 exist from Amadeus API (price.fees). If all fees are $0 or unavailable, displays only base fare for clean presentation
-    - **Clean Airport Codes**: Automatically removes special characters from airport names to prevent encoding issues in PDF output
-    - **Multi-Page Layout**: KEY OF TERMS section on page 2 with controlled text rendering using lineBreak:false to prevent unwanted page breaks and ensure maximum 2-page PDFs
+    - **Clean Airport Codes**: Automatically removes ALL special characters (including `!'`) from airport names in both route headers and individual flight segments to prevent encoding issues in PDF output
+    - **Intelligent Page Breaking**: Before rendering FARE DETAILS or KEY OF TERMS sections, checks if sufficient space remains on current page. If not (currentY + section height > 750), moves entire section to new page to prevent text splitting across pages
+    - **Maximum 2-Page PDFs**: Smart pagination ensures PDFs never exceed 2 pages with clean, organized content flow
     - **Robust Error Handling**: Complete defensive guards for missing data (airline names, timestamps, fee amounts) with graceful fallbacks
     - Uses real flight data from Amadeus with airline logos, passenger information, and randomly generated Amadeus-format PNR codes (excluding digits 0/1)
   - **Payment Receipt PDF**: Detailed receipt showing service fee breakdown, payment method, and important notes about the ticket delivery process. Clearly distinguishes between the service fee charged ($15/passenger) and the flight ticket price (informational).
