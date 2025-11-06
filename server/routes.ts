@@ -607,6 +607,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           bookingNumber: booking.bookingNumber,
           customerEmail: booking.email,
           customerName: booking.fullName,
+          passengers: bookingData.passengers.toString(),
         },
       });
 
@@ -636,9 +637,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         case 'payment_intent.succeeded':
           const paymentIntent = event.data.object;
           const bookingId = paymentIntent.metadata.bookingId;
+          const passengers = parseInt(paymentIntent.metadata.passengers || '1');
+          const totalPaid = passengers * 15; // $15 per passenger
           
           if (bookingId) {
-            await storage.updateBookingPaymentStatus(bookingId, 'completed');
+            await storage.updateBookingPaymentStatus(bookingId, 'completed', 'stripe', totalPaid);
             console.log('[Payment Success] Payment completed for booking:', bookingId);
             // Note: PNR generation removed - Amadeus Production requires consolidator certification
             // PDFs will use generated confirmation codes instead
@@ -687,6 +690,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Booking not found" });
       }
       
+      // Track PDF download
+      await storage.updateBookingPdfDownload(booking.id, 'booking');
+      
       const { generateBookingConfirmationPDF } = await import('./pdfGenerator');
       const doc = await generateBookingConfirmationPDF(booking);
       
@@ -709,6 +715,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!booking) {
         return res.status(404).json({ error: "Booking not found" });
       }
+      
+      // Track PDF download
+      await storage.updateBookingPdfDownload(booking.id, 'receipt');
       
       const { generateReceiptPDF } = await import('./pdfGenerator');
       const paymentMethod = req.query.paymentMethod as string || 'Card';
@@ -818,6 +827,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin Panel Endpoints
+  app.get("/api/admin/bookings", async (req, res) => {
+    try {
+      const filterType = (req.query.filterType as string) || 'all';
+      const selectedDate = req.query.selectedDate as string;
+      
+      const bookings = await storage.getBookingsWithFilters(filterType, selectedDate);
+      
+      res.json(bookings);
+    } catch (error) {
+      console.error("Get admin bookings error:", error);
+      res.status(500).json({ error: "Failed to get bookings" });
+    }
+  });
+
+  app.get("/api/admin/stats", async (req, res) => {
+    try {
+      const filterType = (req.query.filterType as string) || 'all';
+      const selectedDate = req.query.selectedDate as string;
+      
+      const bookings = await storage.getBookingsWithFilters(filterType, selectedDate);
+      const completedBookings = bookings.filter(b => b.paymentStatus === 'completed');
+      
+      const totalRevenue = completedBookings.reduce((sum, b) => {
+        const paid = parseFloat(b.totalPaid || '0');
+        return sum + paid;
+      }, 0);
+      
+      const pdfDownloads = completedBookings.reduce((count, b) => {
+        let downloads = 0;
+        if (b.bookingPdfDownloaded) downloads++;
+        if (b.receiptPdfDownloaded) downloads++;
+        return count + downloads;
+      }, 0);
+      
+      res.json({
+        totalPayments: completedBookings.length,
+        totalRevenue: totalRevenue,
+        successfulPayments: completedBookings.length,
+        pdfDownloads: pdfDownloads
+      });
+    } catch (error) {
+      console.error("Get admin stats error:", error);
+      res.status(500).json({ error: "Failed to get stats" });
+    }
+  });
+
   // PayPal integration routes (from blueprint:javascript_paypal)
   app.get("/paypal/setup", async (req, res) => {
     await loadPaypalDefault(req, res);
@@ -829,7 +885,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/paypal/order/:orderID/capture", async (req, res) => {
-    await capturePaypalOrder(req, res);
+    try {
+      // First capture the PayPal order
+      const originalSend = res.json.bind(res);
+      const originalStatus = res.status.bind(res);
+      
+      let capturedResponse: any;
+      let statusCode = 200;
+      
+      res.json = function(data: any) {
+        capturedResponse = data;
+        return res;
+      };
+      
+      res.status = function(code: number) {
+        statusCode = code;
+        return res;
+      };
+      
+      await capturePaypalOrder(req, res);
+      
+      // Restore original methods
+      res.json = originalSend;
+      res.status = originalStatus;
+      
+      // If successful, update the booking
+      if (statusCode === 200 && capturedResponse && capturedResponse.status === 'COMPLETED') {
+        const bookingId = req.body.bookingId;
+        const passengers = parseInt(req.body.passengers || '1');
+        const totalPaid = passengers * 15;
+        
+        if (bookingId) {
+          await storage.updateBookingPaymentStatus(bookingId, 'completed', 'paypal', totalPaid);
+          console.log('[PayPal Success] Payment completed for booking:', bookingId);
+        }
+      }
+      
+      // Send the response
+      res.status(statusCode).json(capturedResponse);
+    } catch (error) {
+      console.error("PayPal capture error:", error);
+      res.status(500).json({ error: "Failed to capture PayPal payment" });
+    }
   });
 
   const httpServer = createServer(app);

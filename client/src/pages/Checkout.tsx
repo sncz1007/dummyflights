@@ -1016,6 +1016,12 @@ export default function Checkout() {
                       ? `Cargo por servicio (${numberOfPassengers} ${numberOfPassengers === 1 ? 'pasajero' : 'pasajeros'} × $15)` 
                       : `Service fee (${numberOfPassengers} ${numberOfPassengers === 1 ? 'passenger' : 'passengers'} × $15)`}
                   </p>
+                  <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                      <strong>Nota importante:</strong> Después de completar el pago en PayPal, necesitarás {' '}
+                      <strong>hacer clic en "Continuar" o "Volver al comerciante"</strong> para ser redirigido de vuelta y recibir tus PDFs.
+                    </p>
+                  </div>
                 </div>
                 <PayPalButton amount={totalServiceFee.toFixed(2)} currency="USD" intent="CAPTURE" />
                 <Button

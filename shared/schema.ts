@@ -96,6 +96,18 @@ export const bookings = pgTable("bookings", {
   bookingStatus: varchar("booking_status", { length: 20 }).notNull().default("pending"), // pending, confirmed, ticketed, cancelled
   ticketSent: boolean("ticket_sent").notNull().default(false),
   
+  // PDF Download Tracking
+  bookingPdfDownloaded: boolean("booking_pdf_downloaded").notNull().default(false),
+  receiptPdfDownloaded: boolean("receipt_pdf_downloaded").notNull().default(false),
+  bookingPdfDownloadedAt: timestamp("booking_pdf_downloaded_at"),
+  receiptPdfDownloadedAt: timestamp("receipt_pdf_downloaded_at"),
+  
+  // Payment Method Used
+  paymentMethod: varchar("payment_method", { length: 20 }), // stripe, paypal
+  
+  // Total Amount Paid (service fee)
+  totalPaid: decimal("total_paid", { precision: 10, scale: 2 }),
+  
   // Metadata
   language: varchar("language", { length: 5 }).notNull().default("en"),
   notes: text("notes"),

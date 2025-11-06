@@ -23,9 +23,11 @@ export interface IStorage {
   getBookingByNumber(bookingNumber: string): Promise<Booking | undefined>;
   getAllBookings(): Promise<Booking[]>;
   updateBookingPaymentIntent(id: string, paymentIntentId: string): Promise<Booking | undefined>;
-  updateBookingPaymentStatus(id: string, status: string): Promise<Booking | undefined>;
+  updateBookingPaymentStatus(id: string, status: string, paymentMethod?: string, totalPaid?: number): Promise<Booking | undefined>;
   updateBookingStatus(id: string, status: string): Promise<Booking | undefined>;
   updateBookingWithPNR(id: string, pnrCode: string, amadeusOrderId: string): Promise<Booking | undefined>;
+  updateBookingPdfDownload(id: string, pdfType: 'booking' | 'receipt'): Promise<Booking | undefined>;
+  getBookingsWithFilters(filterType: string, date?: string): Promise<Booking[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -179,13 +181,23 @@ export class DatabaseStorage implements IStorage {
     return updatedBooking || undefined;
   }
   
-  async updateBookingPaymentStatus(id: string, status: string): Promise<Booking | undefined> {
+  async updateBookingPaymentStatus(id: string, status: string, paymentMethod?: string, totalPaid?: number): Promise<Booking | undefined> {
+    const updateData: any = { 
+      paymentStatus: status,
+      updatedAt: new Date() 
+    };
+    
+    if (paymentMethod) {
+      updateData.paymentMethod = paymentMethod;
+    }
+    
+    if (totalPaid !== undefined) {
+      updateData.totalPaid = totalPaid.toString();
+    }
+    
     const [updatedBooking] = await db
       .update(bookings)
-      .set({ 
-        paymentStatus: status,
-        updatedAt: new Date() 
-      })
+      .set(updateData)
       .where(eq(bookings.id, id))
       .returning();
     return updatedBooking || undefined;
@@ -215,6 +227,61 @@ export class DatabaseStorage implements IStorage {
       .where(eq(bookings.id, id))
       .returning();
     return updatedBooking || undefined;
+  }
+  
+  async updateBookingPdfDownload(id: string, pdfType: 'booking' | 'receipt'): Promise<Booking | undefined> {
+    const now = new Date();
+    const updateData = pdfType === 'booking' 
+      ? { bookingPdfDownloaded: true, bookingPdfDownloadedAt: now, updatedAt: now }
+      : { receiptPdfDownloaded: true, receiptPdfDownloadedAt: now, updatedAt: now };
+    
+    const [updatedBooking] = await db
+      .update(bookings)
+      .set(updateData)
+      .where(eq(bookings.id, id))
+      .returning();
+    return updatedBooking || undefined;
+  }
+  
+  async getBookingsWithFilters(filterType: string, date?: string): Promise<Booking[]> {
+    const { sql: sqlOp } = await import('drizzle-orm');
+    
+    if (filterType === 'all' || !filterType) {
+      return await this.getAllBookings();
+    }
+    
+    if (!date) {
+      return await this.getAllBookings();
+    }
+    
+    let startDate: Date;
+    let endDate: Date;
+    
+    if (filterType === 'month') {
+      // date format: "2025-11" (YYYY-MM)
+      const [year, month] = date.split('-').map(Number);
+      startDate = new Date(year, month - 1, 1);
+      endDate = new Date(year, month, 0, 23, 59, 59, 999);
+    } else if (filterType === 'day') {
+      // date format: "2025-11-06" (YYYY-MM-DD)
+      startDate = new Date(date);
+      startDate.setHours(0, 0, 0, 0);
+      endDate = new Date(date);
+      endDate.setHours(23, 59, 59, 999);
+    } else {
+      return await this.getAllBookings();
+    }
+    
+    return await db
+      .select()
+      .from(bookings)
+      .where(
+        and(
+          sqlOp`${bookings.createdAt} >= ${startDate}`,
+          sqlOp`${bookings.createdAt} <= ${endDate}`
+        )
+      )
+      .orderBy(desc(bookings.createdAt));
   }
 }
 

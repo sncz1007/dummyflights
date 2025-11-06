@@ -8,6 +8,18 @@ Preferred communication style: Simple, everyday language.
 
 ## System Architecture
 
+### Admin Panel
+A secure admin panel is accessible at `/admin` with password protection (`Fenix1010@*`). Features include:
+- **Payment History**: Complete list of all successful payments with filtering options
+- **PDF Download Tracking**: Monitor which PDFs (booking confirmations and receipts) have been downloaded
+- **Analytics Dashboard**: Real-time statistics showing:
+  - Total payments received
+  - Total revenue (service fees collected)
+  - Successful payment count
+  - PDF downloads count
+- **Date Filtering**: View data by all time, specific month, or specific day
+- **Payment Method Tracking**: Displays whether payment was made via Stripe or PayPal
+
 ### UI/UX Decisions
 The platform features a responsive, mobile-first design using Tailwind CSS with shadcn/ui components, Radix UI primitives, and Lucide React icons. The design includes a professional airplane background, trust badges, popular destinations, a "Why Choose Us" section, customer testimonials, a dynamic video strip, an "About Us" section, and an FAQ with an accordion design. The primary brand color is red with accent colors, and all UI components support both English and Spanish.
 
@@ -24,12 +36,16 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
   - **Cache Keys**: `cachedFlightResults` (search params + flight data), `returningFromCheckout` (navigation flag)
   - **Cache Invalidation**: Cleared on new homepage searches; flag removed after use to prevent stale hits
 - **Booking and Payment**: Integrates both Stripe and PayPal as payment options for maximum flexibility. Flight prices from real airline data are displayed for reference only (informational). The platform charges ONLY $15 USD per passenger for the search and booking service (e.g., 1 passenger = $15, 2 passengers = $30, 3 passengers = $45). After payment, tickets are manually purchased by the business and delivered to customers. Payment buttons appear directly below the contact form for immediate checkout.
+  - **Payment Tracking**: System automatically records payment method (Stripe/PayPal) and total amount paid for each successful transaction
+  - **Database Updates**: Payment webhooks update booking status with method and amount upon successful payment completion
 - **Booking Notifications**: Automated email notifications are sent via EmailJS when customers click "Continue to Payment" after filling out their contact information. These notifications include complete flight details, customer info, all passengers, and pricing breakdown, enabling manual ticket purchase before payment completion.
 - **PDF Document Generation**: After successful payment, the system automatically generates two professional PDF documents for each booking:
   - **Booking Confirmation PDF**: Flight itinerary with airline branding, confirmation codes, flight details, passenger information, and seat assignments. Mimics real airline booking confirmations with realistic formatting.
   - **Payment Receipt PDF**: Detailed receipt showing service fee breakdown, payment method, and important notes about the ticket delivery process. Clearly distinguishes between the service fee charged ($15/passenger) and the flight ticket price (informational).
   - Both PDFs use real flight data, customer information, and randomly generated booking codes for authenticity.
   - PDFs are available for immediate download on the payment success page via dedicated download buttons.
+  - **Download Tracking**: System automatically tracks when each PDF (booking confirmation and payment receipt) is downloaded, including timestamp
+  - **Admin Visibility**: Download status visible in admin panel for monitoring customer engagement
   - **Development Testing**: A "Generate Test PDFs" button is available on the Checkout page (below payment buttons) that creates test bookings using actual form data for PDF preview and formatting validation. This endpoint (`/api/test/generate-booking`) is protected and only works in development environment (NODE_ENV !== 'production').
 - **Internationalization (i18n)**: Full support for English and Spanish, with language preference stored in localStorage. All content, including legal pages, is bilingual.
 - **Homepage Structure**: Includes a Hero Section with flight search, Trust Badges, Video Strip, Popular Destinations, "About Us" section, "Why Choose Us" benefits, Customer Testimonials, FAQ, and a comprehensive Footer.

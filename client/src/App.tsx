@@ -11,6 +11,7 @@ import Checkout from "@/pages/Checkout";
 import PaymentSuccess from "@/pages/PaymentSuccess";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
+import Admin from "@/pages/Admin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/success" component={PaymentSuccess} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>
   );
