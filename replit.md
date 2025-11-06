@@ -99,7 +99,9 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 - **PDFKit**: For server-side PDF document generation of booking confirmations and payment receipts.
 
 ### Environment Variables
-- `DATABASE_URL`
-- `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_BOOKING_TEMPLATE_ID`, `VITE_EMAILJS_PAYMENT_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`
-- `VITE_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY` (OPTIONAL - Payment gateway can be changed)
-- `AMADEUS_API_KEY`, `AMADEUS_API_SECRET` (For real flight data integration)
+- `DATABASE_URL` - PostgreSQL connection string (auto-configured by Replit)
+- `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_BOOKING_TEMPLATE_ID`, `VITE_EMAILJS_PAYMENT_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY` - EmailJS configuration
+- `VITE_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY` - Stripe payment gateway (requires HTTPS for production)
+- `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` - PayPal payment gateway (production credentials configured)
+- `AMADEUS_API_KEY`, `AMADEUS_API_SECRET` - Amadeus Production API for real flight data
+- `SESSION_SECRET` - **NOT USED** in current implementation (legacy placeholder for future session management)
