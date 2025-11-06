@@ -191,19 +191,17 @@ function generateTicketNumber(airlineCode: string): string {
 }
 
 // Generate consecutive seat numbers for multiple passengers
+// Same column, consecutive rows (1-10)
 function generateConsecutiveSeats(count: number): string[] {
-  const baseRow = Math.floor(Math.random() * 10 + 1); // Rows 1-10 (more realistic range)
   const seats = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const seatColumn = seats[Math.floor(Math.random() * seats.length)]; // Pick one column
   
   const consecutiveSeats: string[] = [];
   
-  // For groups larger than 6, span multiple rows
+  // Assign consecutive rows in the same column
   for (let i = 0; i < count; i++) {
-    const rowOffset = Math.floor(i / seats.length);
-    const seatIndex = i % seats.length;
-    const row = baseRow + rowOffset;
-    
-    consecutiveSeats.push(`${row}${seats[seatIndex]}`);
+    const row = (i % 10) + 1; // Rows 1-10, wraps if more than 10 passengers
+    consecutiveSeats.push(`${row}${seatColumn}`);
   }
   
   return consecutiveSeats;
@@ -378,12 +376,20 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
   // Main route header
   doc.fontSize(11).font('Helvetica-Bold')
      .fillColor('#E53E3E')
-     .text(`${cleanFromAirport} → ${cleanToAirport}`, 50, currentY)
+     .text(`${cleanFromAirport} / ${cleanToAirport}`, 50, currentY)
      .fillColor('#000000');
   
   doc.fontSize(9).font('Helvetica')
      .fillColor('#666666')
      .text(`${formatDate(departureDate)} • ${flightData.stops === 0 ? 'Nonstop' : `${flightData.stops} stop${flightData.stops > 1 ? 's' : ''}`} • ${formatDuration(flightData.duration)}`, 50, currentY + 15)
+     .fillColor('#000000');
+  
+  currentY += 30;
+  
+  // Add Status and Class information
+  doc.fontSize(9).font('Helvetica')
+     .text(`Status: ARPT`, 50, currentY)
+     .text(`Class: ${booking.flightClass.charAt(0).toUpperCase() + booking.flightClass.slice(1)}`, 200, currentY)
      .fillColor('#000000');
   
   currentY += 40;
@@ -417,12 +423,12 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
         
         doc.fontSize(9).font('Helvetica')
            .text(`${formatTime(depTime)} ${depAirport}`, 200, currentY)
-           .text(`→`, 300, currentY)
+           .text(`/`, 300, currentY)
            .text(`${formatTime(arrTime)} ${arrAirport}`, 320, currentY);
       } catch (e) {
         // Fallback if date parsing fails
         doc.fontSize(9).font('Helvetica')
-           .text(`${depAirport} → ${arrAirport}`, 200, currentY);
+           .text(`${depAirport} / ${arrAirport}`, 200, currentY);
       }
       
       // Duration
@@ -463,12 +469,20 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
     // Main route header for return
     doc.fontSize(11).font('Helvetica-Bold')
        .fillColor('#E53E3E')
-       .text(`${cleanToAirport} → ${cleanFromAirport}`, 50, currentY)
+       .text(`${cleanToAirport} / ${cleanFromAirport}`, 50, currentY)
        .fillColor('#000000');
     
     doc.fontSize(9).font('Helvetica')
        .fillColor('#666666')
        .text(`${formatDate(returnDate)} • ${returnFlight.stops === 0 ? 'Nonstop' : `${returnFlight.stops} stop${returnFlight.stops > 1 ? 's' : ''}`} • ${formatDuration(returnFlight.duration)}`, 50, currentY + 15)
+       .fillColor('#000000');
+    
+    currentY += 30;
+    
+    // Add Status and Class for return flight
+    doc.fontSize(9).font('Helvetica')
+       .text(`Status: ARPT`, 50, currentY)
+       .text(`Class: ${booking.flightClass.charAt(0).toUpperCase() + booking.flightClass.slice(1)}`, 200, currentY)
        .fillColor('#000000');
     
     currentY += 40;
@@ -502,12 +516,12 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
           
           doc.fontSize(9).font('Helvetica')
              .text(`${formatTime(depTime)} ${depAirport}`, 200, currentY)
-             .text(`→`, 300, currentY)
+             .text(`/`, 300, currentY)
              .text(`${formatTime(arrTime)} ${arrAirport}`, 320, currentY);
         } catch (e) {
           // Fallback if date parsing fails
           doc.fontSize(9).font('Helvetica')
-             .text(`${depAirport} → ${arrAirport}`, 200, currentY);
+             .text(`${depAirport} / ${arrAirport}`, 200, currentY);
         }
         
         // Duration
@@ -761,7 +775,7 @@ export async function generateReceiptPDF(booking: Booking, paymentMethod: string
   
   const departureDate = new Date(booking.departureDate);
   doc.fontSize(10).font('Helvetica')
-     .text(`Route: ${cleanFromAirport} → ${cleanToAirport}`, 50, 335)
+     .text(`Route: ${cleanFromAirport} / ${cleanToAirport}`, 50, 335)
      .text(`Departure: ${formatDate(departureDate)}`, 50, 350)
      .text(`Passengers: ${passengers.length}`, 50, 365)
      .text(`Class: ${booking.flightClass.charAt(0).toUpperCase() + booking.flightClass.slice(1)}`, 50, 380);

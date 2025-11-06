@@ -42,9 +42,11 @@ The platform features a responsive, mobile-first design using Tailwind CSS with 
 - **PDF Document Generation**: After successful payment, the system automatically generates two professional PDF documents for each booking:
   - **Booking Confirmation PDF**: Flight itinerary with airline branding, confirmation codes, REAL IATA ticket numbers, and complete flight details including:
     - **Detailed Segment Information**: Shows airline name, flight number, departure/arrival times, and duration for every segment (including all layovers/connections)
+    - **Flight Information Section**: Displays "Status: ARPT" and flight class (Economy/Business/First) for both outbound and return flights
+    - **Seat Assignment**: Consecutive seats in same column (e.g., 1A, 2A, 3A for 3 passengers) instead of same row, following airline standard seating practices
     - **Layover Duration Calculation**: Automatically calculates and displays layover time between connecting flights
     - **Smart Tax Display**: Only shows "Taxes, Fees and Charges" section when real fees > $0 exist from Amadeus API (price.fees). If all fees are $0 or unavailable, displays only base fare for clean presentation
-    - **Clean Airport Codes**: Automatically removes ALL special characters (including `!'`) from airport names in both route headers and individual flight segments to prevent encoding issues in PDF output
+    - **Clean Airport Codes**: Automatically removes ALL special characters from airport names in both route headers and individual flight segments. Uses `/` instead of `→` to prevent encoding issues in PDF output
     - **Intelligent Page Breaking**: Before rendering FARE DETAILS or KEY OF TERMS sections, checks if sufficient space remains on current page. If not (currentY + section height > 750), moves entire section to new page to prevent text splitting across pages
     - **Maximum 2-Page PDFs**: Smart pagination ensures PDFs never exceed 2 pages with clean, organized content flow
     - **Robust Error Handling**: Complete defensive guards for missing data (airline names, timestamps, fee amounts) with graceful fallbacks
