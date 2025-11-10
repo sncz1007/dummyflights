@@ -92,14 +92,12 @@ interface SearchParams {
 
 interface AdditionalPassenger {
   fullName: string;
-  dateOfBirth: string;
 }
 
 interface CustomerInfo {
   fullName: string;
   email: string;
   phone: string;
-  dateOfBirth: string;
   additionalPassengers: AdditionalPassenger[];
 }
 
@@ -129,15 +127,15 @@ const CustomerInfoForm = ({
 
   // Validate form whenever customer info changes
   useEffect(() => {
-    const isMainPassengerValid = customerInfo.fullName && customerInfo.email && customerInfo.dateOfBirth;
+    const isMainPassengerValid = customerInfo.fullName && customerInfo.email;
     const areAdditionalPassengersValid = totalPassengers === 1 || 
-      customerInfo.additionalPassengers.every(p => p.fullName && p.dateOfBirth);
+      customerInfo.additionalPassengers.every(p => p.fullName);
     
     setFormValid(!!isMainPassengerValid && areAdditionalPassengersValid);
   }, [customerInfo, totalPassengers]);
 
   const handlePaymentMethodClick = async (method: 'paypal' | 'stripe') => {
-    if (!customerInfo.fullName || !customerInfo.email || !customerInfo.dateOfBirth) {
+    if (!customerInfo.fullName || !customerInfo.email) {
       toast({
         title: t('checkout.error'),
         description: 'Please fill in all required fields',
@@ -148,7 +146,7 @@ const CustomerInfoForm = ({
 
     // Validate additional passengers
     if (totalPassengers > 1) {
-      const missingPassengers = customerInfo.additionalPassengers.some(p => !p.fullName || !p.dateOfBirth);
+      const missingPassengers = customerInfo.additionalPassengers.some(p => !p.fullName);
       if (missingPassengers) {
         toast({
           title: t('checkout.error'),
@@ -222,19 +220,6 @@ const CustomerInfoForm = ({
               data-testid="input-phone"
             />
           </div>
-          
-          <div>
-            <Label htmlFor="dateOfBirth">{t('checkout.dateOfBirth')} *</Label>
-            <Input
-              id="dateOfBirth"
-              type="date"
-              value={customerInfo.dateOfBirth}
-              onChange={(e) => setCustomerInfo({ ...customerInfo, dateOfBirth: e.target.value })}
-              required
-              data-testid="input-dob"
-              max={new Date().toISOString().split('T')[0]}
-            />
-          </div>
         </div>
       </Card>
 
@@ -260,19 +245,6 @@ const CustomerInfoForm = ({
                     placeholder="Jane Doe"
                     required
                     data-testid={`input-passenger-name-${index}`}
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor={`passenger-dob-${index}`}>{t('checkout.dateOfBirth')} *</Label>
-                  <Input
-                    id={`passenger-dob-${index}`}
-                    type="date"
-                    value={passenger.dateOfBirth}
-                    onChange={(e) => updateAdditionalPassenger(index, 'dateOfBirth', e.target.value)}
-                    required
-                    data-testid={`input-passenger-dob-${index}`}
-                    max={new Date().toISOString().split('T')[0]}
                   />
                 </div>
               </div>
@@ -442,7 +414,6 @@ export default function Checkout() {
     fullName: '',
     email: '',
     phone: '',
-    dateOfBirth: '',
     additionalPassengers: [],
   });
 
@@ -490,7 +461,6 @@ export default function Checkout() {
     if (totalPassengers > 1) {
       const additionalPassengersArray = Array(totalPassengers - 1).fill(null).map(() => ({
         fullName: '',
-        dateOfBirth: '',
       }));
       setCustomerInfo(prev => ({ ...prev, additionalPassengers: additionalPassengersArray }));
     }
@@ -521,7 +491,7 @@ export default function Checkout() {
         fullName: customerInfo.fullName,
         email: customerInfo.email,
         phone: customerInfo.phone || '',
-        dateOfBirth: customerInfo.dateOfBirth,
+        dateOfBirth: 'N/A',
         additionalPassengers: customerInfo.additionalPassengers.length > 0 
           ? JSON.stringify(customerInfo.additionalPassengers) 
           : undefined,
@@ -563,7 +533,7 @@ export default function Checkout() {
           customerName: customerInfo.fullName,
           customerEmail: customerInfo.email,
           customerPhone: customerInfo.phone || 'Not provided',
-          customerDOB: customerInfo.dateOfBirth,
+          customerDOB: 'N/A',
           additionalPassengers: customerInfo.additionalPassengers,
           totalPrice: `$${totalPrice.toFixed(2)}`,
           originalPrice: `$${totalFlightPrice.toFixed(2)}`,

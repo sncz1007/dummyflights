@@ -28,7 +28,6 @@ export interface QuoteEmailData {
 
 export interface AdditionalPassenger {
   fullName: string;
-  dateOfBirth: string;
 }
 
 export interface BookingNotificationData {
@@ -98,7 +97,7 @@ export const sendBookingNotificationEmail = async (bookingData: BookingNotificat
     // Format additional passengers list
     const passengersListHtml = bookingData.additionalPassengers.length > 0
       ? bookingData.additionalPassengers
-          .map((p, i) => `${i + 2}. ${p.fullName} - DOB: ${p.dateOfBirth}`)
+          .map((p, i) => `${i + 2}. ${p.fullName}`)
           .join('\n')
       : 'No additional passengers';
 
