@@ -354,8 +354,7 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
     }
     
     doc.fontSize(10).font('Helvetica')
-       .text(`Ticket Number: ${passengerTicketNumber}`, 350, passengerY + (index === 0 ? 15 : 0))
-       .text(`Seat: ${seatNumbers[index]}`, 350, passengerY + (index === 0 ? 30 : 15));
+       .text(`Ticket Number: ${passengerTicketNumber}`, 350, passengerY + (index === 0 ? 15 : 0));
     
     passengerY += index === 0 ? 60 : 45;
   });
