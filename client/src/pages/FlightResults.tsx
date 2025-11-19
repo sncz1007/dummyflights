@@ -502,7 +502,7 @@ export default function FlightResults() {
                             ${totalPrice.toFixed(2)}
                           </p>
                           <p className="text-xs text-muted-foreground italic" data-testid={`text-per-passenger-${flight.id}`}>
-                            {localStorage.getItem('preferredLanguage') === 'es' ? 'Precio por pasajero' : 'Price per passenger'}
+                            {t('results.pricePerPassenger')}
                           </p>
                         </>
                       );

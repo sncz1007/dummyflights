@@ -260,6 +260,7 @@ export const translations = {
     'results.entertainment': 'Entertainment',
     'results.power': 'Power Outlets',
     'results.discount': 'OFF',
+    'results.pricePerPassenger': 'Price per passenger',
     
     // Checkout
     'checkout.title': 'Complete Your Booking',
@@ -546,6 +547,7 @@ export const translations = {
     'results.entertainment': 'Entretenimiento',
     'results.power': 'Enchufes',
     'results.discount': 'DESC',
+    'results.pricePerPassenger': 'Precio por pasajero',
     
     // Checkout
     'checkout.title': 'Completar tu Reserva',
