@@ -169,23 +169,25 @@ export default function HeroSection() {
                 </div>
               </div>
               
-              {/* Return Date */}
-              <div>
-                <Label className="block text-sm font-medium text-foreground mb-2" data-testid="label-return">
-                  {t('search.return')}
-                </Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-                  <Input
-                    ref={returnDateRef}
-                    type="date"
-                    value={searchData.returnDate}
-                    onChange={(e) => setSearchData(prev => ({ ...prev, returnDate: e.target.value }))}
-                    className="pl-10"
-                    data-testid="input-return-date"
-                  />
+              {/* Return Date - Only show for round trips */}
+              {searchData.tripType === 'roundtrip' && (
+                <div>
+                  <Label className="block text-sm font-medium text-foreground mb-2" data-testid="label-return">
+                    {t('search.return')}
+                  </Label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                    <Input
+                      ref={returnDateRef}
+                      type="date"
+                      value={searchData.returnDate}
+                      onChange={(e) => setSearchData(prev => ({ ...prev, returnDate: e.target.value }))}
+                      className="pl-10"
+                      data-testid="input-return-date"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             
             {/* Passengers & Trip Type */}
