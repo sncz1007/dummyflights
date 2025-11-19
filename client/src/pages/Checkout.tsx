@@ -421,11 +421,29 @@ export default function Checkout() {
     // Check for success parameter (payment completed)
     const urlParams = new URLSearchParams(window.location.search);
     const paymentIntentId = urlParams.get('payment_intent');
+    const paypalSuccess = urlParams.get('paypal_success');
     const storedBookingId = sessionStorage.getItem('bookingId');
     
+    // Handle Stripe success
     if (paymentIntentId && urlParams.get('redirect_status') === 'succeeded' && storedBookingId) {
       setBookingId(storedBookingId);
       setPaymentComplete(true);
+      setPaymentMethod('stripe');
+      setIsLoading(false);
+      
+      toast({
+        title: t('checkout.success'),
+        description: t('checkout.successMessage'),
+      });
+      
+      return;
+    }
+    
+    // Handle PayPal success
+    if (paypalSuccess === 'true' && storedBookingId) {
+      setBookingId(storedBookingId);
+      setPaymentComplete(true);
+      setPaymentMethod('paypal');
       setIsLoading(false);
       
       toast({

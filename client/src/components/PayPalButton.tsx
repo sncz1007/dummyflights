@@ -35,16 +35,21 @@ export default function PayPalButton({
   passengers,
 }: PayPalButtonProps) {
   const createOrder = async () => {
+    // SECURITY: Server calculates amount from bookingId (trusted database)
     const orderPayload = {
-      amount: amount,
-      currency: currency,
-      intent: intent,
+      bookingId: bookingId,
     };
     const response = await fetch("/paypal/order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(orderPayload),
     });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to create PayPal order');
+    }
+    
     const output = await response.json();
     return { orderId: output.id };
   };
@@ -67,8 +72,22 @@ export default function PayPalButton({
 
   const onApprove = async (data: any) => {
     console.log("onApprove", data);
-    const orderData = await captureOrder(data.orderId);
-    console.log("Capture result", orderData);
+    try {
+      const orderData = await captureOrder(data.orderId);
+      console.log("Capture result", orderData);
+      
+      // Check if payment was successful
+      if (orderData.success || orderData.status === 'COMPLETED') {
+        // Redirect to checkout page with success parameter
+        window.location.href = '/checkout?paypal_success=true';
+      } else {
+        console.error('PayPal payment not completed:', orderData);
+        alert('Payment was not completed. Please try again.');
+      }
+    } catch (error) {
+      console.error('PayPal capture error:', error);
+      alert('Payment capture failed. Please try again.');
+    }
   };
 
   const onCancel = async (data: any) => {

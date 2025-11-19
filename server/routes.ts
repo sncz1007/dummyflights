@@ -823,8 +823,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/paypal/order", async (req, res) => {
-    // Request body should contain: { intent, amount, currency }
-    await createPaypalOrder(req, res);
+    try {
+      // SECURITY: Create PayPal order with server-side calculated amount
+      const { bookingId } = req.body;
+      
+      if (!bookingId) {
+        return res.status(400).json({ error: 'Missing bookingId' });
+      }
+      
+      // Get booking from database
+      const booking = await storage.getBookingById(bookingId);
+      
+      if (!booking) {
+        return res.status(404).json({ error: 'Booking not found' });
+      }
+      
+      // Prevent duplicate orders for completed bookings
+      if (booking.paymentStatus === 'completed') {
+        return res.status(400).json({ error: 'Booking already completed' });
+      }
+      
+      // Calculate amount from trusted database record
+      const SERVICE_FEE_PER_PASSENGER = 15;
+      const amount = (booking.passengers * SERVICE_FEE_PER_PASSENGER).toFixed(2);
+      
+      console.log(`[PayPal Order] Creating order for booking ${bookingId}: ${booking.passengers} passengers × $${SERVICE_FEE_PER_PASSENGER} = $${amount}`);
+      
+      // Create PayPal order with server-calculated amount
+      req.body = {
+        amount: amount,
+        currency: 'USD',
+        intent: 'CAPTURE'
+      };
+      
+      await createPaypalOrder(req, res);
+    } catch (error) {
+      console.error('[PayPal Order] Error:', error);
+      res.status(500).json({ error: 'Failed to create PayPal order' });
+    }
   });
 
   app.post("/paypal/order/:orderID/capture", async (req, res) => {
@@ -852,20 +888,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json = originalSend;
       res.status = originalStatus;
       
-      // If successful, update the booking
-      if (statusCode === 200 && capturedResponse && capturedResponse.status === 'COMPLETED') {
-        const bookingId = req.body.bookingId;
-        const passengers = parseInt(req.body.passengers || '1');
-        const totalPaid = passengers * 15;
-        
-        if (bookingId) {
-          await storage.updateBookingPaymentStatus(bookingId, 'completed', 'paypal', totalPaid);
-          console.log('[PayPal Success] Payment completed for booking:', bookingId);
-        }
+      // SECURITY: Validate bookingId before processing payment
+      const bookingId = req.body.bookingId;
+      
+      if (!bookingId) {
+        console.error('[PayPal Security] Capture request missing bookingId');
+        res.status(400).json({ error: 'Missing bookingId' });
+        return;
       }
       
-      // Send the response
-      res.status(statusCode).json(capturedResponse);
+      // SECURITY: Get booking from database (trusted source) before capture
+      const booking = await storage.getBookingById(bookingId);
+      
+      if (!booking) {
+        console.error('[PayPal Security] Invalid bookingId:', bookingId);
+        res.status(404).json({ error: 'Booking not found' });
+        return;
+      }
+      
+      // SECURITY: Prevent double-spend - check booking status
+      if (booking.paymentStatus === 'completed') {
+        console.error('[PayPal Security] Booking already paid:', bookingId);
+        // Return success if already completed (idempotency)
+        res.status(200).json({ 
+          ...capturedResponse,
+          message: 'Booking already completed',
+          bookingAlreadyCompleted: true 
+        });
+        return;
+      }
+      
+      // SECURITY: Prevent concurrent captures - mark as processing
+      if (booking.paymentStatus === 'processing') {
+        console.error('[PayPal Security] Booking already being processed:', bookingId);
+        res.status(409).json({ error: 'Payment already being processed' });
+        return;
+      }
+      
+      // Mark booking as processing to prevent concurrent captures
+      await storage.updateBookingPaymentStatus(bookingId, 'processing', 'paypal', 0);
+      
+      // Calculate expected amount from trusted database record
+      const SERVICE_FEE_PER_PASSENGER = 15;
+      const expectedAmount = booking.passengers * SERVICE_FEE_PER_PASSENGER;
+      
+      // PayPal returns 201 for successful captures, not 200
+      if (statusCode === 201 && capturedResponse && capturedResponse.status === 'COMPLETED') {
+        // SECURITY: Validate captured amount matches expected amount
+        const capturedAmount = parseFloat(capturedResponse.purchase_units?.[0]?.payments?.captures?.[0]?.amount?.value || '0');
+        
+        if (Math.abs(capturedAmount - expectedAmount) > 0.01) {
+          console.error(`[PayPal Security] Amount mismatch: expected $${expectedAmount}, got $${capturedAmount}`);
+          // Reset status to pending on validation failure
+          await storage.updateBookingPaymentStatus(bookingId, 'pending', null, 0);
+          res.status(400).json({ error: 'Payment amount mismatch' });
+          return;
+        }
+        
+        console.log(`[PayPal Success] Amount verified: ${booking.passengers} passengers × $${SERVICE_FEE_PER_PASSENGER} = $${expectedAmount}`);
+        
+        // All validations passed - update booking to completed
+        await storage.updateBookingPaymentStatus(bookingId, 'completed', 'paypal', expectedAmount);
+        console.log('[PayPal Success] Payment completed for booking:', bookingId);
+        
+        // Send success response with booking info
+        res.status(200).json({
+          ...capturedResponse,
+          bookingId: bookingId,
+          success: true,
+          message: 'Payment completed successfully'
+        });
+        return;
+      } else {
+        console.error('[PayPal Security] Capture failed or incomplete:', { statusCode, status: capturedResponse?.status });
+        // Reset status to pending on capture failure
+        await storage.updateBookingPaymentStatus(bookingId, 'pending', null, 0);
+        res.status(400).json({ 
+          error: 'Payment capture failed',
+          details: capturedResponse 
+        });
+        return;
+      }
     } catch (error) {
       console.error("PayPal capture error:", error);
       res.status(500).json({ error: "Failed to capture PayPal payment" });

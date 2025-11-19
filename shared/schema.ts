@@ -86,7 +86,7 @@ export const bookings = pgTable("bookings", {
   
   // Payment Info
   stripePaymentIntentId: text("stripe_payment_intent_id"),
-  paymentStatus: varchar("payment_status", { length: 20 }).notNull().default("pending"), // pending, completed, failed
+  paymentStatus: varchar("payment_status", { length: 20 }).notNull().default("pending"), // pending, processing, completed, failed
   
   // Amadeus Booking Info
   pnrCode: varchar("pnr_code", { length: 10 }), // Real PNR from Amadeus (e.g., "RXGMKL")
