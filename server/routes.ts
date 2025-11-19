@@ -598,9 +598,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
+      // Calculate correct amount: $15 USD per passenger (service fee)
+      // CRITICAL: Never trust frontend pricing - always calculate on backend
+      const SERVICE_FEE_PER_PASSENGER = 15;
+      const totalAmount = SERVICE_FEE_PER_PASSENGER * bookingData.passengers;
+      
+      console.log(`[Payment] Charging $${totalAmount} USD for ${bookingData.passengers} passenger(s)`);
+
       // Create Stripe payment intent
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(parseFloat(bookingData.discountedPrice) * 100), // Convert to cents
+        amount: Math.round(totalAmount * 100), // Convert to cents
         currency: bookingData.currency?.toLowerCase() || "usd",
         metadata: {
           bookingId: booking.id,
