@@ -516,6 +516,12 @@ export default function FlightResults() {
                   >
                     {t('results.bookNow')}
                   </Button>
+                  
+                  <p className="text-xs text-center text-muted-foreground" data-testid={`text-service-fee-${flight.id}`}>
+                    {t('results.dummyTicketValue')}{' '}
+                    <span className="text-red-600 font-semibold">$15 USD</span>{' '}
+                    {t('results.perPassenger')}
+                  </p>
                 </div>
               </div>
             </Card>

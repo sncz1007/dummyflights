@@ -261,6 +261,8 @@ export const translations = {
     'results.power': 'Power Outlets',
     'results.discount': 'OFF',
     'results.pricePerPassenger': 'Price per passenger',
+    'results.dummyTicketValue': 'Value of the Dummy Ticket:',
+    'results.perPassenger': 'per passenger',
     
     // Checkout
     'checkout.title': 'Complete Your Booking',
@@ -548,6 +550,8 @@ export const translations = {
     'results.power': 'Enchufes',
     'results.discount': 'DESC',
     'results.pricePerPassenger': 'Precio por pasajero',
+    'results.dummyTicketValue': 'Valor del Tiquete Ficticio:',
+    'results.perPassenger': 'por pasajero',
     
     // Checkout
     'checkout.title': 'Completar tu Reserva',
