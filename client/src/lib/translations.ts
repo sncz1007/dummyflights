@@ -34,7 +34,7 @@ export const translations = {
     'search.termsLink': 'Terms and Conditions',
     'search.termsAnd': 'and',
     'search.privacyLink': 'Privacy Policy',
-    'search.ticketPrice': 'Ticket Price:',
+    'search.ticketPrice': 'Value of the Dummy Ticket:',
     'search.ticketPriceDetails': 'per passenger, for both one-way and round-trip flights.',
     
     // Trust Indicators
@@ -323,7 +323,7 @@ export const translations = {
     'search.termsLink': 'Términos y Condiciones',
     'search.termsAnd': 'y la',
     'search.privacyLink': 'Política de Privacidad',
-    'search.ticketPrice': 'Valor del Tiquete:',
+    'search.ticketPrice': 'Valor del Tiquete Ficticio:',
     'search.ticketPriceDetails': 'por pasajero, tanto para vuelos de solo ida, como ida y vuelta.',
     
     // Trust Indicators
