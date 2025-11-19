@@ -504,7 +504,7 @@ export default function Checkout() {
         tripType: searchParams.tripType,
         selectedFlightData: JSON.stringify(flight),
         originalPrice: totalFlightPrice.toString(),
-        discountedPrice: totalFlightPrice.toString(),
+        discountedPrice: totalPrice.toString(),
         currency: 'USD',
         language: localStorage.getItem('preferredLanguage') || 'en',
       };
