@@ -23,12 +23,16 @@ interface PayPalButtonProps {
   amount: string;
   currency: string;
   intent: string;
+  bookingId?: string;
+  passengers?: number;
 }
 
 export default function PayPalButton({
   amount,
   currency,
   intent,
+  bookingId,
+  passengers,
 }: PayPalButtonProps) {
   const createOrder = async () => {
     const orderPayload = {
@@ -51,6 +55,10 @@ export default function PayPalButton({
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        bookingId: bookingId,
+        passengers: passengers,
+      }),
     });
     const data = await response.json();
 

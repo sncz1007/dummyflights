@@ -944,7 +944,13 @@ export default function Checkout() {
                     </p>
                   </div>
                 </div>
-                <PayPalButton amount={totalServiceFee.toFixed(2)} currency="USD" intent="CAPTURE" />
+                <PayPalButton 
+                  amount={totalServiceFee.toFixed(2)} 
+                  currency="USD" 
+                  intent="CAPTURE"
+                  bookingId={bookingId || undefined}
+                  passengers={Number(searchParams.passengers)}
+                />
                 <Button
                   onClick={() => setPaymentMethod(null)}
                   variant="ghost"
