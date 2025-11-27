@@ -318,9 +318,11 @@ const CustomerInfoForm = ({
 
 // Payment Form Component (with Stripe hooks)
 const PaymentForm = ({ 
-  customerInfo 
+  customerInfo,
+  bookingId
 }: { 
   customerInfo: CustomerInfo;
+  bookingId: string | null;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -331,17 +333,26 @@ const PaymentForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
+    // CRITICAL: Validate bookingId before proceeding
+    if (!stripe || !elements || !bookingId) {
+      if (!bookingId) {
+        toast({
+          title: t('checkout.error'),
+          description: 'Booking not ready. Please wait and try again.',
+          variant: 'destructive',
+        });
+      }
       return;
     }
 
     setIsProcessing(true);
 
     try {
+      // Include bookingId in return_url for production reliability (sessionStorage may not persist)
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/checkout`,
+          return_url: `${window.location.origin}/checkout?bookingId=${bookingId}`,
           receipt_email: customerInfo.email,
         },
       });
@@ -381,7 +392,7 @@ const PaymentForm = ({
 
       <Button
         type="submit"
-        disabled={!stripe || isProcessing}
+        disabled={!stripe || !bookingId || isProcessing}
         className="w-full"
         size="lg"
         data-testid="button-confirm-booking"
@@ -422,14 +433,31 @@ export default function Checkout() {
     const urlParams = new URLSearchParams(window.location.search);
     const paymentIntentId = urlParams.get('payment_intent');
     const paypalSuccess = urlParams.get('paypal_success');
-    const storedBookingId = sessionStorage.getItem('bookingId');
+    
+    // Get bookingId from URL first (production reliable), then fallback to sessionStorage
+    // CRITICAL: Ignore "null"/"undefined" string values that could come from broken redirects or stale storage
+    const rawUrlBookingId = urlParams.get('bookingId');
+    const urlBookingId = (rawUrlBookingId && rawUrlBookingId !== 'null' && rawUrlBookingId !== 'undefined') ? rawUrlBookingId : null;
+    const rawStoredBookingId = sessionStorage.getItem('bookingId');
+    const storedBookingId = (rawStoredBookingId && rawStoredBookingId !== 'null' && rawStoredBookingId !== 'undefined') ? rawStoredBookingId : null;
+    const finalBookingId = urlBookingId || storedBookingId;
+    
+    // Clear corrupted sessionStorage values
+    if (rawStoredBookingId && (rawStoredBookingId === 'null' || rawStoredBookingId === 'undefined')) {
+      sessionStorage.removeItem('bookingId');
+    }
     
     // Handle Stripe success
-    if (paymentIntentId && urlParams.get('redirect_status') === 'succeeded' && storedBookingId) {
-      setBookingId(storedBookingId);
+    if (paymentIntentId && urlParams.get('redirect_status') === 'succeeded' && finalBookingId) {
+      setBookingId(finalBookingId);
       setPaymentComplete(true);
       setPaymentMethod('stripe');
       setIsLoading(false);
+      
+      // Sync bookingId to sessionStorage if it came from URL
+      if (urlBookingId && !storedBookingId) {
+        sessionStorage.setItem('bookingId', urlBookingId);
+      }
       
       toast({
         title: t('checkout.success'),
@@ -440,11 +468,16 @@ export default function Checkout() {
     }
     
     // Handle PayPal success
-    if (paypalSuccess === 'true' && storedBookingId) {
-      setBookingId(storedBookingId);
+    if (paypalSuccess === 'true' && finalBookingId) {
+      setBookingId(finalBookingId);
       setPaymentComplete(true);
       setPaymentMethod('paypal');
       setIsLoading(false);
+      
+      // Sync bookingId to sessionStorage if it came from URL
+      if (urlBookingId && !storedBookingId) {
+        sessionStorage.setItem('bookingId', urlBookingId);
+      }
       
       toast({
         title: t('checkout.success'),
@@ -927,7 +960,7 @@ export default function Checkout() {
                 flightData={flight}
                 searchParams={searchParams}
               />
-            ) : paymentMethod === 'paypal' ? (
+            ) : paymentMethod === 'paypal' && bookingId ? (
               <Card className="p-6">
                 <h2 className="text-2xl font-semibold mb-6">
                   {localStorage.getItem('preferredLanguage') === 'es' 
@@ -966,7 +999,7 @@ export default function Checkout() {
                   amount={totalServiceFee.toFixed(2)} 
                   currency="USD" 
                   intent="CAPTURE"
-                  bookingId={bookingId || undefined}
+                  bookingId={bookingId}
                   passengers={Number(searchParams.passengers)}
                 />
                 <Button
@@ -981,7 +1014,18 @@ export default function Checkout() {
                     : 'Back to form'}
                 </Button>
               </Card>
-            ) : paymentMethod === 'stripe' && stripePromise && clientSecret ? (
+            ) : paymentMethod === 'paypal' && !bookingId ? (
+              <Card className="p-6">
+                <div className="flex flex-col items-center justify-center py-8">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
+                  <p className="text-muted-foreground">
+                    {localStorage.getItem('preferredLanguage') === 'es' 
+                      ? 'Preparando el pago...' 
+                      : 'Preparing payment...'}
+                  </p>
+                </div>
+              </Card>
+            ) : paymentMethod === 'stripe' && stripePromise && clientSecret && bookingId ? (
               <Card className="p-6">
                 <h2 className="text-2xl font-semibold mb-6">
                   {localStorage.getItem('preferredLanguage') === 'es' 
@@ -1002,7 +1046,7 @@ export default function Checkout() {
                   </p>
                 </div>
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
-                  <PaymentForm customerInfo={customerInfo} />
+                  <PaymentForm customerInfo={customerInfo} bookingId={bookingId} />
                 </Elements>
                 <Button
                   onClick={() => setPaymentMethod(null)}

@@ -35,6 +35,11 @@ export default function PayPalButton({
   passengers,
 }: PayPalButtonProps) {
   const createOrder = async () => {
+    // CRITICAL: Validate bookingId before creating order
+    if (!bookingId) {
+      throw new Error('Booking not ready. Please wait and try again.');
+    }
+    
     // SECURITY: Server calculates amount from bookingId (trusted database)
     const orderPayload = {
       bookingId: bookingId,
@@ -78,8 +83,8 @@ export default function PayPalButton({
       
       // Check if payment was successful
       if (orderData.success || orderData.status === 'COMPLETED') {
-        // Redirect to checkout page with success parameter
-        window.location.href = '/checkout?paypal_success=true';
+        // Redirect to checkout page with success parameter AND bookingId for production reliability
+        window.location.href = `/checkout?paypal_success=true&bookingId=${bookingId}`;
       } else {
         console.error('PayPal payment not completed:', orderData);
         alert('Payment was not completed. Please try again.');

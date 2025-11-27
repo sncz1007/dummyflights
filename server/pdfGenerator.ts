@@ -316,9 +316,12 @@ export async function generateBookingConfirmationPDF(booking: Booking): Promise<
     }
   }
   
-  // Date of Purchase
+  // Date of Purchase - Set to 7 days before actual purchase for visa/documentation purposes
+  const issueDate = new Date();
+  issueDate.setDate(issueDate.getDate() - 7);
+  
   doc.fontSize(11).font('Helvetica-Bold')
-     .text(`Date of Purchase: ${formatDateShort(new Date())}`, 50, 50);
+     .text(`Date of Purchase: ${formatDateShort(issueDate)}`, 50, 50);
   
   // Title - Include airline name, smaller size, don't cover logo
   const airlineName = flightData.airline.name || 'Flight';
