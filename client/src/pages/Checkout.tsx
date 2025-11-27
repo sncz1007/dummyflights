@@ -960,7 +960,7 @@ export default function Checkout() {
                 flightData={flight}
                 searchParams={searchParams}
               />
-            ) : paymentMethod === 'paypal' && bookingId ? (
+            ) : paymentMethod === 'paypal' ? (
               <Card className="p-6">
                 <h2 className="text-2xl font-semibold mb-6">
                   {localStorage.getItem('preferredLanguage') === 'es' 
@@ -999,7 +999,7 @@ export default function Checkout() {
                   amount={totalServiceFee.toFixed(2)} 
                   currency="USD" 
                   intent="CAPTURE"
-                  bookingId={bookingId}
+                  bookingId={bookingId || undefined}
                   passengers={Number(searchParams.passengers)}
                 />
                 <Button
@@ -1014,18 +1014,7 @@ export default function Checkout() {
                     : 'Back to form'}
                 </Button>
               </Card>
-            ) : paymentMethod === 'paypal' && !bookingId ? (
-              <Card className="p-6">
-                <div className="flex flex-col items-center justify-center py-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-                  <p className="text-muted-foreground">
-                    {localStorage.getItem('preferredLanguage') === 'es' 
-                      ? 'Preparando el pago...' 
-                      : 'Preparing payment...'}
-                  </p>
-                </div>
-              </Card>
-            ) : paymentMethod === 'stripe' && stripePromise && clientSecret && bookingId ? (
+            ) : paymentMethod === 'stripe' && stripePromise && clientSecret ? (
               <Card className="p-6">
                 <h2 className="text-2xl font-semibold mb-6">
                   {localStorage.getItem('preferredLanguage') === 'es' 

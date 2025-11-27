@@ -84,7 +84,8 @@ export default function PayPalButton({
       // Check if payment was successful
       if (orderData.success || orderData.status === 'COMPLETED') {
         // Redirect to checkout page with success parameter AND bookingId for production reliability
-        window.location.href = `/checkout?paypal_success=true&bookingId=${bookingId}`;
+        // CRITICAL: Use absolute URL for production deployments
+        window.location.href = `${window.location.origin}/checkout?paypal_success=true&bookingId=${bookingId}`;
       } else {
         console.error('PayPal payment not completed:', orderData);
         alert('Payment was not completed. Please try again.');
